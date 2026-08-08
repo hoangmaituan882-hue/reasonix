@@ -51,6 +51,7 @@ export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 export { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./components/ui/collapsible"
 export { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "./components/ui/breadcrumb"
 export { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "./components/ui/pagination"
+export { DownloadButton } from "./components/ui/download-button"
 
 /* ---------- 工具 ---------- */
 export { cn } from "./lib/utils"

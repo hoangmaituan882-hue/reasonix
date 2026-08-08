@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
+import { DownloadButton } from '@/components/ui/download-button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -76,6 +77,8 @@ function ButtonPreview() {
         <span className="rx-pill-icon"><Bell className="h-3.5 w-3.5" /></span>
         通知
       </button>
+      {/* 下载按钮（Uiverse）：hover 图标滑入 + tooltip */}
+      <DownloadButton tooltip="保存副本">下载</DownloadButton>
     </div>
   )
 }

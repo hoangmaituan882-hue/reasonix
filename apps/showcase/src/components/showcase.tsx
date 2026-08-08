@@ -1,4 +1,5 @@
 import { Calendar } from '@/components/ui/calendar'
+import { DownloadButton } from '@/components/ui/download-button'
 import { Badge } from '@/components/ui/badge'
 import {
   Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious,
@@ -206,6 +207,9 @@ export default function ComponentsShowcase() {
                   <span className="rx-pill-icon"><Bell className="h-3.5 w-3.5" /></span>
                   通知
                 </button>
+                {/* 下载按钮（Uiverse）：hover 图标滑入 + tooltip */}
+                <DownloadButton>下载</DownloadButton>
+                <DownloadButton tooltip="暂不可用" disabled>下载</DownloadButton>
               </CardContent>
             </Card>
           </TabsContent>
