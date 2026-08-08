@@ -415,7 +415,7 @@ export default function TransitionGallery() {
                 {autoPlay ? '⏸ 停止自动播放' : '▶ 自动播放'}
               </button>
               <span className="mono text-[10px]" style={{ color: autoPlay ? 'var(--rx-accent)' : 'var(--rx-fg-faint)' }}>
-                {autoPlay ? '● 所有卡片循环演示中' : '所有卡片同时独立循环'}
+                {autoPlay ? '● 所有卡片循环演示中' : '● 自动循环已关闭，点击卡片可手动播放'}
               </span>
             </div>
             <div className="flex items-center gap-2 rounded-md border px-2.5" style={{ borderColor: 'var(--rx-border)', background: 'var(--rx-bg-elev)' }}>

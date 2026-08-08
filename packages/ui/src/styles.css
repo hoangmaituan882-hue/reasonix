@@ -224,7 +224,9 @@
   --rx-accent-soft: color-mix(in srgb, var(--rx-accent) 16%, transparent);
   --rx-grad: linear-gradient(120deg, #8b7cff, #38d6e6);
   /* shadcn aliases: keep primary/ring in sync with direction accent */
-  --primary: #8b7cff;
+    --accent: #8b7cff;
+  --accent-foreground: #0c0d10;
+--primary: #8b7cff;
   --primary-foreground: #0c0d10;
   --ring: rgba(139, 124, 255, 0.18);
   --rx-r-s: 10px;
@@ -243,7 +245,9 @@
   --rx-accent-soft: color-mix(in srgb, var(--rx-accent) 16%, transparent);
   --rx-grad: linear-gradient(120deg, #4d8df6, #6ea4f9);
   /* shadcn aliases: keep primary/ring in sync with direction accent */
-  --primary: #4d8df6;
+    --accent: #4d8df6;
+  --accent-foreground: #0c0d10;
+--primary: #4d8df6;
   --primary-foreground: #0c0d10;
   --ring: rgba(77, 141, 246, 0.16);
   --rx-r-s: 8px;
@@ -262,7 +266,9 @@
   --rx-accent-soft: color-mix(in srgb, var(--rx-accent) 16%, transparent);
   --rx-grad: linear-gradient(120deg, #2dd4bf, #5eead4);
   /* shadcn aliases: keep primary/ring in sync with direction accent */
-  --primary: #2dd4bf;
+    --accent: #2dd4bf;
+  --accent-foreground: #0c0d10;
+--primary: #2dd4bf;
   --primary-foreground: #0c0d10;
   --ring: rgba(45, 212, 191, 0.16);
   --rx-r-s: 7px;
@@ -281,7 +287,9 @@
   --rx-accent-soft: color-mix(in srgb, var(--rx-accent) 16%, transparent);
   --rx-grad: linear-gradient(120deg, #818cf8, #a5b4fc);
   /* shadcn aliases: keep primary/ring in sync with direction accent */
-  --primary: #818cf8;
+    --accent: #818cf8;
+  --accent-foreground: #0c0d10;
+--primary: #818cf8;
   --primary-foreground: #0c0d10;
   --ring: rgba(129, 140, 248, 0.18);
   --rx-r-s: 11px;
@@ -300,7 +308,9 @@
   --rx-accent-soft: color-mix(in srgb, var(--rx-accent) 16%, transparent);
   --rx-grad: linear-gradient(120deg, #d4632f, #e08a5a);
   /* shadcn aliases: keep primary/ring in sync with direction accent */
-  --primary: #d4632f;
+    --accent: #d4632f;
+  --accent-foreground: #0c0d10;
+--primary: #d4632f;
   --primary-foreground: #0c0d10;
   --ring: rgba(212, 99, 47, 0.16);
   /* amber inherits graphite radius */

@@ -14,7 +14,7 @@ import { LayoutDashboard, Boxes, Clapperboard, Sparkles, Grid, ChevronsLeft, Che
 export default function App() {
   const [view, setView] = useState<'welcome' | 'intro' | 'workbench' | 'showcase' | 'motion' | 'overview' | 'transition' | 'design'>('welcome')
   const [collapsed, setCollapsed] = useState(false)
-  const { direction, setDirection } = useTheme()
+  const { dark, setDark, direction, setDirection } = useTheme()
 
   const nav = [
     { id: 'welcome' as const, label: '欢迎', icon: Sparkles },
@@ -77,7 +77,18 @@ export default function App() {
         {/* 主题方向切换 */}
         {!narrow && (
           <div className="border-t px-3 py-3" style={{ borderColor: 'var(--rx-border-soft)' }}>
-            <div className="mb-2 text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--rx-fg-faint)' }}>主题方向</div>
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--rx-fg-faint)' }}>主题方向</span>
+              {/* 全局明暗切换（所有页面可见） */}
+              <button
+                onClick={() => setDark(!dark)}
+                className="flex h-5 items-center gap-1 rounded-full px-2 text-[9px] font-semibold transition-colors"
+                style={{ background: 'var(--rx-accent-soft)', color: 'var(--rx-accent)' }}
+                aria-label="切换明暗"
+              >
+                {dark ? '☀️ 浅色' : '🌙 深色'}
+              </button>
+            </div>
             <div className="flex flex-wrap gap-1">
               {DIRECTIONS.map((d) => (
                 <button
