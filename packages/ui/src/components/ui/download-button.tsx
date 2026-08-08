@@ -44,18 +44,18 @@ function DownloadButton({
         data-slot="dl-wrapper"
         className="absolute inset-0 overflow-hidden rounded-[inherit]"
       >
-        {/* 文字层：hover 时上滑并淡出（避免过渡中间帧文字残留重叠） */}
+        {/* 文字层：h-full + flex 居中，hover 整体上移并淡出（中心对称，无漂移） */}
         <span
           data-slot="dl-text"
-          className="absolute inset-0 flex items-center justify-center overflow-hidden transition-[top,opacity] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-[-100%] group-hover:opacity-0 motion-reduce:transition-none"
+          className="absolute inset-x-0 top-0 flex h-full items-center justify-center overflow-hidden transition-[top,opacity] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-[-100%] group-hover:opacity-0 motion-reduce:transition-none"
         >
           {children}
         </span>
-        {/* 图标层：hover 时从下方滑入 */}
+        {/* 图标层：h-full + flex 居中，hover 从下方整体移入（中心落在按钮中心） */}
         <span
           data-slot="dl-icon"
           aria-hidden
-          className="absolute inset-x-0 top-full flex items-center justify-center overflow-hidden transition-[top] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-0 motion-reduce:transition-none"
+          className="absolute inset-x-0 top-full flex h-full items-center justify-center overflow-hidden transition-[top] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-0 motion-reduce:transition-none"
         >
           <Download className="size-6" />
         </span>
