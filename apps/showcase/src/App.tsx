@@ -116,6 +116,6 @@ export default function App() {
           <MotionGallery />
         )}
       </div>
-    </div>
+      </div>
   )
 }

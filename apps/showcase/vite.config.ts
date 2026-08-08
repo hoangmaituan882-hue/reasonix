@@ -18,6 +18,11 @@ export default defineConfig(async ({ mode }) => {
       alias: [
         // 组件统一从 packages/ui 源码导入（单一来源，避免双份漂移）
         { find: '@/components/ui', replacement: path.resolve(__dirname, '../../packages/ui/src/components/ui') },
+        // React 单实例：packages/ui 源码共享 showcase 的 react（避免双实例 context 失效）
+        { find: 'react', replacement: path.resolve(__dirname, './node_modules/react') },
+        { find: 'react-dom', replacement: path.resolve(__dirname, './node_modules/react-dom') },
+        { find: 'react/jsx-runtime', replacement: path.resolve(__dirname, './node_modules/react/jsx-runtime') },
+        { find: 'radix-ui', replacement: path.resolve(__dirname, './node_modules/radix-ui') },
         { find: '@', replacement: path.resolve(__dirname, './src') },
       ],
     },
