@@ -7,6 +7,7 @@ import TransitionGallery from '@/components/transition-gallery'
 import ComponentOverview from '@/components/component-overview'
 import DesignDoc from '@/components/design-doc'
 import IntroPage from '@/components/intro-page'
+import { Switch } from '@/components/ui/switch'
 import { useTheme, DIRECTIONS } from '@/lib/theme'
 import { TRANSITION_CSS, HOVER_OVERRIDES } from '@/lib/transition-global'
 import { LayoutDashboard, Boxes, Clapperboard, Sparkles, Grid, ChevronsLeft, ChevronsRight, BookOpen, Home } from 'lucide-react'
@@ -79,15 +80,14 @@ export default function App() {
           <div className="border-t px-3 py-3" style={{ borderColor: 'var(--rx-border-soft)' }}>
             <div className="mb-2 flex items-center justify-between">
               <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--rx-fg-faint)' }}>主题方向</span>
-              {/* 全局明暗切换（所有页面可见） */}
-              <button
-                onClick={() => setDark(!dark)}
-                className="flex h-5 items-center gap-1 rounded-full px-2 text-[9px] font-semibold transition-colors"
-                style={{ background: 'var(--rx-accent-soft)', color: 'var(--rx-accent)' }}
-                aria-label="切换明暗"
-              >
-                {dark ? '☀️ 浅色' : '🌙 深色'}
-              </button>
+              {/* 全局明暗切换（Switch 组件） */}
+              <label className="flex cursor-pointer items-center gap-1.5 text-[9px] font-semibold" style={{ color: 'var(--rx-fg-dim)' }}>
+                <span className="flex items-center gap-0.5">
+                  <span className={dark ? 'opacity-30' : ''}>☀️</span>
+                  <span className={dark ? '' : 'opacity-30'}>🌙</span>
+                </span>
+                <Switch checked={dark} onCheckedChange={setDark} className="scale-[0.8]" aria-label="切换明暗" />
+              </label>
             </div>
             <div className="flex flex-wrap gap-1">
               {DIRECTIONS.map((d) => (
