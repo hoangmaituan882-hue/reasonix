@@ -44,10 +44,10 @@ function DownloadButton({
         data-slot="dl-wrapper"
         className="absolute inset-0 overflow-hidden rounded-[inherit]"
       >
-        {/* 文字层 */}
+        {/* 文字层：hover 时上滑并淡出（避免过渡中间帧文字残留重叠） */}
         <span
           data-slot="dl-text"
-          className="absolute inset-0 flex items-center justify-center overflow-hidden transition-[top] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-[-100%] motion-reduce:transition-none"
+          className="absolute inset-0 flex items-center justify-center overflow-hidden transition-[top,opacity] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-[-100%] group-hover:opacity-0 motion-reduce:transition-none"
         >
           {children}
         </span>
