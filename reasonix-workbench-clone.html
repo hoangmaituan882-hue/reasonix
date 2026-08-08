@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reasonix 工作台 · 像素级复刻</title>
+<style>
+/* ============================================================
+   Reasonix Desktop Workbench — 像素级复刻
+   基于 esengine/DeepSeek-Reasonix @ main-v2 desktop/frontend
+   App.tsx + styles.css 真实结构/token（截图对照核实）
+   ============================================================ */
+
+/* —— 主题 token（graphite 暗色默认，取自 styles.css :root + graphite 方向）—— */
+:root {
+  --bg: #0c0d10;
+  --bg-soft: #101115;
+  --bg-elev: #15161a;
+  --bg-elev-2: #191a1f;
+  --surface: #15161a;
+  --surface-2: #191a1f;
+  --surface-3: #101115;
+  --sidebar-bg: #15161a;
+  --sidebar-hover: #1f2026;
+  --sidebar-active: rgba(255, 106, 61, 0.16);
+  --chat-bg: #0c0d10;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-2: rgba(255, 255, 255, 0.2);
+  --border-soft: rgba(255, 255, 255, 0.07);
+  --fg: #f1f1ef;
+  --fg-dim: #a7a8ad;
+  --fg-faint: #6c6e74;
+  --accent: #ff6a3d;
+  --accent-strong: #ff9a52;
+  --accent-soft: rgba(255, 106, 61, 0.16);
+  --accent-fg: #0c0d10;
+  --grad: linear-gradient(120deg, #ff6a3d, #ff9a52);
+  --ok: #3ad17e;
+  --warn: #e3a23a;
+  --err: #f0573f;
+  --danger: #e5484d;
+  --danger-fg: #fff;
+  --mode-auto: #2f6de8;
+  --radius: 8px;
+  --r-s: 5px;
+  --r-l: 11px;
+
+  /* component recipes（styles.css 真实值） */
+  --list-row-height: 38px;
+  --list-row-radius: 7px;
+  --list-row-gap: 10px;
+  --list-row-px: 10px;
+  --tree-row-height: 30px;
+  --tree-row-radius: 7px;
+  --button-height: 34px;
+  --button-small-height: 30px;
+  --button-icon-size: 30px;
+  --button-radius: 8px;
+  --button-px: 12px;
+  --project-tree-row-radius: 7px;
+  --composer-control-height: 32px;
+  --composer-control-radius: 7px;
+
+  /* 结构 */
+  --app-chrome-height: 38px;
+  --chrome-toggle-size: 42px;
+  --sidebar-width: 264px;
+  --dock-width: 300px;
+  --statusbar-height: 28px;
+  --maxw: 960px;
+
+  /* 动效 */
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 340ms;
+  --ease-out: cubic-bezier(0.2, 0.72, 0.2, 1);
+
+  /* 字体 */
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+    "Microsoft YaHei", "Noto Sans SC", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+  --font-metadata-family: var(--font-ui);
+  --text-xs: 11px; --text-sm: 12px; --text-md: 13px; --text-base: 14px;
+
+  /* 语法高亮（暗色 One Dark 系） */
+  --hl-k: #c678dd; --hl-s: #98c379; --hl-f: #61afef;
+  --hl-c: #6a6a72; --hl-n: #d19a66; --hl-t: #e5c07b;
+
+  /* 滚动条 */
+  --scrollbar-size: 10px;
+  --scrollbar-thumb: color-mix(in srgb, var(--fg-faint) 42%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--fg-dim) 56%, transparent);
+}
+/* —— 浅色主题（graphite light）—— */
+:root[data-theme="light"] {
+  --bg: #f4f3ef;
+  --bg-soft: #f0efe9;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #f6f5f1;
+  --surface-3: #f0efe9;
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: #f0efe9;
+  --sidebar-active: rgba(255, 90, 44, 0.12);
+  --chat-bg: #f4f3ef;
+  --border: rgba(20, 22, 28, 0.12);
+  --border-2: rgba(20, 22, 28, 0.24);
+  --border-soft: rgba(20, 22, 28, 0.08);
+  --fg: #16181d;
+  --fg-dim: #4a4d56;
+  --fg-faint: #85888f;
+  --accent: #ff5a2c;
+  --accent-strong: #df471f;
+  --accent-soft: rgba(255, 90, 44, 0.12);
+  --accent-fg: #ffffff;
+  --grad: linear-gradient(120deg, #ff5a2c, #ff8a3d);
+  --ok: #1f9d57;
+  --warn: #d98a1f;
+  --err: #d83a2a;
+  --danger: #e5484d;
+  --hl-k: #cf222e; --hl-s: #0a3069; --hl-f: #8250df;
+  --hl-c: #6e7781; --hl-n: #0550ae;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+input { font: inherit; color: inherit; }
+
+/* 滚动条（真实 token） */
+* { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+::-webkit-scrollbar { width: var(--scrollbar-size); height: var(--scrollbar-size); }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); border: 2px solid transparent; background-clip: padding-box; }
+
+/* ============================================================
+   顶层布局：.app > .layout（grid）
+   ============================================================ */
+.app { height: 100%; display: flex; flex-direction: column; }
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr var(--dock-width);
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "sidebar main dock"
+    "sidebar footer dock"
+    "statusbar statusbar statusbar";
+  min-height: 0;
+}
+.layout--terminal-open {
+  grid-template-rows: minmax(0, 1fr) auto 180px auto;
+  grid-template-areas:
+    "sidebar main dock"
+    "sidebar footer dock"
+    "sidebar terminal dock"
+    "statusbar statusbar statusbar";
+}
+.layout--no-dock { grid-template-columns: var(--sidebar-width) 1fr; grid-template-areas: "sidebar main" "sidebar footer" "statusbar statusbar"; }
+
+/* ============================================================
+   左侧边栏
+   ============================================================ */
+.sidebar {
+  grid-area: sidebar;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border-soft);
+  display: flex; flex-direction: column;
+  padding: 12px 10px;
+  min-height: 0;
+  overflow: hidden;
+}
+.sidebar__brand {
+  padding: 2px 6px 12px;
+}
+.sidebar__brand-logo { height: 20px; display: flex; align-items: center; gap: 7px; font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
+.sidebar__brand-logo .mark { width: 18px; height: 18px; border-radius: 5px; background: var(--grad); display: inline-flex; align-items: center; justify-content: center; color: var(--accent-fg); font-size: 11px; font-weight: 800; }
+
+/* 新会话按钮（classic 模式：渐变；workbench 模式：quick-action） */
+.sidebar__new {
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  height: 44px; margin-bottom: 8px;
+  background: var(--grad);
+  color: var(--accent-fg);
+  border-radius: 12px;
+  font-size: 13px; font-weight: 600;
+  box-shadow: 0 6px 18px -6px var(--accent), 0 1px 2px rgba(0,0,0,0.22);
+  transition: filter var(--dur-fast);
+}
+.sidebar__new:hover { filter: brightness(1.06); }
+.sidebar__new svg { flex-shrink: 0; }
+.sidebar__quick-actions { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+.sidebar__quick-action {
+  display: flex; align-items: center; gap: 9px;
+  height: 32px; padding: 0 10px;
+  border-radius: var(--r-s);
+  color: var(--fg-dim); font-size: var(--text-md); font-weight: 550;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.sidebar__quick-action:hover { background: var(--sidebar-hover); color: var(--fg); }
+.sidebar__quick-action svg { flex-shrink: 0; color: var(--accent); }
+
+/* 导航（搜索/回收站/自动化/设置） */
+.sidebar__nav { display: flex; flex-direction: column; gap: 1px; padding: 8px 0 6px; border-top: 1px solid var(--border-soft); margin-top: 8px; }
+.sidebar__navitem {
+  display: flex; align-items: center; gap: 9px;
+  height: 28px; padding: 0 10px;
+  border-radius: var(--r-s);
+  color: var(--fg-dim); font-size: 13px;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.sidebar__navitem:hover { background: var(--sidebar-hover); color: var(--fg); }
+.sidebar__navitem--active { background: var(--sidebar-active); color: var(--accent); }
+.sidebar__navitem svg { flex-shrink: 0; color: var(--fg-faint); }
+.sidebar__navitem--active svg { color: var(--accent); }
+
+/* 项目树区 */
+.sidebar__section { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.project-tree { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.project-tree__search {
+  display: flex; align-items: center; gap: 7px;
+  height: 30px; padding: 0 9px; margin-bottom: 8px;
+  border: 1px solid var(--border-soft); border-radius: var(--r-s);
+  background: var(--bg-soft); color: var(--fg-faint);
+}
+.project-tree__search input { flex: 1; min-width: 0; border: none; outline: none; background: none; font-size: var(--text-sm); color: var(--fg); }
+.project-tree__search input::placeholder { color: var(--fg-faint); }
+.project-tree__search svg { flex-shrink: 0; }
+.project-tree__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 6px 6px;
+}
+.project-tree__header-title { display: flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--fg-faint); }
+.project-tree__header-actions { display: flex; align-items: center; gap: 2px; }
+.project-tree__header-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: var(--r-s);
+  color: var(--fg-faint); transition: background var(--dur-fast), color var(--dur-fast);
+}
+.project-tree__header-icon-btn:hover { background: var(--sidebar-hover); color: var(--fg); }
+.project-tree__header-icon-btn--active { color: var(--accent); }
+
+/* 项目树列表 */
+.project-tree__list { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 1px; padding-right: 2px; }
+.project-tree__section-title { padding: 8px 6px 4px; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-faint); }
+
+/* 项目文件夹 */
+.project-tree__folder { position: relative; }
+.project-tree__folder-main {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; height: 34px; padding: 0 6px 0 8px;
+  border-radius: var(--project-tree-row-radius);
+  color: var(--fg-dim); font-size: var(--text-sm);
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.project-tree__folder-main:hover { background: var(--sidebar-hover); color: var(--fg); }
+.project-tree__folder-main--active { background: var(--sidebar-active); color: var(--fg); box-shadow: inset 3px 0 0 var(--accent); }
+.project-tree__folder-icon { color: var(--fg-faint); flex-shrink: 0; }
+.project-tree__folder-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+.project-tree__folder-color { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.project-tree__folder-action { flex-shrink: 0; width: 20px; height: 20px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-faint); opacity: 0; transition: opacity var(--dur-fast); }
+.project-tree__folder:hover .project-tree__folder-action { opacity: 1; }
+.project-tree__folder-action:hover { background: var(--bg-elev-2); color: var(--fg); }
+
+/* 会话节点 */
+.project-tree__topic { position: relative; }
+.project-tree__topic-main {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; min-height: 34px; padding: 0 6px 0 26px;
+  border-radius: var(--project-tree-row-radius);
+  color: var(--fg-dim); font-size: var(--text-sm); text-align: left;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.project-tree__topic-main:hover { background: var(--sidebar-hover); color: var(--fg); }
+.project-tree__topic-main--active { background: var(--sidebar-active); color: var(--fg); box-shadow: inset 3px 0 0 var(--accent); }
+.project-tree__topic-main--active .project-tree__topic-label { color: var(--fg); font-weight: 600; }
+.project-tree__topic-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.project-tree__topic-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.project-tree__topic-status { flex-shrink: 0; font-size: 10px; color: var(--fg-faint); }
+.project-tree__topic-status--running { color: var(--accent); }
+.project-tree__topic-status--done { color: var(--fg-faint); }
+.project-tree__topic-time { flex-shrink: 0; font-size: 10px; color: var(--fg-faint); }
+.project-tree__topic-actions { flex-shrink: 0; display: flex; gap: 1px; opacity: 0; transition: opacity var(--dur-fast); }
+.project-tree__topic:hover .project-tree__topic-actions { opacity: 1; }
+.project-tree__topic-action { width: 20px; height: 20px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-faint); }
+.project-tree__topic-action:hover { background: var(--bg-elev-2); color: var(--fg); }
+.project-tree__topic-unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+/* ============================================================
+   中央：main > Transcript
+   ============================================================ */
+.main {
+  grid-area: main;
+  background: var(--chat-bg);
+  min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.transcript-shell { flex: 1; min-height: 0; display: flex; position: relative; }
+.transcript {
+  flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
+  padding: 24px 28px 20px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+#messages { display: flex; flex-direction: column; gap: 18px; position: relative; }
+
+/* 欢迎屏 */
+.welcome {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex: 1; min-height: 0; gap: 10px; text-align: center;
+}
+.welcome[hidden], .welcome.hidden { display: none; }
+.welcome__brand { width: 52px; height: 52px; border-radius: 14px; background: var(--grad); display: flex; align-items: center; justify-content: center; color: var(--accent-fg); font-size: 26px; font-weight: 800; box-shadow: 0 10px 30px -8px var(--accent); }
+.welcome__title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.welcome__sub { font-size: var(--text-md); color: var(--fg-faint); max-width: 460px; }
+.welcome__hints { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; justify-content: center; }
+.welcome__hint { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 12px; border: 1px solid var(--border-soft); border-radius: 999px; background: var(--bg-elev); color: var(--fg-dim); font-size: var(--text-xs); }
+.welcome__hint kbd { font-family: var(--font-mono); font-size: 10px; border: 1px solid var(--border); border-radius: 4px; padding: 0 5px; color: var(--fg); background: var(--bg-elev-2); }
+
+/* 消息 */
+.msg { display: flex; gap: 12px; max-width: 720px; }
+.msg-avatar {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; margin-top: 2px;
+}
+.msg-avatar--ai { background: var(--grad); color: var(--accent-fg); }
+.msg-avatar--user { background: var(--bg-elev-2); border: 1px solid var(--border-soft); color: var(--fg-dim); }
+.msg-body { flex: 1; min-width: 0; }
+.msg-name { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.msg-name .who { font-size: 12px; font-weight: 650; color: var(--fg-dim); }
+.msg-name .t { font-size: 10px; color: var(--fg-faint); }
+.msg-text { font-size: var(--text-md); color: var(--fg); line-height: 1.65; }
+.msg-text .accent-word { color: var(--accent); font-weight: 600; }
+.msg-text code { font-family: var(--font-mono); font-size: 0.92em; background: var(--bg-elev); border: 1px solid var(--border-soft); border-radius: 4px; padding: 1px 5px; }
+.msg-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; opacity: 0; transition: opacity var(--dur-fast); }
+.msg:hover .msg-meta { opacity: 1; }
+.msg-meta__time { font-size: 10px; color: var(--fg-faint); }
+.msg-meta__btn { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--fg-faint); padding: 2px 6px; border-radius: 4px; transition: color var(--dur-fast), background var(--dur-fast); }
+.msg-meta__btn:hover { color: var(--fg); background: var(--bg-elev-2); }
+
+/* turn-collapse（已工作折叠） */
+.turn-collapse { margin-top: 8px; }
+.turn-collapse__head {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--text-xs); color: var(--fg-faint);
+  padding: 3px 8px; border-radius: 5px;
+  transition: color var(--dur-fast), background var(--dur-fast);
+}
+.turn-collapse__head:hover { color: var(--fg-dim); background: var(--bg-elev-2); }
+.turn-collapse__chev { font-size: 9px; transition: transform var(--dur-base); }
+.turn-collapse--open .turn-collapse__chev { transform: rotate(90deg); }
+.turn-collapse__label { font-weight: 600; }
+.turn-collapse__body {
+  display: none; margin-top: 6px;
+  padding: 8px 12px;
+  border-left: 2px solid var(--border-2);
+  font-size: var(--text-xs); color: var(--fg-dim);
+  line-height: 1.6;
+}
+.turn-collapse--open .turn-collapse__body { display: block; }
+
+/* jump-bar（问题导航） */
+.jump-bar {
+  position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column;
+  z-index: 10;
+}
+.jump-scroll { display: flex; flex-direction: column; gap: 6px; padding: 8px 4px; }
+.jump-item { display: flex; align-items: center; padding: 2px; }
+.jump-dot { display: block; height: 8px; border-radius: 999px; background: var(--fg-faint); opacity: .5; transition: opacity var(--dur-fast), background var(--dur-fast); }
+.jump-item:hover .jump-dot { opacity: 1; background: var(--accent); }
+.jump-item:first-child .jump-dot { opacity: 1; background: var(--accent); }
+
+/* 工具卡 */
+.tool-card {
+  border: 1px solid var(--border-soft); border-radius: var(--r);
+  background: var(--bg-soft);
+  margin-top: 8px; overflow: hidden;
+}
+.tool-card__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 11px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border-soft);
+  font-family: var(--font-mono); font-size: 11px; color: var(--fg-dim);
+}
+.tool-card__ico { color: var(--accent); flex-shrink: 0; }
+.tool-card__name { font-weight: 600; color: var(--fg); }
+.tool-card__status { margin-left: auto; font-family: var(--font-ui); font-size: 10px; color: var(--ok); display: flex; align-items: center; gap: 5px; }
+.tool-card__status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+.tool-card__body { padding: 9px 11px; }
+
+/* 代码块 */
+.code-block {
+  border: 1px solid var(--border-soft); border-radius: var(--r);
+  background: var(--bg); padding: 10px 12px;
+  font-family: var(--font-mono); font-size: 11px; line-height: 1.7;
+  overflow-x: auto; color: var(--fg-dim);
+}
+.code-block .k { color: var(--hl-k); }
+.code-block .s { color: var(--hl-s); }
+.code-block .f { color: var(--hl-f); }
+.code-block .c { color: var(--hl-c); font-style: italic; }
+.code-block .n { color: var(--hl-n); }
+.code-block .t { color: var(--hl-t); }
+
+/* diff 行 */
+.diff-row { display: flex; gap: 10px; font-family: var(--font-mono); font-size: 11px; padding: 2px 10px; border-radius: 4px; margin-top: 4px; }
+.diff-row--add { background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--ok); }
+.diff-row--del { background: color-mix(in srgb, var(--err) 12%, transparent); color: var(--err); }
+.diff-row .ln { color: var(--fg-faint); width: 16px; text-align: right; flex-shrink: 0; }
+
+/* 用户气泡 */
+.user-bubble {
+  margin-left: auto; max-width: 480px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-elev));
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--border-soft));
+  border-radius: 12px 12px 5px 12px;
+  padding: 10px 14px; font-size: var(--text-md); color: var(--fg);
+}
+
+/* ============================================================
+   Footer：Todo + Composer
+   ============================================================ */
+.footer {
+  grid-area: footer;
+  display: flex; flex-direction: column;
+  padding: 0 24px 14px;
+  min-height: 0;
+  background: var(--chat-bg);
+}
+.composer-wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; }
+
+/* todo 条 */
+.todobar {
+  max-width: var(--maxw); margin: 0 auto 10px; width: 100%;
+  border: 1px solid var(--border-soft); border-radius: var(--r);
+  background: var(--bg-elev);
+}
+.todobar__head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border-soft); }
+.todobar__head .tt { font-size: var(--text-xs); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--fg-faint); }
+.todobar__head .spacer { flex: 1; }
+.todobar__list { padding: 6px 8px; display: flex; flex-direction: column; gap: 2px; }
+.todobar__item { display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px; border-radius: var(--r-s); font-size: var(--text-sm); color: var(--fg-dim); }
+.todobar__item--completed .todobar__text { text-decoration: line-through; color: var(--fg-faint); }
+.todobar__item--in_progress { color: var(--fg); background: var(--accent-soft); }
+.todobar__status { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--fg-faint); flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; }
+.todobar__item--in_progress .todobar__status { border-color: var(--accent); color: var(--accent); }
+.todobar__item--completed .todobar__status { border-color: var(--ok); color: var(--ok); background: color-mix(in srgb, var(--ok) 15%, transparent); }
+
+/* composer */
+.composer-card {
+  border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg-elev);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+.composer { padding: 10px 10px 9px 13px; }
+.composer__input-row { display: flex; align-items: flex-start; gap: 8px; }
+.composer__caret { font-family: var(--font-mono); font-size: var(--text-base); font-weight: 600; color: var(--accent); line-height: 1.55; padding-top: 2px; user-select: none; }
+.composer__content { flex: 1; min-width: 0; }
+.composer__input {
+  width: 100%; min-height: 32px; border: none; outline: none; resize: none;
+  background: none; font-size: var(--text-base); line-height: 1.55; color: var(--fg);
+}
+.composer__input::placeholder { color: var(--fg-faint); }
+.composer__btn { width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background var(--dur-fast), transform var(--dur-fast); }
+.composer__btn--send { background: var(--accent); color: var(--accent-fg); }
+.composer__btn--send:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.composer__btn--stop { background: color-mix(in srgb, var(--err) 14%, transparent); color: var(--err); border: 1px solid color-mix(in srgb, var(--err) 42%, transparent); margin-right: 6px; }
+
+/* composer meta 工具栏 */
+.composer-meta { min-height: 40px; padding: 5px 14px 6px; border-top: 1px solid var(--border-soft); display: flex; align-items: center; }
+.composer-meta__params { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.composer-meta__control { display: flex; align-items: center; }
+.composer-meta__divider { width: 1px; height: 18px; background: color-mix(in srgb, var(--fg-faint) 22%, transparent); margin: 0 2px; flex-shrink: 0; }
+
+/* 触发按钮统一样式 */
+.composer-content-trigger,
+.composer-task-mode-trigger,
+.composer-profile-trigger,
+.composer-more-trigger {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: var(--composer-control-height); padding: 0 8px;
+  border: 1px solid var(--border); border-radius: var(--composer-control-radius);
+  background: var(--surface-2); color: var(--fg-dim);
+  font-size: var(--text-xs); font-weight: 620;
+  transition: border-color var(--dur-fast), background var(--dur-fast), color var(--dur-fast);
+  white-space: nowrap;
+}
+.composer-content-trigger:hover,
+.composer-task-mode-trigger:hover,
+.composer-profile-trigger:hover,
+.composer-more-trigger:hover { border-color: var(--border-2); color: var(--fg); }
+.composer-content-trigger { width: 40px; justify-content: center; padding: 0; }
+.composer-content-trigger svg { color: var(--accent); }
+
+/* approval modebar */
+.composer-modebar {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  position: relative;
+  height: 32px; padding: 2px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  flex: 0 0 232px;
+}
+.composer-modebar__thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: calc((100% - 4px) / 3); height: 28px;
+  border-radius: 999px;
+  background: var(--bg-elev);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.composer-modebar[data-mode="auto"] .composer-modebar__thumb { transform: translateX(100%); }
+.composer-modebar[data-mode="yolo"] .composer-modebar__thumb { transform: translateX(200%); }
+.composer-modebar__item {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  height: 26px; padding: 0 6px; margin: 1px;
+  border-radius: 999px;
+  font-size: var(--text-xs); font-weight: 620;
+  color: var(--fg-faint); z-index: 1;
+  transition: color var(--dur-fast);
+}
+.composer-modebar__item--active { color: var(--fg); }
+.composer-modebar__item--yolo.composer-modebar__item--active { color: var(--danger); }
+.composer-modebar__item svg { flex-shrink: 0; }
+
+/* model switcher */
+.modelsw { position: relative; }
+.modelsw__trigger {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: var(--composer-control-height); padding: 0 10px;
+  border: 1px solid var(--border); border-radius: var(--composer-control-radius);
+  background: var(--surface-2); color: var(--fg);
+  font-size: var(--text-xs); font-weight: 620;
+  transition: border-color var(--dur-fast);
+  max-width: 168px;
+}
+.modelsw__trigger:hover { border-color: var(--border-2); }
+.modelsw__kind { color: var(--accent); flex-shrink: 0; }
+.modelsw__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.modelsw__chev { color: var(--fg-faint); flex-shrink: 0; }
+.effortsw { position: relative; }
+.effortsw .modelsw__trigger { max-width: 110px; }
+.effortsw__trigger--explicit .modelsw__label { color: var(--accent); }
+
+/* 终端抽屉（真实 TerminalPanel） */
+.terminal-drawer {
+  grid-area: terminal;
+  display: flex; flex-direction: column;
+  background: var(--bg-elev);
+  border-top: 1px solid var(--border-soft);
+  min-height: 0;
+}
+.layout--terminal-open { grid-template-rows: minmax(0, 1fr) auto 180px auto; grid-template-areas: "sidebar main dock" "sidebar footer dock" "sidebar terminal dock" "statusbar statusbar statusbar"; }
+.terminal-panel { display: flex; flex-direction: column; height: 100%; min-width: 0; background: var(--bg); color: var(--fg); }
+.terminal-panel__header {
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 38px; padding: 0 10px;
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg-elev);
+}
+.terminal-panel__identity, .terminal-panel__actions { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.terminal-panel__identity { flex: 1; overflow: hidden; }
+.terminal-panel__identity svg { color: var(--accent); flex-shrink: 0; }
+.terminal-panel__identity strong { font-size: var(--text-sm); font-weight: 650; flex-shrink: 0; }
+.terminal-panel__identity span { max-width: 180px; overflow: hidden; color: var(--fg-dim); font: 11px var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+.terminal-panel__actions { flex: 0 1 auto; gap: 4px; }
+.terminal-shell-select {
+  width: 132px; max-width: 30vw; min-width: 0; height: 28px;
+  padding: 0 24px 0 8px;
+  border: 1px solid var(--border-soft); border-radius: 5px;
+  background: var(--surface-2); color: var(--fg);
+  font: inherit; font-size: var(--text-xs);
+  text-overflow: ellipsis; cursor: pointer; outline: none;
+}
+.terminal-icon-button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; padding: 0;
+  border: 1px solid transparent; border-radius: 5px;
+  background: transparent; color: var(--fg-faint); cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.terminal-icon-button:hover { border-color: var(--border-soft); background: var(--surface-2); color: var(--fg); }
+.terminal-panel__body { display: flex; min-height: 0; flex: 1; flex-direction: column; }
+.terminal-view { flex: 1; min-height: 0; padding: 8px; background: var(--bg); font-family: var(--font-mono); font-size: 11px; color: var(--fg-dim); overflow: auto; white-space: pre; }
+.terminal-empty { display: flex; align-items: center; justify-content: center; gap: 9px; height: 100%; color: var(--fg-faint); font-size: var(--text-sm); }
+.terminal-empty__spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: terminal-spin .8s linear infinite; }
+@keyframes terminal-spin { to { transform: rotate(360deg); } }
+.terminal-session-rail { display: flex; min-width: 0; flex: 0 0 34px; align-items: center; border-bottom: 1px solid var(--border-soft); background: var(--bg-elev); }
+.terminal-session-rail__list { display: flex; min-width: 0; flex: 1; overflow-x: auto; padding: 3px 5px; }
+.terminal-session { display: flex; min-width: 96px; max-width: 180px; flex: 0 1 180px; align-items: center; min-height: 28px; border-bottom: 2px solid transparent; }
+.terminal-session--active { border-bottom-color: var(--accent); background: var(--surface-2); }
+.terminal-session__title { font-size: var(--text-xs); color: var(--fg-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.terminal-session__status { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--fg-faint); margin-right: 6px; }
+.terminal-session__status--running { background: var(--ok); }
+
+/* context panel 卡片 */
+.context-panel { display: flex; flex-direction: column; gap: 10px; }
+.dock-body .dock-sec-title { margin-top: 0; }
+.context-panel__section-head { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-faint); margin-bottom: 6px; }
+.context-panel__mini-stat {
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 7px 10px 7px 0;
+}
+.context-panel__mini-stat > span { font-size: 10px; color: var(--fg-faint); }
+.context-panel__mini-stat > strong { font-size: 13px; font-weight: 700; color: var(--fg); font-variant-numeric: tabular-nums; }
+.context-panel__mini-stat--good > strong { color: var(--ok); }
+.context-panel__mini-stat--accent > strong { color: var(--accent); }
+.context-panel__mini-stat--wide { grid-column: span 2; }
+.context-panel__capacity-card {
+  border: 1px solid var(--border-soft); border-radius: var(--r);
+  background: var(--bg-elev); padding: 10px 12px;
+}
+.context-panel__capacity-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+.context-panel__capacity-status { font-size: var(--text-xs); font-weight: 650; color: var(--fg-dim); }
+.context-panel__capacity-top strong { font-size: var(--text-sm); font-weight: 700; color: var(--fg); font-variant-numeric: tabular-nums; }
+.context-panel__usage-progress { height: 8px; border-radius: 999px; background: var(--surface-3); overflow: hidden; position: relative; }
+.context-panel__usage-progress span { display: block; height: 100%; border-radius: 999px; }
+.context-panel__capacity--good span { background: var(--ok); }
+.context-panel__capacity--notice span { background: var(--warn); }
+.context-panel__capacity--warn span { background: var(--err); }
+.context-panel__capacity-foot { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: var(--fg-faint); }
+
+/* context ring（composer 左侧） */
+.context-ring {
+  width: 20px; height: 20px; border-radius: 50%;
+  margin-right: 4px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.context-ring svg { width: 20px; height: 20px; transform: rotate(-90deg); }
+.context-ring .track { fill: none; stroke: var(--surface-3); stroke-width: 3; }
+.context-ring .arc { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+
+/* ============================================================
+   右侧 dock
+   ============================================================ */
+.workbench-dock {
+  grid-area: dock;
+  background: var(--surface, var(--bg-soft));
+  border-left: 1px solid var(--border-soft);
+  display: flex; flex-direction: column;
+  min-height: 0;
+}
+.workbench-dock__tools { height: 42px; padding: 7px 10px 3px; display: flex; align-items: flex-start; }
+.workbench-dock__tabs {
+  display: flex; gap: 3px;
+  padding: 3px;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+}
+.workbench-dock__tab {
+  display: inline-flex; align-items: center; gap: 5px;
+  min-width: 30px; max-width: 118px; height: 24px; padding: 0 8px;
+  border-radius: 6px;
+  font-size: 11.5px; font-weight: 560;
+  color: var(--fg-faint);
+  transition: background var(--dur-fast), color var(--dur-fast), box-shadow var(--dur-fast);
+  white-space: nowrap;
+}
+.workbench-dock__tab:hover { color: var(--fg-dim); }
+.workbench-dock__tab--active {
+  background: var(--bg-elev);
+  color: var(--fg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
+}
+.workbench-dock__tab svg { flex-shrink: 0; }
+.workbench-dock__body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 10px 10px; display: flex; flex-direction: column; gap: 9px; }
+
+/* dock 区块标题 */
+.dock-sec-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-dim); }
+
+/* context panel 指标 */
+.context-panel__metric { display: flex; flex-direction: column; gap: 2px; }
+.context-panel__metric > span { font-size: 10px; color: var(--fg-faint); }
+.context-panel__metric > strong { font-size: 14px; font-weight: 700; color: var(--fg); }
+.context-panel__metric--accent > strong { color: var(--accent); }
+.context-panel__metric--good > strong { color: var(--ok); }
+.metric-row { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+
+/* 上下文窗口环 */
+.ctx-ring {
+  width: 76px; height: 76px; border-radius: 50%;
+  background: conic-gradient(var(--accent) 0deg, var(--accent) 119deg, var(--surface-3) 119deg, var(--surface-3) 360deg);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ctx-ring::after { content: ""; width: 60px; height: 60px; border-radius: 50%; background: var(--surface); }
+.ctx-row { display: flex; align-items: center; gap: 12px; }
+.ctx-label { display: flex; flex-direction: column; }
+.ctx-pct { font-size: 18px; font-weight: 700; color: var(--fg); }
+.ctx-cap { font-size: 10px; color: var(--fg-faint); }
+
+/* 文件列表 */
+.file-row {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 32px; padding: 4px 8px;
+  border-radius: var(--r-s);
+  font-size: var(--text-xs); color: var(--fg-dim);
+  cursor: pointer; border: 1px solid transparent;
+  transition: background var(--dur-fast), border-color var(--dur-fast);
+}
+.file-row:hover { background: var(--bg-elev-2); border-color: var(--border-soft); }
+.file-row--active { background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 28%, transparent); color: var(--fg); }
+.file-row .f-ico { flex-shrink: 0; width: 16px; text-align: center; font-size: 12px; }
+.file-row .f-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); font-size: 10px; }
+.file-row .f-meta { flex-shrink: 0; font-size: 9px; color: var(--fg-faint); }
+.file-type-badge {
+  flex-shrink: 0; font-size: 8px; font-weight: 700;
+  padding: 1px 5px; border-radius: 3px;
+  background: var(--bg-elev-2); color: var(--fg-faint);
+  border: 1px solid var(--border-soft); letter-spacing: .03em;
+}
+.file-type-badge--dart { color: #40c4ff; border-color: color-mix(in srgb, #40c4ff 35%, var(--border-soft)); background: color-mix(in srgb, #40c4ff 10%, transparent); }
+.file-type-badge--json { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, var(--border-soft)); background: color-mix(in srgb, var(--warn) 10%, transparent); }
+
+/* diff 卡 */
+.diff-card { border: 1px solid var(--border-soft); border-radius: var(--r); overflow: hidden; background: var(--bg-soft); }
+.diff-card__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 10px; color: var(--fg-dim);
+}
+.diff-card__head .dc-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); font-size: 10px; color: var(--fg); }
+.diff-card__head .dc-stats { display: flex; gap: 4px; flex-shrink: 0; }
+.dc-stat { font-family: var(--font-mono); font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 999px; }
+.dc-stat--add { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.dc-stat--del { background: color-mix(in srgb, var(--err) 14%, transparent); color: var(--err); }
+.diff-line { display: flex; font-family: var(--font-mono); font-size: 10px; line-height: 1.75; }
+.diff-line .dl-gutter { width: 26px; flex-shrink: 0; text-align: right; padding-right: 6px; color: var(--fg-faint); opacity: .75; user-select: none; background: color-mix(in srgb, var(--bg) 55%, transparent); }
+.diff-line .dl-sign { width: 14px; flex-shrink: 0; text-align: center; font-weight: 700; user-select: none; }
+.diff-line .dl-code { flex: 1; padding-left: 8px; padding-right: 8px; white-space: pre; overflow-x: auto; }
+.diff-line--add { background: color-mix(in srgb, var(--ok) 13%, transparent); color: var(--ok); }
+.diff-line--add .dl-gutter { background: color-mix(in srgb, var(--ok) 22%, transparent); }
+.diff-line--del { background: color-mix(in srgb, var(--err) 13%, transparent); color: var(--err); }
+.diff-line--del .dl-gutter { background: color-mix(in srgb, var(--err) 22%, transparent); }
+.diff-line--ctx { color: var(--fg-dim); }
+.diff-line--ctx .dl-sign { color: transparent; }
+.diff-line .dl-code .k { color: var(--hl-k); }
+.diff-line .dl-code .s { color: var(--hl-s); }
+.diff-line .dl-code .c { color: var(--hl-c); font-style: italic; }
+.diff-line .dl-code .f { color: var(--hl-f); }
+.diff-line .dl-code .n { color: var(--hl-n); }
+
+/* ============================================================
+   状态栏
+   ============================================================ */
+.statusbar {
+  grid-area: statusbar;
+  display: flex; align-items: center;
+  height: var(--statusbar-height);
+  margin: 7px auto 0;
+  padding: 0 14px;
+  font-family: var(--font-metadata-family);
+  font-size: var(--text-xs);
+  color: var(--fg-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  border-top: 1px solid var(--border-soft);
+  width: 100%;
+  overflow: hidden;
+}
+.statusbar__group { display: flex; align-items: center; }
+.statusbar__group--items { display: flex; align-items: center; gap: 0; }
+.statusbar__item { display: inline-flex; align-items: center; }
+.statusbar__item + .statusbar__item::before { content: "|"; margin: 0 9px; color: color-mix(in srgb, var(--fg-faint) 50%, transparent); }
+.statusbar__remote-wrap { display: inline-flex; align-items: center; margin-right: 10px; }
+.statusbar__remote {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 22px; padding: 0 8px;
+  border: 1px solid var(--border-soft); border-radius: 999px;
+  background: var(--bg-elev);
+  font-size: 10px; color: var(--fg-dim);
+  cursor: pointer;
+}
+.statusbar__remote svg:first-child { color: var(--fg-faint); }
+.statusbar__remote svg:last-child { color: var(--fg-faint); }
+.remote-chip--stopped { color: var(--fg-faint); }
+.remote-chip--stopped svg:first-child { color: var(--err); }
+.stat { display: inline-flex; align-items: center; gap: 5px; }
+.stat b { color: var(--fg-dim); font-weight: 600; }
+.stat--accent b { color: var(--accent); }
+.stat--good b { color: var(--ok); }
+.stat--warn b { color: var(--warn); }
+.stat--danger b { color: var(--danger); }
+.stat__label--icon { display: inline-flex; align-items: center; color: var(--fg-faint); }
+.stat--model .statusbar__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); display: inline-block; }
+.statusbar__dot--busy { background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.statusbar__model { max-width: 132px; overflow: hidden; text-overflow: ellipsis; font-weight: 600; color: var(--fg); }
+.statusbar__workspace b, .statusbar__branch b { max-width: 170px; overflow: hidden; text-overflow: ellipsis; font-weight: 500; color: var(--fg-dim); }
+
+/* ============================================================
+   命令面板
+   ============================================================ */
+.palette-overlay {
+  position: fixed; inset: 0; z-index: 1300;
+  background: color-mix(in srgb, var(--bg) 52%, transparent);
+  display: none; align-items: flex-start; justify-content: center;
+  padding-top: 12vh;
+}
+.palette-overlay--open { display: flex; }
+.palette-overlay--open .palette { animation: pop var(--dur-base) var(--ease-out); }
+@keyframes pop { from { opacity: 0; transform: scale(0.98) translateY(-4px); } }
+.palette {
+  width: min(560px, 92vw);
+  border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg-elev);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.48);
+  overflow: hidden;
+}
+.palette__inputrow { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border-soft); color: var(--fg-faint); }
+.palette__input { flex: 1; border: none; outline: none; background: none; color: var(--fg); font: inherit; font-size: var(--text-md); }
+.palette__input::placeholder { color: var(--fg-faint); }
+.palette__esc { font-family: var(--font-mono); font-size: 10px; border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; }
+.palette__list { padding: 6px; max-height: 320px; overflow-y: auto; }
+.palette__group-title { padding: 8px 10px 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-faint); }
+.palette__item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-s); font-size: var(--text-sm); color: var(--fg-dim); cursor: pointer; }
+.palette__item:hover, .palette__item--on { background: var(--accent-soft); color: var(--fg); }
+.palette__item .pico { width: 20px; text-align: center; color: var(--fg-faint); flex-shrink: 0; }
+.palette__item--on .pico { color: var(--accent); }
+.palette__item .right { margin-left: auto; font-size: 10px; color: var(--fg-faint); }
+.palette__foot { padding: 8px 12px; border-top: 1px solid var(--border-soft); font-size: 10px; color: var(--fg-faint); display: flex; gap: 14px; }
+.palette__foot kbd { font-family: var(--font-mono); border: 1px solid var(--border); border-radius: 3px; padding: 0 4px; font-size: 9px; }
+
+/* ============================================================
+   顶栏（workbench 模式隐藏，但保留结构）——app-chrome
+   ============================================================ */
+.app-chrome {
+  display: flex; align-items: center;
+  height: var(--app-chrome-height);
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border-soft);
+  padding: 0 10px;
+  flex-shrink: 0;
+}
+.app-chrome__tab-strip { flex: 1; min-width: 0; display: flex; align-items: flex-end; gap: 2px; overflow: hidden; }
+.tabbar { display: flex; align-items: center; flex: 1; min-width: 0; }
+.tabbar__tabs { display: flex; align-items: center; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; }
+.tabbar__tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 30px; padding: 0 10px;
+  border-radius: 7px;
+  font-size: var(--text-xs); font-weight: 550;
+  color: var(--fg-dim); cursor: pointer;
+  position: relative; flex-shrink: 0; max-width: 176px;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.tabbar__tab:hover { background: var(--bg-elev-2); color: var(--fg); }
+.tabbar__tab--active { color: var(--fg); }
+.tabbar__tab--active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 2px; border-radius: 2px; background: var(--accent); }
+.tabbar__file-icon { color: var(--fg-faint); flex-shrink: 0; }
+.tabbar__tab-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tabbar__mode-badge { font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); flex-shrink: 0; }
+.tabbar__mode-badge--yolo { background: var(--danger); color: #fff; }
+.tabbar__tab-close { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 4px; color: var(--fg-faint); opacity: 0; transition: opacity var(--dur-fast); }
+.tabbar__tab:hover .tabbar__tab-close { opacity: 1; }
+.tabbar__tab-close:hover { background: var(--bg-elev-2); color: var(--fg); }
+.tabbar__new { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; color: var(--fg-faint); margin-left: 2px; flex-shrink: 0; }
+.tabbar__new:hover { background: var(--bg-elev-2); color: var(--fg); }
+.tabbar__command { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 8px; border-radius: 6px; color: var(--fg-faint); margin-left: 8px; flex-shrink: 0; }
+.tabbar__command:hover { background: var(--bg-elev-2); color: var(--fg); }
+.tabbar__command kbd { font-family: var(--font-mono); font-size: 9px; border: 1px solid var(--border); border-radius: 3px; padding: 0 4px; }
+
+/* 窗口控制（windows） */
+.windows-window-controls { position: fixed; top: 0; right: 0; display: flex; width: 138px; height: 48px; z-index: 100; }
+.windows-window-controls button { width: 46px; height: 48px; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-dim); font-size: 10px; }
+.windows-window-controls button:hover { background: var(--bg-elev-2); color: var(--fg); }
+.windows-window-controls button.close:hover { background: var(--danger); color: #fff; }
+
+/* 工具提示 */
+.tooltip { position: fixed; z-index: 1400; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; font-size: 10px; color: var(--fg); box-shadow: 0 4px 12px rgba(0,0,0,0.3); pointer-events: none; display: none; white-space: nowrap; }
+
+/* ============================================================
+   复刻页顶部说明条（非真实 UI 的一部分，用于说明）
+   ============================================================ */
+.clone-banner {
+  position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+  z-index: 2000;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 10px; color: var(--fg-faint);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  display: flex; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.clone-banner b { color: var(--fg-dim); }
+/* 键盘焦点环（DESIGN.md §3 --focus-ring） */
+.btn:focus-visible, .pill:focus-visible, .composer__btn:focus-visible,
+.composer-modebar__item:focus-visible, .modelsw__trigger:focus-visible,
+.sidebar__navitem:focus-visible, .sidebar__quick-action:focus-visible,
+.project-tree__folder-main:focus-visible, .project-tree__topic-main:focus-visible,
+.dock-tab:focus-visible, .workbench-dock__tab:focus-visible, .tabbar__tab:focus-visible, .terminal-icon-button:focus-visible,
+.palette__item:focus-visible, .file-row:focus-visible, .theme-card:focus-visible,
+.sb-metric:focus-visible, .jump-item:focus-visible, .turn-collapse__head:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+/* 尊重系统减弱动效 */
+/* 响应式（与 design-showcase 断点对齐） */
+@media (max-width: 1024px) {
+  .layout { grid-template-columns: var(--sidebar-width) minmax(0, 1fr) minmax(0, var(--dock-width)); }
+  .sidebar { --sidebar-width: 210px; }
+  .workbench-dock { --dock-width: 250px; }
+}
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; grid-template-areas: "main" "footer" "statusbar"; }
+  .sidebar, .workbench-dock { display: none; }
+  .main { grid-area: main; }
+  .footer { grid-area: footer; }
+  .statusbar { grid-area: statusbar; }
+  .terminal-drawer { grid-column: 1; }
+  .composer-meta { flex-wrap: wrap; }
+  .statusbar { overflow-x: auto; }
+}
+@media (max-width: 560px) {
+  .transcript { padding: 16px 14px; }
+  .footer { padding: 0 12px 10px; }
+  .composer-modebar { flex-basis: 100%; }
+  .welcome__hints { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- 应用根 -->
+<div class="app">
+  <!-- AppChrome（workbench 模式在真实 app 中隐藏，此处保留用于展示结构） -->
+  <header class="app-chrome app-chrome--tabs app-chrome--native-tabs app-chrome--identityless app-chrome--platform-windows" style="display:none">
+    <div class="app-chrome__tab-strip">
+      <div class="tabbar">
+        <div class="tabbar__tabs">
+          <button class="tabbar__tab tabbar__tab--active">
+            <span class="tabbar__file-icon">◆</span>
+            <span class="tabbar__tab-label">新会话</span>
+            <span class="tabbar__mode-badge">plan</span>
+            <span class="tabbar__tab-close">✕</span>
+          </button>
+          <button class="tabbar__tab">
+            <span class="tabbar__file-icon">◆</span>
+            <span class="tabbar__tab-label">石墨主题复刻</span>
+            <span class="tabbar__tab-close">✕</span>
+          </button>
+          <button class="tabbar__new">＋</button>
+        </div>
+        <button class="tabbar__command">⌘ <span>搜索</span><kbd>⌘K</kbd></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 布局 -->
+  <div class="layout" id="layout">
+    <!-- ===== 左侧边栏 ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">
+        <div class="sidebar__brand-logo sidebar__brand-logo--workbench">
+          <span class="mark">R</span>
+          <span>Reasonix</span>
+        </div>
+      </div>
+      <div class="sidebar__quick-actions">
+        <button class="sidebar__quick-action" id="quick-new">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>新会话</span>
+        </button>
+      </div>
+
+      <section class="sidebar__section sidebar__section--projects">
+        <div class="project-tree">
+          <label class="project-tree__search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input placeholder="搜索会话…" id="tree-search">
+          </label>
+          <header class="project-tree__header">
+            <span class="project-tree__header-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="14" rx="2"/><path d="M22 5v11M8 2h12v9"/></svg>
+              项目
+            </span>
+            <div class="project-tree__header-actions">
+              <button class="project-tree__header-icon-btn project-tree__header-icon-btn--active" title="时间过滤">◷</button>
+              <button class="project-tree__header-icon-btn" title="全部折叠">−</button>
+              <button class="project-tree__header-icon-btn" title="添加项目">＋</button>
+            </div>
+          </header>
+          <div class="project-tree__list" id="project-list">
+            <div class="project-tree__section-title">固定</div>
+            <div class="project-tree__folder">
+              <button class="project-tree__folder-main project-tree__folder-main--active">
+                <span class="project-tree__folder-icon">▾</span>
+                <span class="project-tree__folder-color" style="background:var(--accent)"></span>
+                <span class="project-tree__folder-label">hibiki</span>
+                <span class="project-tree__folder-action" title="新会话">＋</span>
+              </button>
+              <div class="project-tree__topic">
+                <button class="project-tree__topic-main project-tree__topic-main--active">
+                  <span class="project-tree__topic-copy">
+                    <span class="project-tree__topic-label">复刻 Reasonix 工作台 UI</span>
+                  </span>
+                  <span class="project-tree__topic-status project-tree__topic-status--running">●</span>
+                  <span class="project-tree__topic-time">3 分钟前</span>
+                  <span class="project-tree__topic-actions">
+                    <span class="project-tree__topic-action" title="固定">📌</span>
+                  </span>
+                </button>
+              </div>
+              <div class="project-tree__topic">
+                <button class="project-tree__topic-main">
+                  <span class="project-tree__topic-copy">
+                    <span class="project-tree__topic-label">浅色模式橙色 accent 修正</span>
+                  </span>
+                  <span class="project-tree__topic-status">✓</span>
+                  <span class="project-tree__topic-time">1 小时前</span>
+                </button>
+              </div>
+              <div class="project-tree__topic">
+                <button class="project-tree__topic-main">
+                  <span class="project-tree__topic-copy">
+                    <span class="project-tree__topic-label">历史会话跳转滚动条</span>
+                  </span>
+                  <span class="project-tree__topic-status">✓</span>
+                  <span class="project-tree__topic-time">昨天</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="project-tree__section-title">项目</div>
+            <div class="project-tree__folder">
+              <button class="project-tree__folder-main">
+                <span class="project-tree__folder-icon">▸</span>
+                <span class="project-tree__folder-color" style="background:#4d8df6"></span>
+                <span class="project-tree__folder-label">deepseek-reasonix</span>
+                <span class="project-tree__folder-action" title="新会话">＋</span>
+              </button>
+            </div>
+            <div class="project-tree__folder">
+              <button class="project-tree__folder-main">
+                <span class="project-tree__folder-icon">▸</span>
+                <span class="project-tree__folder-color" style="background:#8b7cff"></span>
+                <span class="project-tree__folder-label">reasonix-docs</span>
+                <span class="project-tree__folder-action" title="新会话">＋</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <nav class="sidebar__nav">
+        <button class="sidebar__navitem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <span>搜索</span>
+        </button>
+        <button class="sidebar__navitem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14Z"/></svg>
+          <span>回收站</span>
+        </button>
+        <button class="sidebar__navitem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span>自动化</span>
+        </button>
+        <button class="sidebar__navitem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>设置</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- ===== 中央转录 ===== -->
+    <main class="main">
+      <div class="transcript-shell">
+        <div class="transcript" id="transcript">
+          <!-- 欢迎屏 -->
+          <div class="welcome" id="welcome">
+            <div class="welcome__brand">R</div>
+            <div class="welcome__title">开始新的会话</div>
+            <div class="welcome__sub">Reasonix 桌面端工作台 · 基于 esengine/DeepSeek-Reasonix 真实源码像素级复刻</div>
+            <div class="welcome__hints">
+              <span class="welcome__hint"><kbd>⌘</kbd><kbd>K</kbd> 命令面板</span>
+              <span class="welcome__hint"><kbd>⌘</kbd><kbd>N</kbd> 新会话</span>
+              <span class="welcome__hint"><kbd>⌘</kbd><kbd>P</kbd> 主题</span>
+            </div>
+          </div>
+
+          <!-- 消息流（动态注入） -->
+          <div id="messages"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===== Footer：Todo + Composer ===== -->
+    <footer class="footer" id="footer">
+      <div class="composer-wrap">
+        <!-- TodoPanel -->
+        <div class="todobar" id="todobar">
+          <div class="todobar__head">
+            <span class="tt">任务</span>
+            <span class="spacer"></span>
+            <span style="font-size:10px;color:var(--fg-faint)">3 / 4</span>
+          </div>
+          <div class="todobar__list">
+            <div class="todobar__item todobar__item--in_progress">
+              <span class="todobar__status">◔</span>
+              <span class="todobar__text">复刻工作台布局骨架</span>
+            </div>
+            <div class="todobar__item todobar__item--completed">
+              <span class="todobar__status">✓</span>
+              <span class="todobar__text">克隆仓库并部署 dev server</span>
+            </div>
+            <div class="todobar__item todobar__item--completed">
+              <span class="todobar__status">✓</span>
+              <span class="todobar__text">精读核心组件源码</span>
+            </div>
+            <div class="todobar__item">
+              <span class="todobar__status"></span>
+              <span class="todobar__text">整理组件清单文档</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Composer -->
+        <div class="composer-card">
+          <div class="composer">
+            <div class="composer__input-row">
+              <span class="composer__caret">$</span>
+              <div class="composer__content">
+                <textarea class="composer__input" id="composer-input" rows="1" placeholder="输入指令，Shift+Enter 换行…"></textarea>
+              </div>
+              <button class="composer__btn composer__btn--send" title="发送" id="composer-send">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="composer-meta">
+            <div class="composer-meta__params">
+              <div class="composer-meta__control composer-meta__control--content">
+                <button class="composer-content-trigger" title="内容菜单">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+              <div class="composer-meta__control composer-meta__control--intent">
+                <button class="composer-task-mode-trigger">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  <span class="composer-task-mode-trigger__value">直接</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                </button>
+              </div>
+              <div class="composer-meta__control composer-meta__control--profile">
+                <button class="composer-profile-trigger" data-profile="economy">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v-6M9.5 15h5M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z" opacity="0"/><path d="m12 14 4-4"/><path d="m12 14 4 4"/></svg>
+                  <span class="composer-profile-trigger__label"><span class="composer-profile-trigger__value">经济</span></span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                </button>
+              </div>
+              <div class="composer-meta__control composer-meta__control--approval">
+                <div class="composer-modebar composer-modebar--approval" data-mode="auto" id="modebar">
+                  <span class="composer-modebar__thumb" aria-hidden="true"></span>
+                  <button class="composer-modebar__item composer-modebar__item--ask" data-mode="ask">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>ask</span>
+                  </button>
+                  <button class="composer-modebar__item composer-modebar__item--auto composer-modebar__item--active" data-mode="auto">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <span>auto</span>
+                  </button>
+                  <button class="composer-modebar__item composer-modebar__item--yolo" data-mode="yolo">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                    <span>yolo</span>
+                  </button>
+                </div>
+              </div>
+              <span class="composer-meta__divider" aria-hidden="true"></span>
+              <div class="composer-meta__control composer-meta__control--model">
+                <span class="context-ring" title="上下文窗口">
+                  <svg viewBox="0 0 20 20">
+                    <circle class="track" cx="10" cy="10" r="7.5"></circle>
+                    <circle class="arc" cx="10" cy="10" r="7.5" stroke-dasharray="47.1" stroke-dashoffset="31.6"></circle>
+                  </svg>
+                </span>
+                <div class="modelsw" id="model-switch">
+                  <button class="modelsw__trigger">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="modelsw__kind"><path d="M12 2a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/><path d="M9 12a3 3 0 0 0 3 3"/><path d="M12 2v2M12 14v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2"/></svg>
+                    <span class="modelsw__label">deepseek-chat</span>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="modelsw__chev"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="composer-meta__control composer-meta__control--effort">
+                <div class="modelsw effortsw" id="effort-switch">
+                  <button class="modelsw__trigger effortsw__trigger">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="modelsw__kind"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+                    <span class="modelsw__label">auto</span>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="modelsw__chev"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ===== 右侧 dock ===== -->
+    <aside class="workbench-dock">
+      <div class="workbench-dock__tools">
+        <div class="workbench-dock__tabs" role="tablist">
+          <button class="workbench-dock__tab workbench-dock__tab--active" data-view="overview" role="tab" aria-selected="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <span>overview</span>
+          </button>
+          <button class="workbench-dock__tab" data-view="files" role="tab" aria-selected="false">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            <span>文件</span>
+          </button>
+          <button class="workbench-dock__tab" data-view="changed" role="tab" aria-selected="false">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+            <span>变更</span>
+          </button>
+          <button class="workbench-dock__tab" data-view="remote" role="tab" aria-selected="false">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg>
+            <span>remote</span>
+          </button>
+        </div>
+      </div>
+      <div class="workbench-dock__body" id="dock-body"></div>
+    </aside>
+
+    <!-- ===== 终端抽屉（真实 TerminalPanel）===== -->
+    <div class="terminal-drawer" id="terminal-drawer" style="display:none">
+      <div class="terminal-panel">
+        <header class="terminal-panel__header">
+          <div class="terminal-panel__identity">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg>
+            <strong>终端</strong>
+            <span title="hibiki">~/projects/hibiki</span>
+          </div>
+          <div class="terminal-panel__actions">
+            <select class="terminal-shell-select" aria-label="Shell">
+              <option value="default">默认 Shell</option>
+              <option value="bash">bash</option>
+              <option value="pwsh">PowerShell</option>
+            </select>
+            <button class="terminal-icon-button" title="新建会话">＋</button>
+            <button class="terminal-icon-button" title="加入对话">＋</button>
+            <button class="terminal-icon-button" id="terminal-close" title="收起">▽</button>
+          </div>
+        </header>
+        <div class="terminal-session-rail">
+          <div class="terminal-session-rail__list">
+            <div class="terminal-session terminal-session--active">
+              <span class="terminal-session__status terminal-session__status--running"></span>
+              <span class="terminal-session__title">bash · hibiki</span>
+            </div>
+          </div>
+        </div>
+        <div class="terminal-view" id="terminal-view"><span style="color:var(--ok)">➜</span> <span style="color:var(--accent)">~/projects/hibiki</span> git:(main) <span style="color:var(--fg-dim)">$ </span></div>
+      </div>
+    </div>
+
+    <!-- ===== 状态栏（真实 14 槽位结构）===== -->
+    <div class="statusbar statusbar--text" id="statusbar">
+      <div class="statusbar__group statusbar__group--items">
+        <span class="statusbar__remote-wrap">
+          <button type="button" class="statusbar__remote remote-chip remote-chip--stopped" title="SSH · 已断开">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+            <span>SSH · 已断开</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+          </button>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="model">
+          <span class="stat stat--model">
+            <span class="statusbar__dot statusbar__dot--busy"></span>
+            <span class="statusbar__model">DeepSeek-R1</span>
+          </span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="workspace">
+          <span class="stat statusbar__workspace">
+            <span class="stat__label stat__label--icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+            </span>
+            <b>…/projects/joyquant-db</b>
+          </span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="git_branch">
+          <span class="stat statusbar__branch">
+            <span class="stat__label stat__label--icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+            </span>
+            <b>main</b>
+          </span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="hit_now">
+          <span class="stat">本次命中 <b>—</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="hit_avg">
+          <span class="stat">平均命中 <b>—</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="tokens_session">
+          <span class="stat">会话 tokens <b>34,479</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="tokens_turn">
+          <span class="stat">本次 tokens <b>—</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="cost_turn">
+          <span class="stat">本次费用 <b>¥0.0000</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="turns">
+          <span class="stat">当前会话 <b>18 轮</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="context">
+          <span class="stat">上下文 <b>33%</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="compaction">
+          <span class="stat">压缩阈值 <b>80%</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="cost_session">
+          <span class="stat">会话费用 <b>¥0.0000</b></span>
+        </span>
+        <span class="statusbar__item" data-statusbar-item="balance">
+          <span class="stat stat--accent">余额 <b>¥128.50</b></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 命令面板 -->
+<div class="palette-overlay" id="palette-overlay">
+  <div class="palette">
+    <div class="palette__inputrow">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input class="palette__input" placeholder="输入命令或搜索…" autocomplete="off">
+      <span class="palette__esc">esc</span>
+    </div>
+    <div class="palette__list">
+      <div class="palette__group-title">导航</div>
+      <div class="palette__item palette__item--on"><span class="pico">＋</span><span>新建会话</span><span class="right">↵</span></div>
+      <div class="palette__item"><span class="pico">🕘</span><span>历史会话</span><span class="right">↵</span></div>
+      <div class="palette__item"><span class="pico">🗑</span><span>回收站</span><span class="right">↵</span></div>
+      <div class="palette__group-title">设置</div>
+      <div class="palette__item"><span class="pico">⚙</span><span>设置 · 外观</span><span class="right">↵</span></div>
+      <div class="palette__item"><span class="pico">🧠</span><span>记忆管理</span><span class="right">↵</span></div>
+    </div>
+    <div class="palette__foot"><span><kbd>↑↓</kbd> 选择</span><span><kbd>↵</kbd> 打开</span><span><kbd>esc</kbd> 关闭</span></div>
+  </div>
+</div>
+
+<!-- 说明条 -->
+<div class="clone-banner">
+  <b>Reasonix 工作台 · 像素级复刻</b>
+  <span>· 组件：AppChrome / TabBar / Sidebar / ProjectTree / Transcript / TodoPanel / Composer / ContextRing / ModeBar / ModelSwitcher / Dock / ContextPanel / StatusBar / CommandPalette</span>
+  <button id="wb-theme-toggle" style="pointer-events:auto;background:var(--bg-elev);border:1px solid var(--border);border-radius:999px;padding:2px 10px;font-size:10px;color:var(--fg-dim);cursor:pointer" title="切换浅色/深色">🌙 深色</button>
+</div>
+
+<script>
+/* ================= 组件清单（对照源码） ================= */
+const COMPONENTS = [
+  "AppChrome", "TabBar", "Sidebar", "ProjectTree", "Transcript", "Message", "ToolCard",
+  "TodoPanel", "Composer", "ContextWindowRing", "ModeBar", "ModelSwitcher", "EffortSwitcher",
+  "WorkspacePanel", "ContextPanel", "StatusBar", "CommandPalette", "HistoryPanel",
+  "SettingsPanel", "ApprovalModal", "AskCard", "TerminalPanel", "RemotePanel", "UpdateBanner",
+];
+
+/* ================= 右侧 dock 三视图 ================= */
+const DOCK_VIEWS = {
+  overview: `
+    <div class="context-panel">
+      <div class="dock-sec-title">上下文窗口</div>
+      <div class="context-panel__capacity-card context-panel__capacity-card--good">
+        <div class="context-panel__capacity-top">
+          <span class="context-panel__capacity-status">上下文充足</span>
+          <strong>42.1k / 128k tokens</strong>
+        </div>
+        <div class="context-panel__usage-progress"><span class="context-panel__capacity--good" style="width:33%"></span></div>
+        <div class="context-panel__capacity-foot"><span>33% 已用</span><span>距压缩 80%</span></div>
+      </div>
+      <div class="dock-sec-title">会话指标</div>
+      <div class="metric-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="context-panel__mini-stat context-panel__mini-stat--good"><span>平均命中</span><strong>87.00%</strong></div>
+        <div class="context-panel__mini-stat"><span>会话费用</span><strong>¥0.1287</strong></div>
+        <div class="context-panel__mini-stat"><span>运行时间</span><strong>33分0秒</strong></div>
+        <div class="context-panel__mini-stat"><span>请求数</span><strong>10</strong></div>
+        <div class="context-panel__mini-stat context-panel__mini-stat--wide"><span>累计 tokens</span><strong>34,479</strong></div>
+      </div>
+      <div class="dock-sec-title">本次</div>
+      <div class="metric-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="context-panel__metric context-panel__metric--accent"><span>本次命中</span><strong>—</strong></div>
+        <div class="context-panel__metric"><span>本次 tokens</span><strong>—</strong></div>
+        <div class="context-panel__metric"><span>本次费用</span><strong>—</strong></div>
+        <div class="context-panel__metric context-panel__metric--accent"><span>余额</span><strong>¥128.50</strong></div>
+      </div>
+      <div class="dock-sec-title">用量分析 · 按来源</div>
+      <div class="context-panel__metric" style="gap:4px">
+        <span>主模型 <b style="float:right;color:var(--fg)">71%</b></span>
+        <span>规划器 <b style="float:right;color:var(--fg)">5%</b></span>
+        <span>子代理 <b style="float:right;color:var(--fg)">14%</b></span>
+        <span>压缩摘要 <b style="float:right;color:var(--fg)">7%</b></span>
+        <span>计划分类 <b style="float:right;color:var(--fg)">2%</b></span>
+        <span>标题生成 <b style="float:right;color:var(--fg)">1%</b></span>
+      </div>
+      <div class="context-panel__metric" style="gap:2px">
+        <span style="font-weight:650;color:var(--fg-dim)">主模型 · 4 次</span>
+        <span>总计 32,400 · 缓存 <b style="color:var(--ok)">89.41%</b> · 费用 ¥0.0887</span>
+      </div>
+      <div class="context-panel__metric" style="gap:2px">
+        <span style="font-weight:650;color:var(--fg-dim)">规划器 · 1 次</span>
+        <span>总计 2,400 · 缓存 <b style="color:var(--ok)">82.93%</b> · 费用 ¥0.0079</span>
+      </div>
+      <div class="context-panel__metric" style="gap:2px">
+        <span style="font-weight:650;color:var(--fg-dim)">子代理 · 2 次</span>
+        <span>总计 6,300 · 缓存 <b style="color:var(--ok)">74.39%</b> · 费用 ¥0.0229</span>
+      </div>
+      <div style="font-size:10px;color:var(--fg-faint)">还有 3 个来源</div>
+    </div>`,
+  remote: `
+    <div class="remote-panel">
+      <div class="dock-sec-title">远程主机</div>
+      <div class="file-row file-row--active">
+        <span class="f-ico">🖥</span>
+        <span class="f-name">dev-server (172.16.0.5)</span>
+        <span class="f-meta">已连接</span>
+      </div>
+      <div class="file-row">
+        <span class="f-ico">🖥</span>
+        <span class="f-name">build-01 (10.0.1.8)</span>
+        <span class="f-meta">未连接</span>
+      </div>
+      <div class="dock-sec-title" style="margin-top:6px">转发端口</div>
+      <div class="file-row">
+        <span class="f-ico">🔌</span>
+        <span class="f-name">3000 → localhost:3000</span>
+        <span class="f-meta">活跃</span>
+      </div>
+      <div class="file-row">
+        <span class="f-ico">🔌</span>
+        <span class="f-name">5173 → localhost:5173</span>
+        <span class="f-meta">活跃</span>
+      </div>
+    </div>`,
+  files: `
+    <div class="dock-sec-title">最近修改</div>
+    <div class="file-row file-row--active">
+      <span class="f-ico">📄</span>
+      <span class="f-name">src/pages/implementations/home_video_page.dart</span>
+      <span class="file-type-badge file-type-badge--dart">DART</span>
+    </div>
+    <div class="file-row">
+      <span class="f-ico">📄</span>
+      <span class="f-name">src/media/video/video_library_overview.dart</span>
+      <span class="file-type-badge file-type-badge--dart">DART</span>
+    </div>
+    <div class="file-row">
+      <span class="f-ico">📄</span>
+      <span class="f-name">src/settings/settings_schema_video.dart</span>
+      <span class="file-type-badge file-type-badge--dart">DART</span>
+    </div>
+    <div class="file-row">
+      <span class="f-ico">📄</span>
+      <span class="f-name">src/models/preferences_repository.dart</span>
+      <span class="file-type-badge file-type-badge--dart">DART</span>
+    </div>
+    <div class="file-row">
+      <span class="f-ico">🌐</span>
+      <span class="f-name">i18n/strings_zh-CN.i18n.json</span>
+      <span class="file-type-badge file-type-badge--json">JSON</span>
+    </div>
+    <div class="dock-sec-title" style="margin-top:6px">工作区</div>
+    <div class="file-row">
+      <span class="f-ico">📁</span>
+      <span class="f-name">hibiki/hibiki/lib/src/pages/</span>
+      <span class="f-meta">14 文件</span>
+    </div>
+    <div class="file-row">
+      <span class="f-ico">📁</span>
+      <span class="f-name">hibiki/hibiki/lib/src/media/</span>
+      <span class="f-meta">9 文件</span>
+    </div>`,
+  changed: `
+    <div class="dock-sec-title">变更（3 个文件）</div>
+    <div class="diff-card">
+      <div class="diff-card__head">
+        <span class="dc-name">video_library_overview.dart</span>
+        <span class="dc-stats"><span class="dc-stat dc-stat--add">+12</span><span class="dc-stat dc-stat--del">−2</span></span>
+      </div>
+      <div class="diff-line diff-line--add">
+        <span class="dl-gutter">14</span><span class="dl-sign">+</span>
+        <span class="dl-code"><span class="k">class</span> <span class="f">VideoOverviewEntry</span> {</span>
+      </div>
+      <div class="diff-line diff-line--add">
+        <span class="dl-gutter">15</span><span class="dl-sign">+</span>
+        <span class="dl-code">  <span class="k">const</span> <span class="f">VideoOverviewEntry</span>({</span>
+      </div>
+      <div class="diff-line diff-line--del">
+        <span class="dl-gutter">19</span><span class="dl-sign">−</span>
+        <span class="dl-code">    <span class="k">required</span> <span class="k">this</span>.lastWatchedAt,</span>
+      </div>
+      <div class="diff-line diff-line--add">
+        <span class="dl-gutter">19</span><span class="dl-sign">+</span>
+        <span class="dl-code">    <span class="k">required</span> <span class="k">this</span>.completed,</span>
+      </div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-card__head">
+        <span class="dc-name">preferences_repository.dart</span>
+        <span class="dc-stats"><span class="dc-stat dc-stat--add">+5</span><span class="dc-stat dc-stat--del">−0</span></span>
+      </div>
+      <div class="diff-line diff-line--add">
+        <span class="dl-gutter">343</span><span class="dl-sign">+</span>
+        <span class="dl-code">  <span class="k">Future</span>&lt;<span class="k">void</span>&gt; <span class="f">setVideoSortModeName</span>(<span class="n">String</span> name) <span class="k">async</span> {</span>
+      </div>
+      <div class="diff-line diff-line--add">
+        <span class="dl-gutter">344</span><span class="dl-sign">+</span>
+        <span class="dl-code">    <span class="k">await</span> <span class="f">setPref</span>(<span class="s">"videoSortModeName"</span>, name);</span>
+      </div>
+    </div>
+    <div class="dock-sec-title" style="margin-top:4px">统计</div>
+    <div class="metric-row">
+      <div class="context-panel__metric"><span>文件</span><strong>3</strong></div>
+      <div class="context-panel__metric context-panel__metric--good"><span>新增</span><strong>+18</strong></div>
+      <div class="context-panel__metric context-panel__metric--accent"><span>删除</span><strong>−2</strong></div>
+    </div>`,
+};
+
+function setDockView(name) {
+  document.querySelectorAll(".workbench-dock__tab").forEach(t => {
+    const on = t.dataset.view === name;
+    t.classList.toggle("workbench-dock__tab--active", on);
+    t.setAttribute("aria-selected", String(on));
+  });
+  document.getElementById("dock-body").innerHTML = DOCK_VIEWS[name];
+  /* 文件行点击切换选中态 */
+  document.querySelectorAll("#dock-body .file-row").forEach(r => {
+    r.addEventListener("click", () => {
+      document.querySelectorAll("#dock-body .file-row").forEach(x => x.classList.remove("file-row--active"));
+      r.classList.add("file-row--active");
+    });
+  });
+}
+document.querySelectorAll(".workbench-dock__tab").forEach(t => {
+  t.addEventListener("click", () => setDockView(t.dataset.view));
+});
+
+/* ================= 会话演示消息（真实 mock 轮次循环格式） ================= */
+const AI_REPLY = `第 {n} 轮结果：当前滚动契约会在切换会话或 reveal 信号到达后执行强制贴底。
+它会先立即设置 scrollTop 到 scrollHeight，再连续几个 animation frame 复查，避免动态内容把底部再次推走。
+如果用户主动向上滚动，普通 streaming 不会强行拉回；只有点击跳到底部按钮或显式切换会话才会重新贴底。`;
+
+function makeMessages() {
+  const out = [];
+  let hh = 11, mm = 49;
+  const turns = 18; // 18 轮（对齐真实 mock 的 37 条消息密度）
+  for (let n = 1; n <= turns; n++) {
+    const t = `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+    out.push({ role: "user", time: t, text: `第 ${n} 轮：检查聊天滚动定位，切换会话后应该自动停在最新消息底部。` });
+    out.push({ role: "ai", text: AI_REPLY.replace("{n}", n) });
+    mm += 15;
+    if (mm >= 60) { mm -= 60; hh++; }
+  }
+  return out;
+}
+const MESSAGES = makeMessages();
+
+function renderMessages() {
+  const host = document.getElementById("messages");
+  const welcome = document.getElementById("welcome");
+  if (welcome) { welcome.style.display = "none"; welcome.classList.add("hidden"); }
+  let turnIdx = 0;
+  host.innerHTML = MESSAGES.map((m, i) => {
+    if (m.role === "user") {
+      turnIdx++;
+      return `<div class="msg msg--user" id="question-anchor-h0-${turnIdx}" data-turn="${turnIdx}" data-entrance="h0-${i}">
+        <div class="msg__body">
+          <div class="msg__text">${m.text}</div>
+        </div>
+        <div class="msg-meta" role="group" aria-label="消息操作">
+          <time class="msg-meta__time">${m.time}</time>
+          <button class="msg-meta__btn msg-meta__copy" title="复制" aria-label="复制">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          </button>
+          <button class="msg-meta__btn" title="编辑" aria-label="编辑">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+          </button>
+        </div>
+      </div>`;
+    }
+    const paragraphs = m.text.split("\n").filter(Boolean).map(p => `<p>${p}</p>`).join("");
+    return `<div class="msg msg--assistant" data-entrance="h0-${i}">
+      <div class="msg__body">
+        <div class="md">${paragraphs}</div>
+      </div>
+    </div>`;
+  }).join("") + renderJumpBar();
+}
+
+function renderJumpBar() {
+  const total = MESSAGES.filter(m => m.role === "user").length;
+  let dots = "";
+  for (let i = 1; i <= total; i++) {
+    dots += `<button class="jump-item" type="button" data-turn="${i}" aria-label="跳转到问题 ${i}" title="问题 ${i}">
+      <span class="jump-dot" style="width:${i === 1 ? 12 : 8}px"></span>
+    </button>`;
+  }
+  return `<nav class="jump-bar" aria-label="问题导航"><div class="jump-scroll">${dots}</div></nav>`;
+}
+
+/* ================= 交互 ================= */
+/* composer 自动增高 */
+const composerInput = document.getElementById("composer-input");
+composerInput.addEventListener("input", () => {
+  composerInput.style.height = "auto";
+  composerInput.style.height = Math.min(composerInput.scrollHeight, 200) + "px";
+});
+
+/* 发送消息 */
+document.getElementById("composer-send").addEventListener("click", sendMessage);
+composerInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+function sendMessage() {
+  const text = composerInput.value.trim();
+  if (!text) return;
+  const host = document.getElementById("messages");
+  const welcome = document.getElementById("welcome");
+  if (welcome) { welcome.style.display = "none"; welcome.classList.add("hidden"); }
+  const div = document.createElement("div");
+  div.className = "msg msg--user";
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  div.innerHTML = `<div class="msg__body">
+      <div class="msg__text">${text.replace(/</g, "&lt;")}</div>
+    </div>
+    <div class="msg-meta" role="group" aria-label="消息操作">
+      <time class="msg-meta__time">${hh}:${mm}</time>
+      <button class="msg-meta__btn msg-meta__copy" title="复制">⧉</button>
+    </div>`;
+  host.appendChild(div);
+  composerInput.value = "";
+  composerInput.style.height = "auto";
+  const t = document.getElementById("transcript");
+  t.scrollTop = t.scrollHeight;
+}
+
+/* modebar 切换 */
+document.getElementById("modebar").querySelectorAll(".composer-modebar__item").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const mode = btn.dataset.mode;
+    const bar = document.getElementById("modebar");
+    bar.dataset.mode = mode;
+    bar.querySelectorAll(".composer-modebar__item").forEach(b => b.classList.remove("composer-modebar__item--active"));
+    btn.classList.add("composer-modebar__item--active");
+  });
+});
+
+/* 命令面板 */
+const overlay = document.getElementById("palette-overlay");
+function openPalette() { overlay.classList.add("palette-overlay--open"); }
+function closePalette() { overlay.classList.remove("palette-overlay--open"); }
+document.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openPalette(); }
+  if (e.key === "Escape") closePalette();
+});
+overlay.addEventListener("click", (e) => { if (e.target === overlay) closePalette(); });
+
+/* 项目树搜索过滤 */
+document.getElementById("tree-search").addEventListener("input", (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll("#project-list .project-tree__topic").forEach(t => {
+    const label = t.querySelector(".project-tree__topic-label").textContent.toLowerCase();
+    t.style.display = label.includes(q) ? "" : "none";
+  });
+});
+
+/* 终端开关 */
+document.getElementById("terminal-close").addEventListener("click", toggleTerminal);
+function toggleTerminal() {
+  const drawer = document.getElementById("terminal-drawer");
+  const layout = document.getElementById("layout");
+  const open = drawer.style.display === "none";
+  drawer.style.display = open ? "" : "none";
+  layout.classList.toggle("layout--terminal-open", open);
+}
+/* 状态栏加终端切换按钮 */
+document.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "j") { e.preventDefault(); toggleTerminal(); }
+});
+
+/* 初始化 */
+setDockView("overview");
+renderMessages();
+/* 与真实 mock 一致：转录区默认贴底（显示最新消息） */
+const transEl = document.getElementById("transcript");
+if (transEl) transEl.scrollTop = transEl.scrollHeight;
+
+/* ================= 浅色/深色切换（DESIGN.md graphite 双模式） ================= */
+const wbToggle = document.getElementById("wb-theme-toggle");
+if (wbToggle) {
+  wbToggle.addEventListener("click", () => {
+    const root = document.documentElement;
+    const isLight = root.hasAttribute("data-theme");
+    if (isLight) {
+      root.removeAttribute("data-theme");
+      wbToggle.textContent = "🌙 深色";
+    } else {
+      root.setAttribute("data-theme", "light");
+      wbToggle.textContent = "☀️ 浅色";
+    }
+  });
+}</script>
+</body>
+</html>

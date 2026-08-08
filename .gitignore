@@ -1,0 +1,16 @@
+# deps
+node_modules/
+
+# build
+dist/
+coverage/
+*.tgz
+
+# 临时脚本
+_gen*.py
+_*.mjs
+__check.mjs
+
+# misc
+.DS_Store
+*.log

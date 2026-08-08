@@ -1,0 +1,686 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   Reasonix design system → shadcn/tailwind mapping
+   DESIGN.md (reasonix-design-kit/DESIGN.md) — graphite default
+   ============================================================ */
+
+@theme inline {
+  /* reasonix font */
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "PingFang SC", "Microsoft YaHei", "Noto Sans SC", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas,
+    "Liberation Mono", monospace;
+  --font-sans: var(--font-ui);
+
+  /* reasonix radius scale (s/m/l per direction) → tailwind radii */
+  --radius-rx-s: var(--rx-r-s);
+  --radius-rx-m: var(--rx-r-m);
+  --radius-rx-l: var(--rx-r-l);
+
+  /* shadcn aliases */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ---------- base :root = reasonix graphite light（shadcn 默认浅色） ---------- */
+:root {
+  /* reasonix graphite light — shadcn 默认（无 dark 类=浅色） */
+  --background: #f4f3ef;
+  --foreground: #16181d;
+
+  --card: #ffffff;
+  --card-foreground: #16181d;
+  --popover: #ffffff;
+  --popover-foreground: #16181d;
+
+  --primary: #ff5a2c;
+  --primary-foreground: #ffffff;
+  --secondary: #f6f5f1;
+  --secondary-foreground: #16181d;
+  --muted: #f0efe9;
+  --muted-foreground: #6e6e75;
+
+  --accent: #ff5a2c;
+  --accent-foreground: #ffffff;
+  --destructive: #d83a2a;
+  --destructive-foreground: #ffffff;
+
+  --border: rgba(20, 22, 28, 0.12);
+  --input: rgba(20, 22, 28, 0.16);
+  --ring: rgba(255, 90, 44, 0.12);
+
+  --rx-bg: #f4f3ef;
+  --rx-bg-soft: #f0efe9;
+  --rx-bg-elev: #ffffff;
+  --rx-bg-elev-2: #f6f5f1;
+  --rx-sidebar: #ffffff;
+  --rx-sidebar-hover: #f0efe9;
+  --rx-fg: #16181d;
+  --rx-fg-dim: #4a4d56;
+  --rx-fg-faint: #6e6e75;
+  --rx-border: rgba(20, 22, 28, 0.12);
+  --rx-border-2: rgba(20, 22, 28, 0.2);
+  --rx-border-soft: rgba(20, 22, 28, 0.08);
+
+  --rx-accent: #c93918;
+  --rx-accent-strong: #df471f;
+  --rx-accent-soft: rgba(255, 90, 44, 0.12);
+  --rx-accent-fg: #ffffff;
+  --rx-accent-text: #0c0d10;
+  --rx-grad: linear-gradient(120deg, #ff5a2c, #ff8a3d);
+
+  --rx-ok: #1f9d57;
+  --rx-warn: #d98a1f;
+  --rx-err: #d83a2a;
+  --rx-danger: #e5484d;
+
+  /* radius stays per direction (light≠dark do not change radius) */
+  --rx-r-s: 5px;
+  --rx-r-m: 8px;
+  --rx-r-l: 11px;
+  --rx-r-pill: 999px;
+  --radius: 8px;
+
+  /* syntax highlight — light GitHub */
+  --hl-keyword: #cf222e;
+  --hl-string: #0a3069;
+  --hl-number: #0550ae;
+  --hl-comment: #6e7781;
+  --hl-func: #8250df;
+  --hl-type: #116329;
+  --hl-builtin: #0550ae;
+}
+
+/* ---------- .dark 变体（ui 组件 dark:* 规则对应） ---------- */
+.dark {
+  /* reasonix graphite dark (DESIGN.md §1.1) */
+  --background: #0c0d10;
+  --foreground: #f1f1ef;
+
+  --card: #15161a;
+  --card-foreground: #f1f1ef;
+  --popover: #15161a;
+  --popover-foreground: #f1f1ef;
+
+  --primary: #ff6a3d;
+  --primary-foreground: #0c0d10;
+  --secondary: #191a1f;
+  --secondary-foreground: #f1f1ef;
+  --muted: #101115;
+  --muted-foreground: #6c6e74;
+
+  /* reasonix: accent is THE single focus color */
+  --accent: #ff6a3d;
+  --accent-foreground: #0c0d10;
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
+
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: rgba(255, 106, 61, 0.16);
+
+  /* reasonix surface tokens (graphite dark) */
+  --rx-bg: #0c0d10;
+  --rx-bg-soft: #101115;
+  --rx-bg-elev: #15161a;
+  --rx-bg-elev-2: #191a1f;
+  --rx-sidebar: #15161a;
+  --rx-sidebar-hover: #1f2026;
+  --rx-fg: #f1f1ef;
+  --rx-fg-dim: #a7a8ad;
+  --rx-fg-faint: #7a7a80;
+  --rx-border: rgba(255, 255, 255, 0.1);
+  --rx-border-2: rgba(255, 255, 255, 0.2);
+  --rx-border-soft: rgba(255, 255, 255, 0.07);
+
+  /* reasonix accent (graphite) */
+  --rx-accent: #ff6a3d;
+  --rx-accent-strong: #ff9a52;
+  --rx-accent-soft: rgba(255, 106, 61, 0.16);
+  --rx-accent-fg: #0c0d10;
+  --rx-accent-text: #ffffff;
+  --rx-grad: linear-gradient(120deg, #ff6a3d, #ff9a52);
+
+  /* status */
+  --rx-ok: #3ad17e;
+  --rx-warn: #e3a23a;
+  --rx-err: #f0573f;
+  --rx-danger: #e5484d;
+
+  /* radius scale — graphite 5/8/11 */
+  --rx-r-s: 5px;
+  --rx-r-m: 8px;
+  --rx-r-l: 11px;
+  --radius: 8px;
+
+  /* motion (DESIGN.md §5) */
+  --rx-dur-fast: 120ms;
+  --rx-dur-base: 180ms;
+  --rx-dur-slow: 340ms;
+  --rx-ease: cubic-bezier(0.2, 0.72, 0.2, 1);
+
+  /* chart (GitHub Primer data-viz, not overridden by direction) */
+  --chart-1: #54a24b;
+  --chart-2: #9a6700;
+  --chart-3: #8250df;
+  --chart-4: #0969da;
+  --chart-5: #e16f24;
+
+  /* syntax highlight — dark One Dark */
+  --hl-keyword: #c678dd;
+  --hl-string: #98c379;
+  --hl-number: #d19a66;
+  --hl-comment: #6a6a72;
+  --hl-func: #61afef;
+  --hl-type: #e5c07b;
+  --hl-builtin: #56b6c2;
+}
+
+/* ---------- theme direction: aurora / slate / carbon / nocturne / amber ----------
+   Only accent + radius change; surfaces/borders stay (DESIGN.md §1.4) */
+:root[data-direction="aurora"] {
+  --rx-accent: #6459b8;
+  --rx-accent-strong: #38d6e6;
+  --rx-accent-soft: rgba(100,89,184,0.18);
+  --rx-grad: linear-gradient(120deg, #8b7cff, #38d6e6);
+  /* shadcn aliases: keep primary/ring in sync with direction accent */
+  --primary: #8b7cff;
+  --primary-foreground: #0c0d10;
+  --ring: rgba(139, 124, 255, 0.18);
+  --rx-r-s: 10px;
+  --rx-r-m: 15px;
+  --rx-r-l: 22px;
+  --radius: 15px;
+}
+.dark[data-direction="aurora"] {
+  --rx-accent: #8b7cff;
+  --rx-accent-strong: #38d6e6;
+  --rx-accent-soft: rgba(139,124,255,0.18);
+}
+:root[data-direction="slate"] {
+  --rx-accent: #3765b1;
+  --rx-accent-strong: #6ea4f9;
+  --rx-accent-soft: rgba(55,101,177,0.16);
+  --rx-grad: linear-gradient(120deg, #4d8df6, #6ea4f9);
+  /* shadcn aliases: keep primary/ring in sync with direction accent */
+  --primary: #4d8df6;
+  --primary-foreground: #0c0d10;
+  --ring: rgba(77, 141, 246, 0.16);
+  --rx-r-s: 8px;
+  --rx-r-m: 12px;
+  --rx-r-l: 16px;
+  --radius: 12px;
+}
+.dark[data-direction="slate"] {
+  --rx-accent: #4d8df6;
+  --rx-accent-strong: #6ea4f9;
+  --rx-accent-soft: rgba(77,141,246,0.18);
+}
+:root[data-direction="carbon"] {
+  --rx-accent: #176e63;
+  --rx-accent-strong: #5eead4;
+  --rx-accent-soft: rgba(23,110,99,0.16);
+  --rx-grad: linear-gradient(120deg, #2dd4bf, #5eead4);
+  /* shadcn aliases: keep primary/ring in sync with direction accent */
+  --primary: #2dd4bf;
+  --primary-foreground: #0c0d10;
+  --ring: rgba(45, 212, 191, 0.16);
+  --rx-r-s: 7px;
+  --rx-r-m: 10px;
+  --rx-r-l: 14px;
+  --radius: 10px;
+}
+.dark[data-direction="carbon"] {
+  --rx-accent: #2dd4bf;
+  --rx-accent-strong: #5eead4;
+  --rx-accent-soft: rgba(45,212,191,0.18);
+}
+:root[data-direction="nocturne"] {
+  --rx-accent: #5d65b3;
+  --rx-accent-strong: #a5b4fc;
+  --rx-accent-soft: rgba(93,101,179,0.18);
+  --rx-grad: linear-gradient(120deg, #818cf8, #a5b4fc);
+  /* shadcn aliases: keep primary/ring in sync with direction accent */
+  --primary: #818cf8;
+  --primary-foreground: #0c0d10;
+  --ring: rgba(129, 140, 248, 0.18);
+  --rx-r-s: 11px;
+  --rx-r-m: 16px;
+  --rx-r-l: 22px;
+  --radius: 16px;
+}
+.dark[data-direction="nocturne"] {
+  --rx-accent: #818cf8;
+  --rx-accent-strong: #a5b4fc;
+  --rx-accent-soft: rgba(129,140,248,0.18);
+}
+:root[data-direction="amber"] {
+  --rx-accent: #994721;
+  --rx-accent-strong: #e08a5a;
+  --rx-accent-soft: rgba(153,71,33,0.16);
+  --rx-grad: linear-gradient(120deg, #d4632f, #e08a5a);
+  /* shadcn aliases: keep primary/ring in sync with direction accent */
+  --primary: #d4632f;
+  --primary-foreground: #0c0d10;
+  --ring: rgba(212, 99, 47, 0.16);
+  /* amber inherits graphite radius */
+}
+.dark[data-direction="amber"] {
+  --rx-accent: #d4632f;
+  --rx-accent-strong: #e08a5a;
+  --rx-accent-soft: rgba(212,99,47,0.18);
+}
+
+/* ---------- reasonix helpers ---------- */
+@layer base {
+  * {
+    border-color: var(--rx-border);
+  }
+  body {
+    background: var(--rx-bg);
+    color: var(--rx-fg);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* mono for code/paths/numbers */
+  code,
+  pre,
+  .mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  /* theme transition */
+  body,
+  .theme-transition {
+    transition: background-color var(--rx-dur-slow), color var(--rx-dur-slow),
+      border-color var(--rx-dur-slow);
+  }
+}
+
+@layer utilities {
+  .rx-grad {
+    background: var(--rx-grad);
+  }
+  .rx-accent-soft {
+    background: var(--rx-accent-soft);
+  }
+  .rx-hairline {
+    border: 1px solid var(--rx-border-soft);
+  }
+  /* 卡片 hover 上浮 + 阴影（微交互） */
+  .rx-lift {
+    transition: transform 180ms var(--rx-ease), box-shadow 180ms var(--rx-ease), border-color 180ms var(--rx-ease);
+  }
+  .rx-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.18);
+    border-color: var(--rx-accent);
+  }
+  .rx-lift:active {
+    transform: translateY(0);
+  }
+  /* 图标 hover 放大 */
+  .rx-icon-pop {
+    transition: transform 180ms var(--rx-ease);
+  }
+  .group:hover .rx-icon-pop,
+  button:hover .rx-icon-pop {
+    transform: scale(1.12);
+  }
+  /* 按压反馈（高频操作仅允许近不可感）：160ms fast-tier */
+  .rx-press {
+    transition: transform 160ms var(--rx-ease);
+  }
+  .rx-press:active {
+    transform: scale(0.97);
+  }
+  /* 胶囊按钮（rx-pill）：参考 Uiverse bell 按钮，全令牌化
+     布局 40px 高 + 左侧圆形图标槽；hover 图标旋转 250°；active 缩放 */
+  .rx-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    padding: 0 18px 0 8px;
+    border: none;
+    border-radius: var(--rx-r-pill, 999px);
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    background: var(--rx-accent);
+    color: var(--rx-accent-fg);
+    box-shadow: 0 4px 14px -6px var(--rx-accent);
+    transition:
+      background-color var(--rx-dur-fast) var(--rx-ease),
+      transform var(--rx-dur-fast) var(--rx-ease),
+      box-shadow var(--rx-dur-fast) var(--rx-ease);
+  }
+  .rx-pill:hover {
+    background: var(--rx-accent-strong, var(--rx-accent));
+    box-shadow: 0 6px 18px -6px var(--rx-accent);
+  }
+  .rx-pill:active {
+    transform: scale(0.97);
+  }
+  .rx-pill .rx-pill-icon {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex: none;
+    transition: transform var(--rx-dur-slower) var(--rx-ease);
+  }
+  .rx-pill:hover .rx-pill-icon {
+    transform: rotate(250deg);
+  }
+  /* soft 变体：accent-soft 底 + accent 字（无重阴影） */
+  .rx-pill--soft {
+    background: var(--rx-accent-soft);
+    color: var(--rx-accent);
+    box-shadow: none;
+  }
+  .rx-pill--soft:hover {
+    background: color-mix(in srgb, var(--rx-accent) 24%, transparent);
+    box-shadow: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rx-pill, .rx-pill .rx-pill-icon {
+      transition: none !important;
+    }
+    .rx-pill:hover .rx-pill-icon {
+      transform: none;
+    }
+  }
+  .text-2xs {
+    font-size: 10px;
+  }
+  .text-xs {
+    font-size: 11px;
+  }
+  .text-sm {
+    font-size: 12px;
+  }
+  .text-md {
+    font-size: 13px;
+  }
+  .text-base {
+    font-size: 14px;
+  }
+  .text-lg {
+    font-size: 15px;
+  }
+  .text-xl {
+    font-size: 18px;
+  }
+}
+
+/* ============================================================
+   Reasonix motion system (DESIGN.md §5)
+   ============================================================ */
+:root {
+  /* durations */
+  --rx-dur-fast: 120ms;    /* hover, tooltip */
+  --rx-dur-base: 180ms;    /* popover, menu, small entrances */
+  --rx-dur-slow: 340ms;    /* drawer, modal, panel slide */
+  --rx-dur-slower: 420ms;  /* big backdrop fade */
+  /* easings */
+  --rx-ease: cubic-bezier(0.2, 0.72, 0.2, 1);           /* fast-out default */
+  --rx-ease-decelerate: cubic-bezier(0.2, 0.7, 0.1, 1); /* soft landing */
+  --rx-ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1); /* symmetric */
+  --rx-ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1); /* dot width rebound */
+  --rx-ease-palette: cubic-bezier(0.34, 1.4, 0.5, 1);   /* command palette 160ms */
+  /* motion constants */
+  --rx-motion-pop-scale: 0.98;
+  --rx-motion-rise: 4px;
+}
+
+/* ============================================================
+   Keyframes (DESIGN.md §5.0.1 — 33 scenes, transform/opacity only)
+   ============================================================ */
+@keyframes rx-modal-in {
+  0% { opacity: 0; transform: translateY(10px) scale(0.98); }
+  60% { opacity: 1; transform: translateY(-1px) scale(1.005); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rx-palette-in {
+  0% { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rx-drawer-in {
+  0% { opacity: 0.6; transform: translateX(24px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes rx-popover-in {
+  0% { opacity: 0; transform: translateY(var(--rx-motion-rise)) scale(var(--rx-motion-pop-scale)); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rx-menu-pop-in {
+  0% { opacity: 0; transform: scale(0.98) translateY(2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes rx-tooltip-in {
+  0% { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rx-backdrop-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes rx-backdrop-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes rx-jump-bar-in {
+  0% { opacity: 0; transform: translateX(-6px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes rx-shelf-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rx-card-body-in {
+  0% { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rx-message-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rx-todobar-in {
+  0% { opacity: 0; transform: translateY(var(--rx-motion-rise)); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rx-tab-in {
+  0% { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rx-startup-splash-in {
+  0% { opacity: 0; transform: translateY(12px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rx-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes rx-process-sweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes rx-shimmer-sweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes rx-tab-status-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes rx-mac-press {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.94); }
+  70% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+@keyframes rx-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes rx-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes rx-slide-up {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rx-slide-down {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(6px); }
+}
+
+/* ---------- motion utility classes ---------- */
+.rx-anim-modal { animation: rx-modal-in 280ms var(--rx-ease); }
+.rx-anim-palette { animation: rx-palette-in 160ms var(--rx-ease-palette); }
+.rx-anim-drawer { animation: rx-drawer-in 340ms var(--rx-ease); }
+.rx-anim-popover { animation: rx-popover-in 180ms var(--rx-ease); }
+.rx-anim-menu { animation: rx-menu-pop-in 180ms var(--rx-ease); }
+.rx-anim-tooltip { animation: rx-tooltip-in 120ms var(--rx-ease); }
+.rx-anim-backdrop { animation: rx-backdrop-in 180ms var(--rx-ease); }
+.rx-anim-jumpbar { animation: rx-jump-bar-in 180ms var(--rx-ease) 80ms backwards; }
+.rx-anim-shelf { animation: rx-shelf-in 340ms var(--rx-ease); }
+.rx-anim-cardbody { animation: rx-card-body-in 180ms var(--rx-ease); }
+.rx-anim-message { animation: rx-message-in 350ms var(--rx-ease); }
+.rx-anim-todobar { animation: rx-todobar-in 180ms var(--rx-ease); }
+.rx-anim-tab { animation: rx-tab-in 180ms var(--rx-ease); }
+.rx-anim-splash { animation: rx-startup-splash-in 550ms var(--rx-ease-decelerate); }
+.rx-anim-press { animation: rx-mac-press 260ms var(--rx-ease-overshoot); }
+.rx-anim-spin { animation: rx-spin 1s linear infinite; }
+.rx-anim-fade { animation: rx-fade-in 180ms var(--rx-ease); }
+.rx-anim-slideup { animation: rx-slide-up 200ms var(--rx-ease); }
+.rx-anim-slideup-rev { animation: rx-slide-down 200ms var(--rx-ease) forwards; }
+.rx-pulse { animation: rx-pulse 1.2s ease-in-out infinite; }
+.rx-breathe { animation: rx-tab-status-breathe 2.6s ease-in-out infinite; }
+.rx-sweep {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  background-size: 200% 100%;
+  animation: rx-process-sweep 1.2s ease-in-out infinite;
+}
+.rx-shimmer {
+  background: linear-gradient(90deg, var(--rx-bg-elev-2) 25%, var(--rx-bg-elev) 50%, var(--rx-bg-elev-2) 75%);
+  background-size: 200% 100%;
+  animation: rx-shimmer-sweep 5s linear infinite;
+}
+
+/* reduced motion: collapse everything (DESIGN.md §5.0.2) */
+@media (prefers-reduced-motion: reduce) {
+  .rx-anim-modal, .rx-anim-palette, .rx-anim-drawer, .rx-anim-popover,
+  .rx-anim-menu, .rx-anim-tooltip, .rx-anim-backdrop, .rx-anim-jumpbar,
+  .rx-anim-shelf, .rx-anim-cardbody, .rx-anim-message, .rx-anim-todobar,
+  .rx-anim-tab, .rx-anim-splash, .rx-anim-press, .rx-anim-spin,
+  .rx-anim-fade, .rx-anim-slideup, .rx-pulse, .rx-breathe, .rx-sweep,
+  .rx-shimmer {
+    animation: none !important;
+  }
+}
+
+/* ===== 多代理补充动效场景（33 个全集） ===== */
+@keyframes rx-page-transition {
+  0% { opacity: 1; transform: translateX(0); }
+  40% { opacity: 0; transform: translateX(-8px); }
+  60% { opacity: 0; transform: translateX(8px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes rx-row-press {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.985); }
+  100% { transform: scale(1); }
+}
+@keyframes rx-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+@keyframes rx-pulse-scale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+@keyframes rx-collapse {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.85); }
+}
+@keyframes rx-toast-in {
+  0% { opacity: 0; transform: translateY(10px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rx-dock-in {
+  0% { opacity: 0; transform: translateY(8px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rx-onboarding-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.rx-anim-backdrop-out { animation: rx-backdrop-out var(--rx-dur-base) var(--rx-ease); }
+.rx-anim-page { animation: rx-page-transition var(--rx-dur-slower) var(--rx-ease-standard); }
+.rx-anim-rowpress { animation: rx-row-press var(--rx-dur-fast) var(--rx-ease); }
+.rx-anim-shake { animation: rx-shake 320ms ease-in-out; }
+.rx-anim-pulsescale { animation: rx-pulse-scale 1.6s ease-in-out infinite; }
+.rx-anim-collapse { animation: rx-collapse var(--rx-dur-base) var(--rx-ease-standard); }
+.rx-anim-toast { animation: rx-toast-in var(--rx-dur-slow) var(--rx-ease); }
+.rx-anim-dock { animation: rx-dock-in var(--rx-dur-base) var(--rx-ease); }
+.rx-anim-onboard { animation: rx-onboarding-in var(--rx-dur-slower) var(--rx-ease); }
+.rx-sweep-slow {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  background-size: 200% 100%;
+  animation: rx-process-sweep 2.4s ease-in-out infinite;
+}
+.rx-shimmer-fast {
+  background: linear-gradient(90deg, var(--rx-bg-elev-2) 25%, var(--rx-bg-elev) 50%, var(--rx-bg-elev-2) 75%);
+  background-size: 200% 100%;
+  animation: rx-shimmer-sweep 1.5s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rx-anim-backdrop-out, .rx-anim-page, .rx-anim-rowpress, .rx-anim-shake,
+  .rx-anim-pulsescale, .rx-anim-collapse, .rx-anim-toast, .rx-anim-dock,
+  .rx-anim-onboard, .rx-sweep-slow, .rx-shimmer-fast {
+    animation: none !important;
+  }
+}

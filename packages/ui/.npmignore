@@ -1,0 +1,14 @@
+# 源码与测试（files 已限定 dist，此处兜底）
+src/
+*.test.tsx
+vitest.config.ts
+vitest.setup.ts
+tsconfig.json
+tsup.config.ts
+scripts/
+
+# 开发产物
+node_modules/
+package-lock.json
+*.tgz
+coverage/

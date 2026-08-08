@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@reasonix/ui — 组件库介绍</title>
+<style>
+/* ===== graphite 设计语言 ===== */
+:root {
+  --rx-bg: #0c0d10;
+  --rx-bg-soft: #15161a;
+  --rx-bg-elev: #1f2026;
+  --rx-fg: #f1f1ef;
+  --rx-fg-dim: #9a9ba1;
+  --rx-fg-faint: #7a7a80;
+  --rx-border: #2a2b31;
+  --rx-accent: #ff6a3d;
+  --rx-accent-soft: rgba(255,106,61,.14);
+  --rx-ok: #3ad17e;
+  --rx-warn: #e3a23a;
+  --rx-err: #f0573f;
+  --rx-accent-strong: #ff9a52;
+  --rx-r-s: 5px;
+  --rx-r-m: 8px;
+  --rx-r-l: 11px;
+  --rx-r-pill: 999px;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+[data-mode="light"] {
+  --rx-bg: #f4f3ef;
+  --rx-bg-soft: #ffffff;
+  --rx-bg-elev: #eceae3;
+  --rx-fg: #16181d;
+  --rx-fg-dim: #6e6e75;
+  --rx-fg-faint: #8a8a90;
+  --rx-border: #d8d6cf;
+  --rx-accent: #c93918;
+  --rx-accent-soft: rgba(201,57,24,.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-ui); background: var(--rx-bg); color: var(--rx-fg); transition: background .3s, color .3s; overflow-x: hidden; }
+
+/* ===== Header ===== */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: .75rem;
+  padding: .75rem 1.5rem;
+  background: color-mix(in srgb, var(--rx-bg) 85%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rx-border);
+}
+.brand-mark {
+  display: grid; place-items: center; width: 2rem; height: 2rem;
+  border-radius: var(--rx-r-m); background: var(--rx-accent);
+  color: #0c0d10; font-weight: 800;
+}
+.brand-name { font-weight: 700; font-size: .95rem; }
+.header-nav { display: flex; gap: .25rem; margin-left: auto; }
+.header-nav a {
+  color: var(--rx-fg-dim); text-decoration: none; font-size: .8rem;
+  padding: .4rem .7rem; border-radius: var(--rx-r-s); transition: all .2s;
+}
+.header-nav a:hover { background: var(--rx-accent-soft); color: var(--rx-accent); }
+.theme-btn {
+  display: grid; place-items: center; width: 2.2rem; height: 2.2rem;
+  border: 1px solid var(--rx-border); border-radius: var(--rx-r-m);
+  background: var(--rx-bg-soft); cursor: pointer; font-size: 1rem;
+  transition: border-color .2s;
+}
+.theme-btn:hover { border-color: var(--rx-accent); }
+
+/* ===== Section 通用 ===== */
+section { padding: 3.5rem 1.5rem; scroll-margin-top: 4rem; }
+.section-inner { max-width: 64rem; margin: 0 auto; }
+.sec-head { margin-bottom: 2rem; }
+.sec-kicker {
+  font-size: .7rem; font-weight: 700; letter-spacing: .14em;
+  color: var(--rx-accent); text-transform: uppercase;
+}
+.sec-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -.02em; margin-top: .3rem; }
+.sec-desc { color: var(--rx-fg-dim); font-size: .9rem; margin-top: .5rem; max-width: 42rem; }
+
+/* ===== Hero ===== */
+.hero { min-height: 68vh; display: grid; place-items: center; text-align: center; padding: 4rem 1.5rem; position: relative; }
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(420px 200px at 50% 30%, var(--rx-accent-soft), transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono); font-size: .7rem; letter-spacing: .18em;
+  color: var(--rx-accent); margin-bottom: 1rem;
+}
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 900; letter-spacing: -.03em;
+  line-height: 1.05;
+  background: linear-gradient(120deg, var(--rx-fg), var(--rx-accent));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-desc { max-width: 40rem; margin: 1rem auto 0; color: var(--rx-fg-dim); font-size: 1rem; line-height: 1.7; }
+.hero-stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem; }
+.stat-card {
+  min-width: 100px; padding: .9rem 1.2rem; border-radius: var(--rx-r-m);
+  background: var(--rx-bg-soft); border: 1px solid var(--rx-border);
+}
+.stat-value { font-size: 1.6rem; font-weight: 900; color: var(--rx-accent); font-variant-numeric: tabular-nums; }
+.stat-label { font-size: .7rem; color: var(--rx-fg-faint); margin-top: .2rem; }
+.hero-cta { display: flex; gap: .75rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; }
+.cta-btn {
+  padding: .7rem 1.5rem; border-radius: var(--rx-r-m); font-size: .9rem; font-weight: 600;
+  text-decoration: none; transition: transform .15s, box-shadow .2s;
+}
+.cta-btn:hover { transform: translateY(-2px); }
+.cta-primary { background: var(--rx-accent); color: #0c0d10; box-shadow: 0 8px 24px -8px var(--rx-accent); }
+.cta-secondary { border: 1px solid var(--rx-border); color: var(--rx-fg); }
+
+/* ===== 特性 ===== */
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.feat-card {
+  background: var(--rx-bg-soft); border: 1px solid var(--rx-border);
+  border-radius: var(--rx-r-l); padding: 1.4rem;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+.feat-card:hover { transform: translateY(-3px); border-color: var(--rx-accent); box-shadow: 0 10px 28px -12px rgba(0,0,0,.3); }
+.feat-icon { font-size: 1.4rem; }
+.feat-card h3 { font-size: 1rem; font-weight: 700; margin-top: .6rem; }
+.feat-card p { font-size: .8rem; color: var(--rx-fg-dim); line-height: 1.6; margin-top: .4rem; }
+
+/* ===== 组件矩阵 ===== */
+.cat-row {
+  background: var(--rx-bg-soft); border: 1px solid var(--rx-border);
+  border-radius: var(--rx-r-m); padding: 1rem 1.2rem; margin-bottom: .8rem;
+}
+.cat-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; }
+.cat-dot { width: .6rem; height: .6rem; border-radius: 50%; }
+.cat-name { font-size: .9rem; font-weight: 700; }
+.cat-count {
+  font-family: var(--font-mono); font-size: .7rem; color: var(--rx-accent);
+  background: var(--rx-accent-soft); border-radius: var(--rx-r-pill); padding: .1rem .5rem;
+}
+.comp-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.comp-chip {
+  font-size: .75rem; padding: .3rem .7rem; border-radius: var(--rx-r-pill);
+  background: var(--rx-bg-elev); border: 1px solid var(--rx-border);
+  color: var(--rx-fg-dim); transition: all .2s;
+}
+.comp-chip:hover { color: var(--rx-accent); border-color: var(--rx-accent); }
+
+/* ===== 主题演示 ===== */
+.dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: .8rem; }
+.dir-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: .5rem;
+  background: var(--rx-bg-soft); border: 1px solid var(--rx-border);
+  border-radius: var(--rx-r-m); padding: 1rem; cursor: pointer;
+  transition: border-color .2s, transform .2s;
+}
+.dir-card:hover { border-color: var(--rx-accent); transform: translateY(-2px); }
+.dir-swatch { width: 100%; height: 2.2rem; border-radius: var(--rx-r-s); }
+.dir-name { font-size: .85rem; font-weight: 600; }
+.dir-id { font-size: .65rem; color: var(--rx-fg-faint); }
+.theme-demo-hint { font-size: .75rem; color: var(--rx-fg-faint); margin-top: 1rem; }
+
+/* ===== 技术栈 ===== */
+.stack-wrap { display: flex; flex-wrap: wrap; gap: .5rem; }
+.stack-chip {
+  font-family: var(--font-mono); font-size: .75rem; padding: .4rem .9rem;
+  border-radius: var(--rx-r-pill); background: var(--rx-accent-soft);
+  color: var(--rx-accent); border: 1px solid color-mix(in srgb, var(--rx-accent) 30%, transparent);
+}
+
+/* ===== 质量 ===== */
+.quality-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; }
+.q-card {
+  background: var(--rx-bg-soft); border: 1px solid var(--rx-border);
+  border-radius: var(--rx-r-m); padding: 1.2rem;
+}
+.q-num { font-size: 1.5rem; font-weight: 900; color: var(--rx-accent); }
+.q-label { font-size: .75rem; color: var(--rx-fg-faint); margin-top: .2rem; }
+
+/* ===== 代码 ===== */
+.code-block {
+  background: var(--rx-bg-elev); border: 1px solid var(--rx-border);
+  border-radius: var(--rx-r-m); padding: 1.2rem; overflow-x: auto;
+}
+.code-block pre { font-family: var(--font-mono); font-size: .78rem; line-height: 1.7; color: var(--rx-fg-dim); }
+.code-block .cmt { color: var(--rx-fg-faint); }
+.code-block .kw { color: var(--rx-accent-strong); }
+.code-block .str { color: var(--rx-ok); }
+
+/* ===== 路线图 ===== */
+.road-row {
+  display: flex; gap: .8rem; align-items: flex-start;
+  background: var(--rx-bg-soft); border: 1px solid var(--rx-border);
+  border-radius: var(--rx-r-m); padding: 1rem 1.2rem; margin-bottom: .6rem;
+}
+.road-dot { width: .6rem; height: .6rem; border-radius: 50%; margin-top: .3rem; flex: none; }
+.road-done { background: var(--rx-ok); }
+.road-todo { background: var(--rx-warn); }
+.road-text b { font-size: .85rem; }
+.road-text span { font-size: .75rem; color: var(--rx-fg-dim); display: block; margin-top: .2rem; }
+
+/* ===== Footer ===== */
+.site-footer {
+  border-top: 1px solid var(--rx-border); padding: 2rem 1.5rem;
+  text-align: center; font-size: .75rem; color: var(--rx-fg-faint);
+}
+
+/* ===== Reveal ===== */
+[data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity .5s var(--rx-ease, ease), transform .5s var(--rx-ease, ease); }
+[data-reveal].is-revealed { opacity: 1; transform: translateY(0); }
+
+/* ===== 响应式 ===== */
+@media (max-width: 720px) {
+  .header-nav { display: none; }
+  section { padding: 2.5rem 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  [data-reveal] { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+<!-- ===== Header ===== -->
+<header class="site-header">
+  <span class="brand-mark">R</span>
+  <span class="brand-name">@reasonix/ui</span>
+  <nav class="header-nav" aria-label="导航">
+    <a href="#features">特性</a>
+    <a href="#components">组件</a>
+    <a href="#themes">主题</a>
+    <a href="#stack">技术栈</a>
+    <a href="#quality">质量</a>
+    <a href="#quickstart">快速开始</a>
+    <a href="#roadmap">路线图</a>
+  </nav>
+  <button class="theme-btn" id="theme-toggle" aria-label="切换明暗">☀️</button>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow" data-reveal>REASONIX · DESIGN SYSTEM</div>
+    <h1 class="hero-title" data-reveal>@reasonix/ui</h1>
+    <p class="hero-desc" data-reveal>一套面向现代 Web 的 React 组件库 —— 38 个组件、6 方向主题、动效体系与设计规范的开箱即用集合。</p>
+    <div class="hero-stats" data-reveal>
+      <div class="stat-card"><div class="stat-value" data-count="38">0</div><div class="stat-label">组件</div></div>
+      <div class="stat-card"><div class="stat-value" data-count="37">0</div><div class="stat-label">设计令牌</div></div>
+      <div class="stat-card"><div class="stat-value" data-count="6">0</div><div class="stat-label">主题方向</div></div>
+      <div class="stat-card"><div class="stat-value" data-count="72">0</div><div class="stat-label">测试用例</div></div>
+    </div>
+    <div class="hero-cta" data-reveal>
+      <a class="cta-btn cta-primary" href="#quickstart">快速开始 ↓</a>
+      <a class="cta-btn cta-secondary" href="#components">浏览组件</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 特性 ===== -->
+<section id="features">
+  <div class="section-inner">
+    <div class="sec-head" data-reveal>
+      <div class="sec-kicker">FEATURES</div>
+      <h2 class="sec-title">为什么选 @reasonix/ui</h2>
+      <p class="sec-desc">不只是又一个 shadcn 复制品 —— 完整的设计规范、多方向主题与动效体系三位一体。</p>
+    </div>
+    <div class="feat-grid"><div class="feat-card" data-reveal>
+      <span class="feat-icon">🎨</span>
+      <h3>多方向主题</h3>
+      <p>6 个主题方向（石墨/极光/石板/碳/夜曲/琥珀）× 明暗双态，37 个语义令牌，换主题只改 data-direction</p>
+    </div><div class="feat-card" data-reveal>
+      <span class="feat-icon">⚡</span>
+      <h3>动效体系</h3>
+      <p>32 个 keyframes + 28 个 rx-anim 工具类，120–420ms 时长刻度，prefers-reduced-motion 自动降级</p>
+    </div><div class="feat-card" data-reveal>
+      <span class="feat-icon">♿</span>
+      <h3>无障碍 AA</h3>
+      <p>对比度 WCAG AA 审计、键盘可达、focus ring、vitest-axe 可访问性测试</p>
+    </div><div class="feat-card" data-reveal>
+      <span class="feat-icon">📦</span>
+      <h3>Tree-shaking</h3>
+      <p>ESM 构建 + sideEffects 仅 css + 组件级 subpath exports（按需导入）</p>
+    </div><div class="feat-card" data-reveal>
+      <span class="feat-icon">📝</span>
+      <h3>完整类型</h3>
+      <p>d.ts 随包发布，组件 props 完整类型推断</p>
+    </div><div class="feat-card" data-reveal>
+      <span class="feat-icon">🛡️</span>
+      <h3>工程化质量</h3>
+      <p>72 测试用例 / 57% 覆盖率 / CI+Release 流水线 / changesets 版本管理</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ===== 组件矩阵 ===== -->
+<section id="components" style="background: color-mix(in srgb, var(--rx-bg) 96%, transparent)">
+  <div class="section-inner">
+    <div class="sec-head" data-reveal>
+      <div class="sec-kicker">COMPONENTS</div>
+      <h2 class="sec-title">38 个组件，五大分类</h2>
+      <p class="sec-desc">基础 / 表单 / 数据展示 / 反馈 / 导航，覆盖从按钮到日历的全场景。</p>
+    </div>
+    <div class="cat-row" data-reveal>
+          <div class="cat-head">
+            <span class="cat-dot" style="background:var(--rx-accent)"></span>
+            <span class="cat-name">基础</span>
+            <span class="cat-count">7</span>
+          </div>
+          <div class="comp-chips"><span class="comp-chip">Button</span><span class="comp-chip">Badge</span><span class="comp-chip">Card</span><span class="comp-chip">Skeleton</span><span class="comp-chip">Separator</span><span class="comp-chip">Label</span><span class="comp-chip">Avatar</span></div>
+        </div><div class="cat-row" data-reveal>
+          <div class="cat-head">
+            <span class="cat-dot" style="background:var(--rx-ok)"></span>
+            <span class="cat-name">表单</span>
+            <span class="cat-count">11</span>
+          </div>
+          <div class="comp-chips"><span class="comp-chip">Input</span><span class="comp-chip">Textarea</span><span class="comp-chip">Checkbox</span><span class="comp-chip">RadioGroup</span><span class="comp-chip">Switch</span><span class="comp-chip">Select</span><span class="comp-chip">Slider</span><span class="comp-chip">Toggle</span><span class="comp-chip">ToggleGroup</span><span class="comp-chip">InputGroup</span><span class="comp-chip">Progress</span></div>
+        </div><div class="cat-row" data-reveal>
+          <div class="cat-head">
+            <span class="cat-dot" style="background:var(--rx-warn)"></span>
+            <span class="cat-name">数据</span>
+            <span class="cat-count">6</span>
+          </div>
+          <div class="comp-chips"><span class="comp-chip">Table</span><span class="comp-chip">Calendar</span><span class="comp-chip">Carousel</span><span class="comp-chip">ScrollArea</span><span class="comp-chip">Resizable</span><span class="comp-chip">Toaster</span></div>
+        </div><div class="cat-row" data-reveal>
+          <div class="cat-head">
+            <span class="cat-dot" style="background:var(--rx-err)"></span>
+            <span class="cat-name">反馈</span>
+            <span class="cat-count">9</span>
+          </div>
+          <div class="comp-chips"><span class="comp-chip">Alert</span><span class="comp-chip">Dialog</span><span class="comp-chip">Drawer</span><span class="comp-chip">Sheet</span><span class="comp-chip">Command</span><span class="comp-chip">Popover</span><span class="comp-chip">HoverCard</span><span class="comp-chip">Tooltip</span><span class="comp-chip">DropdownMenu</span></div>
+        </div><div class="cat-row" data-reveal>
+          <div class="cat-head">
+            <span class="cat-dot" style="background:var(--rx-accent-strong)"></span>
+            <span class="cat-name">导航</span>
+            <span class="cat-count">5</span>
+          </div>
+          <div class="comp-chips"><span class="comp-chip">Tabs</span><span class="comp-chip">Accordion</span><span class="comp-chip">Collapsible</span><span class="comp-chip">Breadcrumb</span><span class="comp-chip">Pagination</span></div>
+        </div>
+  </div>
+</section>
+
+<!-- ===== 主题演示 ===== -->
+<section id="themes">
+  <div class="section-inner">
+    <div class="sec-head" data-reveal>
+      <div class="sec-kicker">THEMING</div>
+      <h2 class="sec-title">6 方向主题 × 明暗双态</h2>
+      <p class="sec-desc">点击方向卡可实时预览（切换全局 accent 色）。37 个语义令牌随方向自动跟随。</p>
+    </div>
+    <div class="dir-grid"><button class="dir-card" data-dir="graphite" data-reveal>
+      <span class="dir-swatch" style="background:#ff6a3d"></span>
+      <span class="dir-name">石墨</span>
+      <span class="dir-id mono">graphite</span>
+    </button><button class="dir-card" data-dir="aurora" data-reveal>
+      <span class="dir-swatch" style="background:#8b7cff"></span>
+      <span class="dir-name">极光</span>
+      <span class="dir-id mono">aurora</span>
+    </button><button class="dir-card" data-dir="slate" data-reveal>
+      <span class="dir-swatch" style="background:#4d8df6"></span>
+      <span class="dir-name">石板</span>
+      <span class="dir-id mono">slate</span>
+    </button><button class="dir-card" data-dir="carbon" data-reveal>
+      <span class="dir-swatch" style="background:#2dd4bf"></span>
+      <span class="dir-name">碳</span>
+      <span class="dir-id mono">carbon</span>
+    </button><button class="dir-card" data-dir="nocturne" data-reveal>
+      <span class="dir-swatch" style="background:#818cf8"></span>
+      <span class="dir-name">夜曲</span>
+      <span class="dir-id mono">nocturne</span>
+    </button><button class="dir-card" data-dir="amber" data-reveal>
+      <span class="dir-swatch" style="background:#d4632f"></span>
+      <span class="dir-name">琥珀</span>
+      <span class="dir-id mono">amber</span>
+    </button></div>
+    <div class="theme-demo-hint" data-reveal>当前方向：<span id="cur-dir" class="mono">graphite（石墨）</span> · 可点右上角 ☀️/🌙 切换明暗</div>
+  </div>
+</section>
+
+<!-- ===== 技术栈 ===== -->
+<section id="stack" style="background: color-mix(in srgb, var(--rx-bg) 96%, transparent)">
+  <div class="section-inner">
+    <div class="sec-head" data-reveal>
+      <div class="sec-kicker">TECH STACK</div>
+      <h2 class="sec-title">现代技术栈</h2>
+      <p class="sec-desc">基于成熟开源生态，代码归你所有（shadcn 模式）。</p>
+    </div>
+    <div class="stack-wrap" data-reveal><span class="stack-chip">React 19</span><span class="stack-chip">Tailwind CSS v4</span><span class="stack-chip">shadcn 模式</span><span class="stack-chip">radix-ui</span><span class="stack-chip">vaul</span><span class="stack-chip">cmdk</span><span class="stack-chip">tsup</span><span class="stack-chip">vitest</span><span class="stack-chip">changesets</span></div>
+  </div>
+</section>
+
+<!-- ===== 质量 ===== -->
+<section id="quality">
+  <div class="section-inner">
+    <div class="sec-head" data-reveal>
+      <div class="sec-kicker">QUALITY</div>
+      <h2 class="sec-title">可发布级的质量保证</h2>
+      <p class="sec-desc">从测试到发布全链路自动化。</p>
+    </div>
+    <div class="quality-grid" data-reveal>
+      <div class="q-card"><div class="q-num" data-count="72">0</div><div class="q-label">vitest 测试用例</div></div>
+      <div class="q-card"><div class="q-num" data-count="57">0</div><div class="q-label">覆盖率 %</div></div>
+      <div class="q-card"><div class="q-num">AA</div><div class="q-label">WCAG 对比度 + axe 审计</div></div>
+      <div class="q-card"><div class="q-num">CI</div><div class="q-label">lint → test → build → pack</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 快速开始 ===== -->
+<section id="quickstart" style="background: color-mix(in srgb, var(--rx-bg) 96%, transparent)">
+  <div class="section-inner">
+    <div class="sec-head" data-reveal>
+      <div class="sec-kicker">QUICKSTART</div>
+      <h2 class="sec-title">快速开始</h2>
+      <p class="sec-desc">两步接入你的 React 项目。</p>
+    </div>
+    <div class="code-block" data-reveal>
+      <pre><span class="cmt">// 1. 安装（peerDependencies 需自行安装）</span>
+<span class="kw">npm install</span> <span class="str">@reasonix/ui</span>
+<span class="kw">npm install</span> <span class="str">react react-dom tailwindcss radix-ui vaul sonner cmdk react-day-picker react-resizable-panels embla-carousel-react next-themes</span>
+
+<span class="cmt">// 2. 引入组件与主题</span>
+<span class="kw">import</span> { Button, Tabs, TabsList, TabsTrigger, TabsContent } <span class="kw">from</span> <span class="str">'@reasonix/ui'</span>
+<span class="kw">import</span> <span class="str">'@reasonix/ui/styles.css'</span>
+
+<span class="kw">function</span> App() {
+  <span class="kw">return</span> (
+    &lt;Tabs defaultValue=<span class="str">"tab1"</span>&gt;
+      &lt;TabsList&gt;&lt;TabsTrigger value=<span class="str">"tab1"</span>&gt;标签一&lt;/TabsTrigger&gt;&lt;/TabsList&gt;
+      &lt;TabsContent value=<span class="str">"tab1"</span>&gt;内容一&lt;/TabsContent&gt;
+    &lt;/Tabs&gt;
+  )
+}
+
+<span class="cmt">// 3. 切换主题方向</span>
+document.documentElement.setAttribute(<span class="str">'data-direction'</span>, <span class="str">'aurora'</span>)
+document.documentElement.classList.toggle(<span class="str">'dark'</span>)</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 路线图 ===== -->
+<section id="roadmap">
+  <div class="section-inner">
+    <div class="sec-head" data-reveal>
+      <div class="sec-kicker">ROADMAP</div>
+      <h2 class="sec-title">版本与路线图</h2>
+    </div>
+    <div data-reveal>
+      <div class="road-row"><span class="road-dot road-done"></span><div class="road-text"><b>v0.1.0 — 已发布</b><span>38 组件 · 6 方向主题 · 37 令牌 · 32 动效 · 72 测试 · CI+Release 流水线 · changesets 版本管理</span></div></div>
+      <div class="road-row"><span class="road-dot road-todo"></span><div class="road-text"><b>v0.2.0 — 规划中</b><span>交互 playground · publint/attw 产物校验 · llms.txt（AI-ready 文档）</span></div></div>
+      <div class="road-row"><span class="road-dot road-todo"></span><div class="road-text"><b>v1.0.0 — 远期</b><span>覆盖率 80%+ · Storybook 视觉回归 · 多包拆分（core/hooks/theme）</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer">
+  <p>© 2026 Reasonix Design · 38 组件 · 6 方向 · MIT License</p>
+</footer>
+
+<script>
+  // 明暗切换
+  const themeToggle = document.getElementById('theme-toggle')
+  const setMode = (dark) => {
+    document.documentElement.setAttribute('data-mode', dark ? 'dark' : 'light')
+    themeToggle.textContent = dark ? '☀️' : '🌙'
+  }
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-mode') === 'dark'
+    setMode(!isDark)
+  })
+
+  // 主题方向切换（点击方向卡 → 全局 accent）
+  const dirCards = document.querySelectorAll('.dir-card')
+  const curDir = document.getElementById('cur-dir')
+  const DIR_ACCENTS = {
+    graphite: '#ff6a3d', aurora: '#8b7cff', slate: '#4d8df6',
+    carbon: '#2dd4bf', nocturne: '#818cf8', amber: '#d4632f',
+  }
+  dirCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const dir = card.dataset.dir
+      document.documentElement.style.setProperty('--rx-accent', DIR_ACCENTS[dir])
+      document.documentElement.style.setProperty('--rx-accent-soft', 'color-mix(in srgb, ' + DIR_ACCENTS[dir] + ' 14%, transparent)')
+      curDir.textContent = dir + '（' + card.querySelector('.dir-name').textContent + '）'
+    })
+  })
+
+  // Reveal 动效
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-revealed')
+        io.unobserve(e.target)
+      }
+    })
+  }, { threshold: 0.1 })
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el))
+
+  // count-up
+  const cio = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return
+      const el = e.target
+      const target = parseInt(el.dataset.count, 10)
+      const t0 = performance.now()
+      const dur = 900
+      const tick = (now) => {
+        const p = Math.min((now - t0) / dur, 1)
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)))
+        if (p < 1) requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
+      cio.unobserve(el)
+    })
+  }, { threshold: 0.5 })
+  document.querySelectorAll('[data-count]').forEach(el => cio.observe(el))
+</script>
+</body>
+</html>

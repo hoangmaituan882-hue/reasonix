@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>移动端组件库 · 文档展示</title>
+<style>
+/* ============================================================
+   Reasonix graphite 设计语言（参照 reasonix-components-showcase.html）
+   ============================================================ */
+:root {
+  --bg: #0c0d10; --bg-soft: #101115; --bg-elev: #15161a; --bg-elev-2: #191a1f;
+  --surface: #15161a; --surface-2: #191a1f; --surface-3: #101115;
+  --border: rgba(255,255,255,0.1); --border-2: rgba(255,255,255,0.2); --border-soft: rgba(255,255,255,0.07);
+  --fg: #f1f1ef; --fg-dim: #a7a8ad; --fg-faint: #6c6e74;
+  --accent: #ff6a3d; --accent-strong: #ff9a52; --accent-soft: rgba(255,106,61,0.16); --accent-fg: #0c0d10;
+  --grad: linear-gradient(120deg,#ff6a3d,#ff9a52);
+  --ok: #3ad17e; --warn: #e3a23a; --err: #f0573f; --danger: #e5484d;
+  --radius: 8px; --r-s: 5px; --r-l: 11px;
+  --dur-fast: 120ms; --dur-base: 180ms; --dur-slow: 340ms;
+  --ease-out: cubic-bezier(0.2,0.72,0.2,1);
+  --font-ui: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei","Noto Sans SC",Helvetica,Arial,sans-serif;
+  --font-mono: ui-monospace,"SF Mono","Cascadia Code",Consolas,"Liberation Mono",monospace;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f4f3ef; --bg-soft: #f0efe9; --bg-elev: #ffffff; --bg-elev-2: #f6f5f1;
+  --surface: #ffffff; --surface-2: #f6f5f1; --surface-3: #f0efe9;
+  --border: rgba(20,22,28,0.12); --border-2: rgba(20,22,28,0.24); --border-soft: rgba(20,22,28,0.08);
+  --fg: #16181d; --fg-dim: #4a4d56; --fg-faint: #85888f;
+  --accent: #ff5a2c; --accent-strong: #df471f; --accent-soft: rgba(255,90,44,0.12); --accent-fg: #ffffff;
+  --grad: linear-gradient(120deg,#ff5a2c,#ff8a3d);
+  --ok: #1f9d57; --warn: #d98a1f; --err: #d83a2a;
+  color-scheme: light;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-ui); background: var(--bg); color: var(--fg);
+  font-size: 14px; line-height: 1.6; min-height: 100vh;
+  transition: background var(--dur-slow), color var(--dur-slow);
+  -webkit-font-smoothing: antialiased;
+}
+* { scrollbar-width: thin; scrollbar-color: var(--fg-faint) transparent; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb { background: var(--fg-faint); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+
+/* ---- 顶栏 ---- */
+.topbar {
+  display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 20px;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border-bottom: 1px solid var(--border-soft);
+  position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px);
+}
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 16px; }
+.brand .mark {
+  width: 26px; height: 26px; border-radius: var(--r-s);
+  background: var(--grad); color: var(--accent-fg);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 900;
+}
+.brand .sub { font-size: 11px; color: var(--fg-faint); font-weight: 500; }
+.top-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.top-btn {
+  display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 14px;
+  border: 1px solid var(--border-soft); border-radius: 999px;
+  background: var(--bg-elev); color: var(--fg-dim); font-size: 11px;
+  cursor: pointer; transition: border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast);
+}
+.top-btn:hover { border-color: var(--border-2); color: var(--fg); }
+.top-btn:active { transform: scale(0.96); }
+
+/* ---- 头部 hero ---- */
+.hero { padding: 36px 20px 20px; max-width: 1100px; margin: 0 auto; }
+.hero h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.01em; }
+.hero h1 .badge {
+  display: inline-block; font-size: 11px; font-weight: 700; color: var(--accent-fg);
+  background: var(--grad); border-radius: var(--r-s); padding: 2px 8px;
+  vertical-align: 4px; margin-left: 8px;
+}
+.hero p { color: var(--fg-dim); font-size: 13px; margin-top: 6px; }
+.hero .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.hero .meta .tag {
+  font-size: 11px; color: var(--fg-faint); border: 1px solid var(--border-soft);
+  border-radius: 999px; padding: 3px 12px;
+}
+
+/* ---- 统计卡 ---- */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; max-width: 1100px; margin: 8px auto 0; padding: 0 20px; }
+.stat-card {
+  border: 1px solid var(--border-soft); border-radius: 12px; background: var(--bg-elev);
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 2px;
+  transition: border-color var(--dur-fast), transform var(--dur-fast), box-shadow var(--dur-fast);
+}
+.stat-card:hover { border-color: var(--border-2); box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.stat-card .sc-label { font-size: 10px; color: var(--fg-faint); text-transform: uppercase; letter-spacing: .05em; }
+.stat-card .sc-value { font-size: 22px; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat-card .sc-sub { font-size: 10px; color: var(--fg-faint); }
+
+/* ---- 主区 ---- */
+.main { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+/* 工具条（搜索 + 分类过滤） */
+.toolbar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+.ct-search {
+  display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-elev); transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.ct-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.ct-search input { flex: 1; border: none; outline: none; background: none; color: var(--fg); font: inherit; font-size: 13px; }
+.ct-search input::placeholder { color: var(--fg-faint); }
+.ct-search .count { font-size: 10px; color: var(--fg-faint); font-family: var(--font-mono); }
+
+.cat-filter { display: flex; gap: 6px; flex-wrap: wrap; }
+.cf-btn {
+  display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 12px;
+  border: 1px solid var(--border-soft); border-radius: 999px;
+  background: var(--bg-elev); color: var(--fg-dim); font-size: 11px; cursor: pointer;
+  transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast);
+}
+.cf-btn:hover { border-color: var(--border-2); color: var(--fg); }
+.cf-btn--on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 650; }
+.cf-btn .n { font-size: 9px; opacity: .7; }
+
+/* ---- 分类 section ---- */
+.comp-section { margin-bottom: 28px; }
+.sec-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 750; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border-soft);
+}
+.sec-count {
+  font-size: 10px; font-weight: 700; color: var(--accent);
+  background: var(--accent-soft); border-radius: 999px; padding: 1px 8px;
+}
+
+/* ---- 组件网格 ---- */
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.comp-card {
+  border: 1px solid var(--border-soft); border-radius: 12px; background: var(--bg-elev);
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: border-color var(--dur-fast), transform var(--dur-fast), box-shadow var(--dur-fast);
+}
+.comp-card:hover { border-color: var(--border-2); box-shadow: 0 4px 16px rgba(0,0,0,0.18); transform: translateY(-2px); }
+.comp-card:active { transform: translateY(-2px) scale(0.98); }
+.cc-head {
+  display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.cc-ic { width: 26px; height: 26px; border-radius: 7px; background: var(--accent-soft); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.cc-name { font-size: 13px; font-weight: 650; }
+.cc-zh { font-size: 10px; color: var(--fg-faint); }
+.cc-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.cc-desc { font-size: 11px; color: var(--fg-dim); line-height: 1.55; flex: 1; }
+/* 组件 mini demo（示意预览） */
+.cc-demo {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 56px; border: 1px dashed var(--border-soft); border-radius: var(--r-s);
+  background: var(--bg-soft); position: relative; overflow: hidden;
+}
+.cc-demo-tag {
+  font-size: 11px; font-weight: 600; color: var(--accent);
+  background: var(--accent-soft); border-radius: var(--r-s); padding: 4px 12px;
+}
+
+/* ---- 隐藏（过滤） ---- */
+.comp-section[hidden] { display: none; }
+.comp-card[hidden] { display: none; }
+
+/* ---- 动效 ---- */
+@keyframes fade-up { from { opacity: 0; transform: translateY(8px); } }
+.hero, .stats, .main { animation: fade-up var(--dur-slow) var(--ease-out); }
+
+/* ---- 响应式 ---- */
+@media (max-width: 640px) {
+  .brand .sub { display: none; }
+  .comp-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="mark">M</span> 移动端组件库 <span class="sub">文档展示 · 13 分类 / 60 组件</span></div>
+    <div class="top-actions">
+      <button class="top-btn" onclick="toggleTheme()" id="theme-btn">🌙 深色</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>移动端组件库 <span class="badge">文档</span></h1>
+    <p>一套按 13 个分类组织的移动端 UI 组件目录 —— 从基础按钮到函数式反馈的完整覆盖。</p>
+    <div class="meta">
+      <span class="tag">📱 移动优先</span>
+      <span class="tag">🎨 Reasonix 设计语言</span>
+      <span class="tag">🌓 明暗双主题</span>
+      <span class="tag">🔍 搜索 + 分类过滤</span>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat-card"><span class="sc-label">组件总数</span><span class="sc-value">60</span><span class="sc-sub">13 分类</span></div>
+    <div class="stat-card"><span class="sc-label">最多分类</span><span class="sc-value">数据展示</span><span class="sc-sub">10 个组件</span></div>
+    <div class="stat-card"><span class="sc-label">基础组件</span><span class="sc-value">3</span><span class="sc-sub">按钮 / 按钮组 / 图标</span></div>
+    <div class="stat-card"><span class="sc-label">反馈组件</span><span class="sc-value">5</span><span class="sc-sub">Alert / Dialog / Modal / Toast</span></div>
+  </section>
+
+  <main class="main">
+    <div class="toolbar">
+      <div class="ct-search">
+        <span>🔍</span>
+        <input id="search" placeholder="搜索组件（名称 / 中文 / 用途）…" autocomplete="off">
+        <span class="count" id="count">60 / 60</span>
+      </div>
+      <div class="cat-filter" id="cat-filter">
+<button class="cf-btn cf-btn--on" data-cat="全部">全部 <span class="n">60</span></button>
+<button class="cf-btn" data-cat="基础">基础 <span class="n">3</span></button>
+<button class="cf-btn" data-cat="弹层基础">弹层基础 <span class="n">3</span></button>
+<button class="cf-btn" data-cat="操作弹层">操作弹层 <span class="n">2</span></button>
+<button class="cf-btn" data-cat="布局">布局 <span class="n">5</span></button>
+<button class="cf-btn" data-cat="导航">导航 <span class="n">6</span></button>
+<button class="cf-btn" data-cat="表单与输入">表单与输入 <span class="n">6</span></button>
+<button class="cf-btn" data-cat="选择控件">选择控件 <span class="n">6</span></button>
+<button class="cf-btn" data-cat="选择器">选择器 <span class="n">5</span></button>
+<button class="cf-btn" data-cat="列表与单元格">列表与单元格 <span class="n">5</span></button>
+<button class="cf-btn" data-cat="数据展示">数据展示 <span class="n">10</span></button>
+<button class="cf-btn" data-cat="媒体">媒体 <span class="n">3</span></button>
+<button class="cf-btn" data-cat="反馈">反馈 <span class="n">5</span></button>
+<button class="cf-btn" data-cat="函数式">函数式 <span class="n">1</span></button>
+      </div>
+    </div>
+
+<section class="comp-section" data-cat="基础">
+  <h2 class="sec-title">🧱 基础 <span class="sec-count">3</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="button" data-cat="基础">
+  <div class="cc-head">
+    <span class="cc-ic">🔘</span>
+    <span class="cc-name">Button</span>
+    <span class="cc-zh">按钮</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">主按钮 / 次按钮 / 幽灵按钮 / 危险按钮，尺寸 small / normal / large</p>
+    <div class="cc-demo" data-demo="Button">
+      <span class="cc-demo-tag">Button</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="buttongroup" data-cat="基础">
+  <div class="cc-head">
+    <span class="cc-ic">🧩</span>
+    <span class="cc-name">ButtonGroup</span>
+    <span class="cc-zh">按钮组</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">横向 / 纵向排列多个按钮，支持选中态</p>
+    <div class="cc-demo" data-demo="ButtonGroup">
+      <span class="cc-demo-tag">ButtonGroup</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="icon" data-cat="基础">
+  <div class="cc-head">
+    <span class="cc-ic">✨</span>
+    <span class="cc-name">Icon</span>
+    <span class="cc-zh">图标</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">内置图标库，可自定义大小 / 颜色 / 旋转</p>
+    <div class="cc-demo" data-demo="Icon">
+      <span class="cc-demo-tag">Icon</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="弹层基础">
+  <h2 class="sec-title">🪟 弹层基础 <span class="sec-count">3</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="bottomsheet" data-cat="弹层基础">
+  <div class="cc-head">
+    <span class="cc-ic">⬆️</span>
+    <span class="cc-name">BottomSheet</span>
+    <span class="cc-zh">底部浮窗</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">从底部滑出的面板，支持拖拽关闭 / 高度自定义</p>
+    <div class="cc-demo" data-demo="BottomSheet">
+      <span class="cc-demo-tag">BottomSheet</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="mask" data-cat="弹层基础">
+  <div class="cc-head">
+    <span class="cc-ic">🌑</span>
+    <span class="cc-name">Mask</span>
+    <span class="cc-zh">遮罩</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">半透明遮罩层，可配置透明度 / 点击关闭</p>
+    <div class="cc-demo" data-demo="Mask">
+      <span class="cc-demo-tag">Mask</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="popup" data-cat="弹层基础">
+  <div class="cc-head">
+    <span class="cc-ic">🪟</span>
+    <span class="cc-name">Popup</span>
+    <span class="cc-zh">弹出层</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">基础弹出层，支持上 / 下 / 左 / 右四个方向</p>
+    <div class="cc-demo" data-demo="Popup">
+      <span class="cc-demo-tag">Popup</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="操作弹层">
+  <h2 class="sec-title">💬 操作弹层 <span class="sec-count">2</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="actionpopover" data-cat="操作弹层">
+  <div class="cc-head">
+    <span class="cc-ic">💬</span>
+    <span class="cc-name">ActionPopover</span>
+    <span class="cc-zh">操作气泡</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">气泡形式的操作菜单，跟随触发元素定位</p>
+    <div class="cc-demo" data-demo="ActionPopover">
+      <span class="cc-demo-tag">ActionPopover</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="actionsheet" data-cat="操作弹层">
+  <div class="cc-head">
+    <span class="cc-ic">📋</span>
+    <span class="cc-name">ActionSheet</span>
+    <span class="cc-zh">操作面板</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">底部操作面板，常用语确认 / 取消操作</p>
+    <div class="cc-demo" data-demo="ActionSheet">
+      <span class="cc-demo-tag">ActionSheet</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="布局">
+  <h2 class="sec-title">📐 布局 <span class="sec-count">5</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="card" data-cat="布局">
+  <div class="cc-head">
+    <span class="cc-ic">🃏</span>
+    <span class="cc-name">Card</span>
+    <span class="cc-zh">卡片</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">内容容器卡片，支持标题 / 内容 / 操作区</p>
+    <div class="cc-demo" data-demo="Card">
+      <span class="cc-demo-tag">Card</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="divider" data-cat="布局">
+  <div class="cc-head">
+    <span class="cc-ic">➖</span>
+    <span class="cc-name">Divider</span>
+    <span class="cc-zh">分割线</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">水平 / 垂直分割线，可带文字</p>
+    <div class="cc-demo" data-demo="Divider">
+      <span class="cc-demo-tag">Divider</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="grids" data-cat="布局">
+  <div class="cc-head">
+    <span class="cc-ic">🔲</span>
+    <span class="cc-name">Grids</span>
+    <span class="cc-zh">网格</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">宫格布局，支持列数 / 间距 / 边框</p>
+    <div class="cc-demo" data-demo="Grids">
+      <span class="cc-demo-tag">Grids</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="placeholder" data-cat="布局">
+  <div class="cc-head">
+    <span class="cc-ic">🕳️</span>
+    <span class="cc-name">Placeholder</span>
+    <span class="cc-zh">占位符</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">空状态占位，支持图片 / 文字 / 按钮</p>
+    <div class="cc-demo" data-demo="Placeholder">
+      <span class="cc-demo-tag">Placeholder</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="skeleton" data-cat="布局">
+  <div class="cc-head">
+    <span class="cc-ic">🦴</span>
+    <span class="cc-name">Skeleton</span>
+    <span class="cc-zh">骨架屏</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">加载骨架屏，多种占位形态</p>
+    <div class="cc-demo" data-demo="Skeleton">
+      <span class="cc-demo-tag">Skeleton</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="导航">
+  <h2 class="sec-title">🧭 导航 <span class="sec-count">6</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="indexbar" data-cat="导航">
+  <div class="cc-head">
+    <span class="cc-ic">📑</span>
+    <span class="cc-name">IndexBar</span>
+    <span class="cc-zh">索引栏</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">字母索引栏，支持滑动定位</p>
+    <div class="cc-demo" data-demo="IndexBar">
+      <span class="cc-demo-tag">IndexBar</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="navbar" data-cat="导航">
+  <div class="cc-head">
+    <span class="cc-ic">🧭</span>
+    <span class="cc-name">NavBar</span>
+    <span class="cc-zh">导航栏</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">页面顶部导航，标题 + 返回 + 操作</p>
+    <div class="cc-demo" data-demo="NavBar">
+      <span class="cc-demo-tag">NavBar</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="pagination" data-cat="导航">
+  <div class="cc-head">
+    <span class="cc-ic">📄</span>
+    <span class="cc-name">Pagination</span>
+    <span class="cc-zh">分页</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">分页器，支持数字 / 省略号</p>
+    <div class="cc-demo" data-demo="Pagination">
+      <span class="cc-demo-tag">Pagination</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="steps" data-cat="导航">
+  <div class="cc-head">
+    <span class="cc-ic">👣</span>
+    <span class="cc-name">Steps</span>
+    <span class="cc-zh">步骤条</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">步骤条，支持横向 / 纵向</p>
+    <div class="cc-demo" data-demo="Steps">
+      <span class="cc-demo-tag">Steps</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="tabbar" data-cat="导航">
+  <div class="cc-head">
+    <span class="cc-ic">🏷️</span>
+    <span class="cc-name">TabBar</span>
+    <span class="cc-zh">标签栏</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">底部标签栏，支持图标 + 文字</p>
+    <div class="cc-demo" data-demo="TabBar">
+      <span class="cc-demo-tag">TabBar</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="tabs" data-cat="导航">
+  <div class="cc-head">
+    <span class="cc-ic">📇</span>
+    <span class="cc-name">Tabs</span>
+    <span class="cc-zh">标签页</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">顶部标签页，支持滑动切换</p>
+    <div class="cc-demo" data-demo="Tabs">
+      <span class="cc-demo-tag">Tabs</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="表单与输入">
+  <h2 class="sec-title">📝 表单与输入 <span class="sec-count">6</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="codeinput" data-cat="表单与输入">
+  <div class="cc-head">
+    <span class="cc-ic">🔢</span>
+    <span class="cc-name">CodeInput</span>
+    <span class="cc-zh">码输入框</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">验证码输入框，支持自动聚焦 / 粘贴</p>
+    <div class="cc-demo" data-demo="CodeInput">
+      <span class="cc-demo-tag">CodeInput</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="form" data-cat="表单与输入">
+  <div class="cc-head">
+    <span class="cc-ic">📝</span>
+    <span class="cc-name">Form</span>
+    <span class="cc-zh">表单</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">表单容器，支持校验 / 提交</p>
+    <div class="cc-demo" data-demo="Form">
+      <span class="cc-demo-tag">Form</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="fullkeyboard" data-cat="表单与输入">
+  <div class="cc-head">
+    <span class="cc-ic">⌨️</span>
+    <span class="cc-name">FullKeyboard</span>
+    <span class="cc-zh">全键盘</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">全键盘输入，支持数字 / 字母</p>
+    <div class="cc-demo" data-demo="FullKeyboard">
+      <span class="cc-demo-tag">FullKeyboard</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="input" data-cat="表单与输入">
+  <div class="cc-head">
+    <span class="cc-ic">✏️</span>
+    <span class="cc-name">Input</span>
+    <span class="cc-zh">输入框</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">文本输入框，支持前后缀 / 清除</p>
+    <div class="cc-demo" data-demo="Input">
+      <span class="cc-demo-tag">Input</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="numkeyboard" data-cat="表单与输入">
+  <div class="cc-head">
+    <span class="cc-ic">🔟</span>
+    <span class="cc-name">NumKeyboard</span>
+    <span class="cc-zh">数字键盘</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">数字键盘，支持小数点 / 自定义</p>
+    <div class="cc-demo" data-demo="NumKeyboard">
+      <span class="cc-demo-tag">NumKeyboard</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="signature" data-cat="表单与输入">
+  <div class="cc-head">
+    <span class="cc-ic">✍️</span>
+    <span class="cc-name">Signature</span>
+    <span class="cc-zh">签名</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">手写签名板，支持导出图片</p>
+    <div class="cc-demo" data-demo="Signature">
+      <span class="cc-demo-tag">Signature</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="选择控件">
+  <h2 class="sec-title">☑️ 选择控件 <span class="sec-count">6</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="checkbox" data-cat="选择控件">
+  <div class="cc-head">
+    <span class="cc-ic">✅</span>
+    <span class="cc-name">Checkbox</span>
+    <span class="cc-zh">复选框</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">复选框，支持多选 / 半选</p>
+    <div class="cc-demo" data-demo="Checkbox">
+      <span class="cc-demo-tag">Checkbox</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="radio" data-cat="选择控件">
+  <div class="cc-head">
+    <span class="cc-ic">🔘</span>
+    <span class="cc-name">Radio</span>
+    <span class="cc-zh">单选框</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">单选框，支持分组</p>
+    <div class="cc-demo" data-demo="Radio">
+      <span class="cc-demo-tag">Radio</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="rate" data-cat="选择控件">
+  <div class="cc-head">
+    <span class="cc-ic">⭐</span>
+    <span class="cc-name">Rate</span>
+    <span class="cc-zh">评分</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">星级评分，支持半星 / 自定义</p>
+    <div class="cc-demo" data-demo="Rate">
+      <span class="cc-demo-tag">Rate</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="slider" data-cat="选择控件">
+  <div class="cc-head">
+    <span class="cc-ic">🎚️</span>
+    <span class="cc-name">Slider</span>
+    <span class="cc-zh">滑块</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">滑动条，支持单值 / 区间</p>
+    <div class="cc-demo" data-demo="Slider">
+      <span class="cc-demo-tag">Slider</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="stepper" data-cat="选择控件">
+  <div class="cc-head">
+    <span class="cc-ic">➕</span>
+    <span class="cc-name">Stepper</span>
+    <span class="cc-zh">步进器</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">步进器，支持增减 / 限制范围</p>
+    <div class="cc-demo" data-demo="Stepper">
+      <span class="cc-demo-tag">Stepper</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="switch" data-cat="选择控件">
+  <div class="cc-head">
+    <span class="cc-ic">🔛</span>
+    <span class="cc-name">Switch</span>
+    <span class="cc-zh">开关</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">开关，支持加载 / 禁用态</p>
+    <div class="cc-demo" data-demo="Switch">
+      <span class="cc-demo-tag">Switch</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="选择器">
+  <h2 class="sec-title">🎡 选择器 <span class="sec-count">5</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="asyncpicker" data-cat="选择器">
+  <div class="cc-head">
+    <span class="cc-ic">⏳</span>
+    <span class="cc-name">AsyncPicker</span>
+    <span class="cc-zh">异步选择器</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">异步数据选择器，支持远程加载</p>
+    <div class="cc-demo" data-demo="AsyncPicker">
+      <span class="cc-demo-tag">AsyncPicker</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="calendar" data-cat="选择器">
+  <div class="cc-head">
+    <span class="cc-ic">📅</span>
+    <span class="cc-name">Calendar</span>
+    <span class="cc-zh">日历</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">日历选择，支持单选 / 范围</p>
+    <div class="cc-demo" data-demo="Calendar">
+      <span class="cc-demo-tag">Calendar</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="colorpicker" data-cat="选择器">
+  <div class="cc-head">
+    <span class="cc-ic">🎨</span>
+    <span class="cc-name">ColorPicker</span>
+    <span class="cc-zh">颜色选择器</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">颜色选择，支持色板 / 取色</p>
+    <div class="cc-demo" data-demo="ColorPicker">
+      <span class="cc-demo-tag">ColorPicker</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="picker" data-cat="选择器">
+  <div class="cc-head">
+    <span class="cc-ic">🎡</span>
+    <span class="cc-name">Picker</span>
+    <span class="cc-zh">选择器</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">滚动选择器，支持多列联动</p>
+    <div class="cc-demo" data-demo="Picker">
+      <span class="cc-demo-tag">Picker</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="timepicker" data-cat="选择器">
+  <div class="cc-head">
+    <span class="cc-ic">⏰</span>
+    <span class="cc-name">TimePicker</span>
+    <span class="cc-zh">时间选择器</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">时间选择，支持时分秒</p>
+    <div class="cc-demo" data-demo="TimePicker">
+      <span class="cc-demo-tag">TimePicker</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="列表与单元格">
+  <h2 class="sec-title">📜 列表与单元格 <span class="sec-count">5</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="accordion" data-cat="列表与单元格">
+  <div class="cc-head">
+    <span class="cc-ic">🎹</span>
+    <span class="cc-name">Accordion</span>
+    <span class="cc-zh">手风琴</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">折叠面板，支持手风琴模式</p>
+    <div class="cc-demo" data-demo="Accordion">
+      <span class="cc-demo-tag">Accordion</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="cell" data-cat="列表与单元格">
+  <div class="cc-head">
+    <span class="cc-ic">📦</span>
+    <span class="cc-name">Cell</span>
+    <span class="cc-zh">单元格</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">列表单元格，支持图标 / 箭头 / 自定义</p>
+    <div class="cc-demo" data-demo="Cell">
+      <span class="cc-demo-tag">Cell</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="list" data-cat="列表与单元格">
+  <div class="cc-head">
+    <span class="cc-ic">📜</span>
+    <span class="cc-name">List</span>
+    <span class="cc-zh">列表</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">列表容器，支持分组 / 加载</p>
+    <div class="cc-demo" data-demo="List">
+      <span class="cc-demo-tag">List</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="pullrefresh" data-cat="列表与单元格">
+  <div class="cc-head">
+    <span class="cc-ic">🔄</span>
+    <span class="cc-name">PullRefresh</span>
+    <span class="cc-zh">下拉刷新</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">下拉刷新，支持自定义</p>
+    <div class="cc-demo" data-demo="PullRefresh">
+      <span class="cc-demo-tag">PullRefresh</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="infinitescroll" data-cat="列表与单元格">
+  <div class="cc-head">
+    <span class="cc-ic">🔃</span>
+    <span class="cc-name">InfiniteScroll</span>
+    <span class="cc-zh">上滑加载</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">上滑无限加载，支持防抖</p>
+    <div class="cc-demo" data-demo="InfiniteScroll">
+      <span class="cc-demo-tag">InfiniteScroll</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="数据展示">
+  <h2 class="sec-title">📊 数据展示 <span class="sec-count">10</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="avatar" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">👤</span>
+    <span class="cc-name">Avatar</span>
+    <span class="cc-zh">头像</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">头像，支持图片 / 文字 / 徽标</p>
+    <div class="cc-demo" data-demo="Avatar">
+      <span class="cc-demo-tag">Avatar</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="avatargroup" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">👥</span>
+    <span class="cc-name">AvatarGroup</span>
+    <span class="cc-zh">头像组</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">头像组，支持叠加 / 总数</p>
+    <div class="cc-demo" data-demo="AvatarGroup">
+      <span class="cc-demo-tag">AvatarGroup</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="badge" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">🔖</span>
+    <span class="cc-name">Badge</span>
+    <span class="cc-zh">徽标</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">徽标，支持数字 / 红点</p>
+    <div class="cc-demo" data-demo="Badge">
+      <span class="cc-demo-tag">Badge</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="charroll" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">🎰</span>
+    <span class="cc-name">CharRoll</span>
+    <span class="cc-zh">字符滚动</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">字符滚动动画，数字滚动效果</p>
+    <div class="cc-demo" data-demo="CharRoll">
+      <span class="cc-demo-tag">CharRoll</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="countdown" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">⏱️</span>
+    <span class="cc-name">CountDown</span>
+    <span class="cc-zh">倒计时</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">倒计时，支持天 / 时 / 分 / 秒</p>
+    <div class="cc-demo" data-demo="CountDown">
+      <span class="cc-demo-tag">CountDown</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="noticebar" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">📢</span>
+    <span class="cc-name">NoticeBar</span>
+    <span class="cc-zh">通告栏</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">通告栏，支持滚动 / 关闭</p>
+    <div class="cc-demo" data-demo="NoticeBar">
+      <span class="cc-demo-tag">NoticeBar</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="progress" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">📊</span>
+    <span class="cc-name">Progress</span>
+    <span class="cc-zh">进度条</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">进度条，支持百分比 / 动画</p>
+    <div class="cc-demo" data-demo="Progress">
+      <span class="cc-demo-tag">Progress</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="progressloop" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">⭕</span>
+    <span class="cc-name">ProgressLoop</span>
+    <span class="cc-zh">进度环</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">环形进度，支持渐变色</p>
+    <div class="cc-demo" data-demo="ProgressLoop">
+      <span class="cc-demo-tag">ProgressLoop</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="tag" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">🏷️</span>
+    <span class="cc-name">Tag</span>
+    <span class="cc-zh">标签</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">标签，支持实心 / 空心 / 自定义色</p>
+    <div class="cc-demo" data-demo="Tag">
+      <span class="cc-demo-tag">Tag</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="tooltip" data-cat="数据展示">
+  <div class="cc-head">
+    <span class="cc-ic">💡</span>
+    <span class="cc-name">Tooltip</span>
+    <span class="cc-zh">文字提示</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">文字提示，支持方向 / 触发方式</p>
+    <div class="cc-demo" data-demo="Tooltip">
+      <span class="cc-demo-tag">Tooltip</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="媒体">
+  <h2 class="sec-title">🎬 媒体 <span class="sec-count">3</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="imagepreview" data-cat="媒体">
+  <div class="cc-head">
+    <span class="cc-ic">🖼️</span>
+    <span class="cc-name">ImagePreview</span>
+    <span class="cc-zh">图片预览</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">图片预览，支持缩放 / 旋转 / 切换</p>
+    <div class="cc-demo" data-demo="ImagePreview">
+      <span class="cc-demo-tag">ImagePreview</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="imagelist" data-cat="媒体">
+  <div class="cc-head">
+    <span class="cc-ic">🖼</span>
+    <span class="cc-name">ImageList</span>
+    <span class="cc-zh">图片列表</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">图片列表，支持懒加载 / 预览</p>
+    <div class="cc-demo" data-demo="ImageList">
+      <span class="cc-demo-tag">ImageList</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="swiper" data-cat="媒体">
+  <div class="cc-head">
+    <span class="cc-ic">🎠</span>
+    <span class="cc-name">Swiper</span>
+    <span class="cc-zh">轮播</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">轮播图，支持自动播放 / 指示器</p>
+    <div class="cc-demo" data-demo="Swiper">
+      <span class="cc-demo-tag">Swiper</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="反馈">
+  <h2 class="sec-title">🔔 反馈 <span class="sec-count">5</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="alert" data-cat="反馈">
+  <div class="cc-head">
+    <span class="cc-ic">⚠️</span>
+    <span class="cc-name">Alert</span>
+    <span class="cc-zh">弹窗提示</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">提示条，支持类型 / 关闭</p>
+    <div class="cc-demo" data-demo="Alert">
+      <span class="cc-demo-tag">Alert</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="dialog" data-cat="反馈">
+  <div class="cc-head">
+    <span class="cc-ic">💬</span>
+    <span class="cc-name">Dialog</span>
+    <span class="cc-zh">对话框</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">对话框，支持标题 / 内容 / 按钮</p>
+    <div class="cc-demo" data-demo="Dialog">
+      <span class="cc-demo-tag">Dialog</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="loading" data-cat="反馈">
+  <div class="cc-head">
+    <span class="cc-ic">⏳</span>
+    <span class="cc-name">Loading</span>
+    <span class="cc-zh">加载</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">加载动画，支持多种样式</p>
+    <div class="cc-demo" data-demo="Loading">
+      <span class="cc-demo-tag">Loading</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="modal" data-cat="反馈">
+  <div class="cc-head">
+    <span class="cc-ic">🪟</span>
+    <span class="cc-name">Modal</span>
+    <span class="cc-zh">弹框</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">模态弹框，支持自定义内容</p>
+    <div class="cc-demo" data-demo="Modal">
+      <span class="cc-demo-tag">Modal</span>
+    </div>
+  </div>
+</div><div class="comp-card" data-name="toast" data-cat="反馈">
+  <div class="cc-head">
+    <span class="cc-ic">🍞</span>
+    <span class="cc-name">Toast</span>
+    <span class="cc-zh">轻提示</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">轻提示，支持成功 / 失败 / 加载</p>
+    <div class="cc-demo" data-demo="Toast">
+      <span class="cc-demo-tag">Toast</span>
+    </div>
+  </div>
+</div></div>
+</section>
+<section class="comp-section" data-cat="函数式">
+  <h2 class="sec-title">⚡ 函数式 <span class="sec-count">1</span></h2>
+  <div class="comp-grid"><div class="comp-card" data-name="feedback" data-cat="函数式">
+  <div class="cc-head">
+    <span class="cc-ic">⚡</span>
+    <span class="cc-name">Feedback</span>
+    <span class="cc-zh">函数式反馈</span>
+  </div>
+  <div class="cc-body">
+    <p class="cc-desc">函数式调用反馈，toast / dialog 等命令式 API</p>
+    <div class="cc-demo" data-demo="Feedback">
+      <span class="cc-demo-tag">Feedback</span>
+    </div>
+  </div>
+</div></div>
+</section>
+  </main>
+
+<script>
+  // 明暗切换
+  function toggleTheme() {
+    const isLight = document.documentElement.hasAttribute('data-theme');
+    if (isLight) { document.documentElement.removeAttribute('data-theme'); document.getElementById('theme-btn').textContent = '🌙 深色'; }
+    else { document.documentElement.setAttribute('data-theme', 'light'); document.getElementById('theme-btn').textContent = '☀️ 浅色'; }
+  }
+
+  // 分类过滤
+  const cfBtns = document.querySelectorAll('.cf-btn');
+  cfBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cfBtns.forEach(b => b.classList.remove('cf-btn--on'));
+      btn.classList.add('cf-btn--on');
+      const cat = btn.dataset.cat;
+      document.querySelectorAll('.comp-section').forEach(sec => {
+        sec.hidden = cat !== '全部' && sec.dataset.cat !== cat;
+      });
+      updateCount();
+    });
+  });
+
+  // 搜索过滤（组件级）
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    document.querySelectorAll('.comp-card').forEach(card => {
+      const hay = (card.dataset.name + ' ' + card.textContent).toLowerCase();
+      card.hidden = q && !hay.includes(q);
+    });
+    updateCount();
+  });
+
+  function updateCount() {
+    let visible = 0;
+    document.querySelectorAll('.comp-card').forEach(c => { if (!c.hidden) visible++; });
+    document.getElementById('count').textContent = visible + ' / 60';
+  }
+</script>
+</body>
+</html>
