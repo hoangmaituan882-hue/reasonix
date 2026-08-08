@@ -40,7 +40,7 @@ function TransitionDemo({ item, autoPlay }: { item: (typeof TRANSITIONS)[number]
       clearTimeout(startTimer)
       if (loopRef.current) clearInterval(loopRef.current)
     }
-  }, [autoPlay, item.id])
+  }, [autoPlay, item.id]) // eslint-disable-line react-hooks/exhaustive-deps -- drive 每渲染变化，回调内引用旧值无害
   const [active, setActive] = useState(false)
   const [copied, setCopied] = useState(false)
   const [expand, setExpand] = useState(false)
@@ -50,7 +50,7 @@ function TransitionDemo({ item, autoPlay }: { item: (typeof TRANSITIONS)[number]
   // 记录各 data-* 初始值（挂载时一次，供重置用）
   const initHtmlRef = useRef<string | null>(null)
   // 缓存 dangerouslySetInnerHTML 对象：React 对比引用相同则跳过重设（避免重渲染清类）
-  const demoHtml = useMemo(() => ({ __html: demo?.html || `<div class="${item.cls}" style="padding:12px;background:var(--rx-bg-elev);border-radius:8px;color:var(--rx-fg-dim)">${item.zh}</div>` }), [item.id, item.cls, item.zh, demo])
+  const demoHtml = useMemo(() => ({ __html: demo?.html || `<div class="${item.cls}" style="padding:12px;background:var(--rx-bg-elev);border-radius:8px;color:var(--rx-fg-dim)">${item.zh}</div>` }), [item, demo])
 
   const demoRef = (el: HTMLDivElement | null) => {
     // CSS 已由 App 全局注入（TRANSITION_CSS + HOVER_OVERRIDES），无需重复

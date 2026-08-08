@@ -22,9 +22,6 @@ jobs:
   version:
     name: Version Packages
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/ui
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,9 +31,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: packages/ui/package-lock.json
+          cache-dependency-path: package-lock.json
 
-      - name: Install dependencies
+      - name: Install dependencies (workspace)
         run: npm ci
 
       - name: Create Version PR

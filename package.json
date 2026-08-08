@@ -1,0 +1,22 @@
+{
+  "name": "reasonix-design-kit",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Reasonix design system monorepo — @reasonix/ui component library + showcase app",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "npm run build -w @reasonix/ui && npm run build -w reasonix-showcase",
+    "build:single": "npm run build:single -w reasonix-showcase",
+    "test": "npm test -w @reasonix/ui",
+    "test:coverage": "npm run test:coverage -w @reasonix/ui",
+    "lint": "npm run lint -w @reasonix/ui && npm run lint -w reasonix-showcase",
+    "typecheck": "npm run typecheck -w @reasonix/ui",
+    "dev": "npm run dev -w reasonix-showcase"
+  }
+}
