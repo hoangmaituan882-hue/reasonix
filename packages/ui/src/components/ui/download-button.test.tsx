@@ -19,16 +19,19 @@ describe("DownloadButton", () => {
     expect(btn).toHaveAttribute("aria-label", "导出报告")
   })
 
-  it("hover 后 text 上滑 / icon 滑入（group-hover 类）", async () => {
+  it("hover 后 text 上滑 / icon 滑入（wrapper 裁剪层存在）", async () => {
     render(<DownloadButton>下载</DownloadButton>)
     const btn = screen.getByRole("button")
-    const text = btn.querySelector('[data-slot="dl-text"]')
-    const icon = btn.querySelector('[data-slot="dl-icon"]')
-    expect(text?.className).toContain("group-hover:-top-full")
+    const wrapper = btn.querySelector('[data-slot="dl-wrapper"]')
+    expect(wrapper).not.toBeNull()
+    expect(wrapper?.className).toContain("overflow-hidden")
+    const text = wrapper?.querySelector('[data-slot="dl-text"]')
+    const icon = wrapper?.querySelector('[data-slot="dl-icon"]')
+    expect(text?.className).toContain("group-hover:top-[-100%]")
     expect(icon?.className).toContain("group-hover:top-0")
     // hover 触发
     await userEvent.hover(btn)
-    expect(text?.className).toContain("group-hover:-top-full")
+    expect(text?.className).toContain("group-hover:top-[-100%]")
   })
 
   it("disabled 禁用", () => {

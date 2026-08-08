@@ -33,26 +33,32 @@ function DownloadButton({
         "bg-[var(--rx-accent)] text-[var(--rx-accent-fg)] hover:bg-[var(--rx-accent-strong)]",
         // tooltip 气泡（::before 文字）——hover: 作用于自身（含 ::before）
         "before:pointer-events-none before:absolute before:bottom-[calc(100%+28px)] before:left-1/2 before:-translate-x-1/2 before:rounded-[0.25em] before:px-2 before:text-xs before:leading-[35px] before:content-[attr(data-tooltip)] before:whitespace-nowrap before:bg-[var(--rx-bg-elev)] before:text-[var(--rx-fg)] before:shadow-md before:opacity-0 before:invisible before:transition-all before:duration-[var(--rx-dur-slow)] before:ease-[var(--rx-ease)] hover:before:bottom-[calc(100%+18px)] hover:before:opacity-100 hover:before:visible motion-reduce:before:transition-none",
-        // tooltip 箭头（::after 三角，同气泡色）
-        "after:pointer-events-none after:absolute after:bottom-[calc(100%+8px)] after:left-1/2 after:-translate-x-1/2 after:border-x-8 after:border-t-8 after:border-x-transparent after:border-t-[var(--rx-bg-elev)] after:opacity-0 after:invisible after:transition-all after:duration-[var(--rx-dur-slow)] after:ease-[var(--rx-ease)] hover:after:bottom-[calc(100%+18px)] hover:after:opacity-100 hover:after:visible motion-reduce:after:transition-none",
+        // tooltip 箭头（::after 三角，同气泡色）——border 10px 对应原版
+        "after:pointer-events-none after:absolute after:bottom-[calc(100%+8px)] after:left-1/2 after:-translate-x-1/2 after:border-x-[10px] after:border-t-[10px] after:border-x-transparent after:border-t-[var(--rx-bg-elev)] after:opacity-0 after:invisible after:transition-all after:duration-[var(--rx-dur-slow)] after:ease-[var(--rx-ease)] hover:after:bottom-[calc(100%+18px)] hover:after:opacity-100 hover:after:visible motion-reduce:after:transition-none",
         className
       )}
       {...props}
     >
-      {/* 文字层 */}
+      {/* wrapper 裁剪层（对应原版 .button-wrapper）：保证 text/icon 滑动全程被裁在按钮内 */}
       <span
-        data-slot="dl-text"
-        className="absolute inset-0 flex items-center justify-center overflow-hidden transition-[top] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:-top-full motion-reduce:transition-none"
+        data-slot="dl-wrapper"
+        className="absolute inset-0 overflow-hidden rounded-[inherit]"
       >
-        {children}
-      </span>
-      {/* 图标层：hover 时从下方滑入 */}
-      <span
-        data-slot="dl-icon"
-        aria-hidden
-        className="absolute inset-x-0 top-full flex items-center justify-center overflow-hidden transition-[top] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-0 motion-reduce:transition-none"
-      >
-        <Download className="size-6" />
+        {/* 文字层 */}
+        <span
+          data-slot="dl-text"
+          className="absolute inset-0 flex items-center justify-center overflow-hidden transition-[top] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-[-100%] motion-reduce:transition-none"
+        >
+          {children}
+        </span>
+        {/* 图标层：hover 时从下方滑入 */}
+        <span
+          data-slot="dl-icon"
+          aria-hidden
+          className="absolute inset-x-0 top-full flex items-center justify-center overflow-hidden transition-[top] duration-[var(--rx-dur-slow)] ease-[var(--rx-ease)] group-hover:top-0 motion-reduce:transition-none"
+        >
+          <Download className="size-6" />
+        </span>
       </span>
     </button>
   )
