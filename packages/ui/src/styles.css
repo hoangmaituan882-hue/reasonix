@@ -53,6 +53,15 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* light chart 值（GitHub Primer light）—— .dark 块覆盖 */
+:root {
+  --chart-1: #1f9d57;
+  --chart-2: #4d8df6;
+  --chart-3: #d98a1f;
+  --chart-4: #8b5cf6;
+  --chart-5: #e5484d;
+}
+
 /* ---------- base :root = reasonix graphite light（shadcn 默认浅色） ---------- */
 :root {
   /* reasonix graphite light — shadcn 默认（无 dark 类=浅色） */

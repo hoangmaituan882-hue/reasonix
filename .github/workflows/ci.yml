@@ -53,6 +53,10 @@ jobs:
       - name: Coverage
         run: npm run test:coverage
 
+      - name: Changeset status (PR 必须带变更集)
+        run: npx changeset status --since origin/main || echo "::warning::PR 缺少 changeset 变更集"
+        if: github.event_name == 'pull_request'
+
       - name: Build
         run: npm run build
 

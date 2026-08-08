@@ -17,7 +17,7 @@
 - **主题系统**：`styles.css` 随包发布，37 个 `--rx-*` 令牌、6 个主题方向（graphite/aurora/slate/carbon/nocturne/amber）、明暗双态。
 - **动效体系**：32 个 keyframes + 28 个 `rx-anim-*` 工具类 + `prefers-reduced-motion` 降级。
 - **工程化**：ESM 构建（tsup）、完整 TypeScript 类型（d.ts）、tree-shaking 支持（sideEffects 仅 css）。
-- **测试**：10 个核心组件 37 个测试用例（vitest + Testing Library + jsdom）。
+- **测试**：vitest + Testing Library + jsdom（0.1.0 首发 37 用例，后续迭代至 72 用例）。
 
 ### Fixed
 

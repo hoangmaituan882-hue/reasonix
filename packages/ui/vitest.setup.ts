@@ -4,6 +4,13 @@ import { expect } from "vitest"
 
 expect.extend(axeMatchers)
 
+// vitest-axe matcher 类型声明（expect.toHaveNoViolations）
+declare module "vitest" {
+  interface Assertion<T = any> {
+    toHaveNoViolations(): void
+  }
+}
+
 // MUI 模式：未预期的 console.error/warn 使测试失败（捕获组件错误提示）
 import { afterEach, vi } from "vitest"
 const origError = console.error

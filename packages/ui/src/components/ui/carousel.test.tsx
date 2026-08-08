@@ -88,6 +88,6 @@ describe("Carousel", () => {
       </Carousel>,
     )
     expect(captured).not.toBeNull()
-    expect(captured?.api).toBeDefined()
+    expect(captured!.scrollPrev).toBeTypeOf("function")
   })
 })
