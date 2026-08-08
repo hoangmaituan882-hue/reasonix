@@ -40,4 +40,4 @@
 - 组件 subpath exports（`@reasonix/ui/components/*` 独立导入）
 - vitest-axe 可访问性测试 + 令牌 color-mix 派生去重
 
-[0.1.0]: https://github.com/yourorg/reasonix/releases/tag/v0.1.0
+[0.1.0]: https://github.com/hoangmaituan882-hue/reasonix/releases/tag/v0.1.0

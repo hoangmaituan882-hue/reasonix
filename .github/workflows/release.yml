@@ -6,6 +6,8 @@ on:
     paths:
       - "packages/ui/.changeset/**"
       - "packages/ui/CHANGELOG.md"
+      - "packages/ui/package.json"
+      - "package-lock.json"
       - ".github/workflows/ci.yml"
       - ".github/workflows/release.yml"
 
@@ -30,16 +32,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          registry-url: https://registry.npmjs.org
           cache: npm
           cache-dependency-path: package-lock.json
 
       - name: Install dependencies (workspace)
         run: npm ci
 
-      - name: Create Version PR
+      - name: Create Version PR + Publish
         uses: changesets/action@v1
         with:
-          cwd: packages/ui
           version: npm run version
           publish: npm run release
           commit: "chore: version packages"

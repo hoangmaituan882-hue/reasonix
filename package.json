@@ -17,6 +17,9 @@
     "test:coverage": "npm run test:coverage -w @reasonix/ui",
     "lint": "npm run lint -w @reasonix/ui && npm run lint -w reasonix-showcase",
     "typecheck": "npm run typecheck -w @reasonix/ui",
-    "dev": "npm run dev -w reasonix-showcase"
+    "dev": "npm run dev -w reasonix-showcase",
+    "version": "npm run version -w @reasonix/ui",
+    "release": "npm run build -w @reasonix/ui && npm run release -w @reasonix/ui",
+    "pack": "npm run pack -w @reasonix/ui"
   }
 }

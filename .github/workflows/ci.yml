@@ -51,7 +51,8 @@ jobs:
         run: npm run test:coverage
 
       - name: Changeset status (PR 必须带变更集)
-        run: npx --prefix packages/ui changeset status --since origin/main || echo "::warning::PR 缺少 changeset 变更集"
+        working-directory: packages/ui
+        run: npx changeset status --since origin/main || echo "::warning::PR 缺少 changeset 变更集"
         if: github.event_name == 'pull_request'
 
       - name: Build (ui + showcase)
