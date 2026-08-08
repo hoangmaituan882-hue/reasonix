@@ -196,6 +196,7 @@
   /* motion (DESIGN.md §5) */
   --rx-dur-fast: 120ms;
   --rx-dur-base: 180ms;
+  --rx-dur-mid: 220ms;    /* medium movement, button content swap */
   --rx-dur-slow: 340ms;
   --rx-ease: cubic-bezier(0.2, 0.72, 0.2, 1);
 
@@ -473,7 +474,8 @@
 :root {
   /* durations */
   --rx-dur-fast: 120ms;    /* hover, tooltip */
-  --rx-dur-base: 180ms;    /* popover, menu, small entrances */
+  --rx-dur-base: 180ms;
+  --rx-dur-mid: 220ms;    /* medium movement, button content swap */
   --rx-dur-slow: 340ms;    /* drawer, modal, panel slide */
   --rx-dur-slower: 420ms;  /* big backdrop fade */
   /* easings */
