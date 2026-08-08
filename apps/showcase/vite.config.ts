@@ -14,7 +14,13 @@ export default defineConfig(async ({ mode }) => {
   return {
     base: './',
     plugins,
-    resolve: { alias: { '@': path.resolve(__dirname, './src') } },
+    resolve: {
+      alias: [
+        // 组件统一从 packages/ui 源码导入（单一来源，避免双份漂移）
+        { find: '@/components/ui', replacement: path.resolve(__dirname, '../../packages/ui/src/components/ui') },
+        { find: '@', replacement: path.resolve(__dirname, './src') },
+      ],
+    },
     build: single
       ? { cssCodeSplit: false, assetsInlineLimit: 100000000 }
       : undefined,

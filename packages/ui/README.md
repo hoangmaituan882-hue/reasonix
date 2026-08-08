@@ -79,7 +79,7 @@ npm pack            # 打包发布
 
 ## 📐 设计规范
 
-设计令牌的完整规范见 [DESIGN.md](../../../docs/DESIGN.md)（9 章：身份 / 色彩 / 排版 / 形状 / 运动 / DoDon't / Checklist）。
+设计令牌的完整规范见 [DESIGN.md](../../docs/DESIGN.md)（9 章：身份 / 色彩 / 排版 / 形状 / 运动 / DoDon't / Checklist）。
 
 ## 📄 License
 

@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths:
       - "packages/ui/**"
+      - "apps/showcase/**"
       - ".github/workflows/ci.yml"
   pull_request:
     branches: [main]
     paths:
       - "packages/ui/**"
+      - "apps/showcase/**"
       - ".github/workflows/ci.yml"
 
 concurrency:
@@ -20,8 +22,8 @@ permissions:
   contents: read
 
 jobs:
-  quality:
-    name: Lint · Test · Build · Pack
+  ui:
+    name: UI · Lint · Test · Build · Pack
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -62,3 +64,34 @@ jobs:
         with:
           name: reasonix-ui-dist
           path: packages/ui/dist/
+
+  showcase:
+    name: Showcase · Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/showcase
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/showcase/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Build single-file
+        run: npm run build:single
+
+      - name: Verify single-file output
+        run: test -f ../../showcase/reasonix-shadcn-design.html && echo "single-file OK"
