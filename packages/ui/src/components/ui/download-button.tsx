@@ -30,7 +30,7 @@ function DownloadButton({
       disabled={disabled}
       className={cn(
         "group relative block h-[35px] w-[100px] rounded-[0.45em] text-center text-sm font-medium outline-none select-none transition-colors duration-[var(--rx-dur-base)] ease-[var(--rx-ease)] focus-visible:ring-3 focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50",
-        "bg-[var(--rx-accent)] text-[var(--rx-accent-fg)] hover:bg-[var(--rx-accent-strong)]",
+        "bg-primary text-primary-foreground hover:bg-primary/80",
         // tooltip 气泡（::before 文字）——hover: 作用于自身（含 ::before）
         "before:pointer-events-none before:absolute before:bottom-[calc(100%+28px)] before:left-1/2 before:-translate-x-1/2 before:rounded-[0.25em] before:px-2 before:text-xs before:leading-[35px] before:content-[attr(data-tooltip)] before:whitespace-nowrap before:bg-[var(--rx-bg-elev)] before:text-[var(--rx-fg)] before:shadow-md before:opacity-0 before:invisible before:transition-all before:duration-[var(--rx-dur-slow)] before:ease-[var(--rx-ease)] hover:before:bottom-[calc(100%+18px)] hover:before:opacity-100 hover:before:visible motion-reduce:before:transition-none",
         // tooltip 箭头（::after 三角，同气泡色）——border 10px 对应原版
