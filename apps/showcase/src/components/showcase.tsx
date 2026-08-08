@@ -83,8 +83,8 @@ const TAB_LABELS: Record<string, string> = {
   navigation: '导航', breadcrumb: '面包屑', pagination: '分页', accordions: '手风琴',
   misc: '杂项', textareas: '文本域', collapsible: '折叠',
   avatar: '头像', checkbox: '复选', radio: '单选', label: '标签',
-  dropdown: '下拉菜单', slider: '滑动条', toggle: '开关', scrollarea: '滚动区',
-  sheet: '抽屉', separator: '分隔线',
+  dropdown: '下拉菜单', slider: '滑动条', toggle: '切换', scrollarea: '滚动区',
+  sheet: '侧滑', separator: '分隔线',
 }
 
 const TAB_GROUPS: Record<string, string[]> = {
@@ -105,7 +105,7 @@ export default function ComponentsShowcase() {
 
   return (
     <div className="mx-auto max-w-5xl overflow-y-auto p-8">
-      <header className="mb-8 flex items-end justify-between">
+      <header className="mb-8 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold" style={{ color: 'var(--rx-fg)' }}>
             组件库 <span className="mono text-sm font-normal" style={{ color: 'var(--rx-fg-faint)' }}>shadcn/ui × reasonix</span>
@@ -624,24 +624,20 @@ export default function ComponentsShowcase() {
                     <div className="text-[10px]" style={{ color: 'var(--rx-fg-faint)' }}>在线 · graphite</div>
                   </div>
                 </div>
-                <div className="text-xs" style={{ color: 'var(--rx-fg-faint)' }}>Breadcrumb / Pagination 见完整组件库（37 个组件已装）</div>
+                <div className="text-xs" style={{ color: 'var(--rx-fg-faint)' }}>Breadcrumb / Pagination 见完整组件库（{Object.values(TAB_GROUPS).reduce((a, g) => a + g.length, 0)} 个组件已装）</div>
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent className="rx-anim-slideup" value="misc">
             <Card>
-              <CardContent className="space-y-4 p-6">
-                <div className="flex items-center gap-3">
-                  <Toggle aria-label="bold" className="rx-anim-press"><Bold className="h-4 w-4" /></Toggle>
-                  <Toggle aria-label="italic" className="rx-anim-press"><Italic className="h-4 w-4" /></Toggle>
-                  <span className="text-xs" style={{ color: 'var(--rx-fg-faint)' }}>Toggle 开关</span>
+              <CardContent className="p-6">
+                <div className="flex flex-wrap items-center gap-2 text-xs" style={{ color: 'var(--rx-fg-dim)' }}>
+                  <span>Toggle · Slider · Separator 等组件在各自分类 tab 中有完整演示：</span>
+                  <span className="rounded-full px-2 py-0.5" style={{ background: 'var(--rx-accent-soft)', color: 'var(--rx-accent)' }}>切换（表单）</span>
+                  <span className="rounded-full px-2 py-0.5" style={{ background: 'var(--rx-accent-soft)', color: 'var(--rx-accent)' }}>滑动条（表单）</span>
+                  <span className="rounded-full px-2 py-0.5" style={{ background: 'var(--rx-accent-soft)', color: 'var(--rx-accent)' }}>分隔线（杂项）</span>
                 </div>
-                <div className="space-y-2">
-                  <div className="text-xs" style={{ color: 'var(--rx-fg-dim)' }}>Slider 滑动条 · 上下文窗口</div>
-                  <Slider defaultValue={[33]} max={100} className="w-64" />
-                </div>
-                <SeparatorDemo />
               </CardContent>
             </Card>
           </TabsContent>
@@ -1103,7 +1099,7 @@ export default function ComponentsShowcase() {
       {/* ===== 圆角对比 ===== */}
       <section className="mt-10">
         <h2 className="mb-3 text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--rx-fg-faint)' }}>圆角 · 主题性格第一语言</h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
             { name: 's', val: 'var(--rx-r-s)', d: '按钮 / chip' },
             { name: 'm', val: 'var(--rx-r-m)', d: '输入框 / 卡片' },
@@ -1136,21 +1132,6 @@ function CalendarDemo() {
       />
       <div className="text-xs" style={{ color: 'var(--rx-fg-faint)' }}>
         {date ? `已选日期：${date.toLocaleDateString('zh-CN')}` : '点击选择一个日期'}
-      </div>
-    </div>
-  )
-}
-
-function SeparatorDemo() {
-  return (
-    <div className="space-y-2">
-      <div className="text-xs" style={{ color: 'var(--rx-fg-dim)' }}>Separator 分隔线</div>
-      <div className="flex items-center gap-3 text-[10px]" style={{ color: 'var(--rx-fg-faint)' }}>
-        <span>statusbar</span>
-        <span className="h-3 w-px" style={{ background: 'var(--rx-border-soft)' }} />
-        <span>dock</span>
-        <span className="h-3 w-px" style={{ background: 'var(--rx-border-soft)' }} />
-        <span>transcript</span>
       </div>
     </div>
   )
