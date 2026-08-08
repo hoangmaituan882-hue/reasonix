@@ -1,6 +1,5 @@
 import { Calendar } from '@/components/ui/calendar'
 import { Badge } from '@/components/ui/badge'
-import { JumpSidebar } from '@/components/jump-sidebar'
 import {
   Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious,
 } from '@/components/ui/carousel'
@@ -105,16 +104,7 @@ export default function ComponentsShowcase() {
   const groupTabs = TAB_GROUPS[group] ?? []
 
   return (
-    <div className="flex h-full w-full">
-      {/* 跳转侧边栏（移植自 components-showcase 分类导航） */}
-      <JumpSidebar
-        groups={TAB_GROUPS}
-        labels={TAB_LABELS}
-        activeGroup={group}
-        activeTab={tab}
-        onNavigate={(g, t) => { setGroup(g); setTab(t) }}
-      />
-      <div className="mx-auto max-w-5xl flex-1 overflow-y-auto p-8">
+    <div className="mx-auto max-w-5xl overflow-y-auto p-8">
       <header className="mb-8 flex items-end justify-between">
         <div>
           <h1 className="text-xl font-bold" style={{ color: 'var(--rx-fg)' }}>
@@ -1129,7 +1119,6 @@ export default function ComponentsShowcase() {
           ))}
         </div>
       </section>
-      </div>
     </div>
   )
 }
