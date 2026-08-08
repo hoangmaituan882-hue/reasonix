@@ -80,14 +80,8 @@ export default function App() {
           <div className="border-t px-3 py-3" style={{ borderColor: 'var(--rx-border-soft)' }}>
             <div className="mb-2 flex items-center justify-between">
               <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--rx-fg-faint)' }}>主题方向</span>
-              {/* 全局明暗切换（Switch 组件） */}
-              <label className="flex cursor-pointer items-center gap-1.5 text-[9px] font-semibold" style={{ color: 'var(--rx-fg-dim)' }}>
-                <span className="flex items-center gap-0.5">
-                  <span className={dark ? 'opacity-30' : ''}>☀️</span>
-                  <span className={dark ? '' : 'opacity-30'}>🌙</span>
-                </span>
-                <Switch checked={dark} onCheckedChange={setDark} className="scale-[0.8]" aria-label="切换明暗" />
-              </label>
+              {/* 全局明暗切换（Uiverse 复刻：滑块自带太阳/月亮，无需额外图标） */}
+              <Switch checked={dark} onCheckedChange={setDark} variant="pill" aria-label="切换明暗" />
             </div>
             <div className="flex flex-wrap gap-1">
               {DIRECTIONS.map((d) => (

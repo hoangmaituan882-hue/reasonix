@@ -381,6 +381,20 @@ export default function ComponentsShowcase() {
           <TabsContent className="rx-anim-slideup" value="switches">
             <Card>
               <CardContent className="space-y-4 p-6">
+                <div className="flex flex-wrap items-center gap-6">
+                  <div className="flex items-center gap-3">
+                    <Switch variant="pill" aria-label="pill 开" />
+                    <span className="text-xs" style={{ color: 'var(--rx-fg-faint)' }}>pill（太阳/月亮）</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Switch variant="pill" defaultChecked aria-label="pill 关" />
+                    <span className="text-xs" style={{ color: 'var(--rx-fg-faint)' }}>pill 选中</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Switch defaultChecked aria-label="默认开" />
+                    <span className="text-xs" style={{ color: 'var(--rx-fg-faint)' }}>默认</span>
+                  </div>
+                </div>
                 {[
                   { label: '自动滚动', desc: '新消息到达时自动滚动到底部' },
                   { label: '跟随系统主题', desc: '明暗随操作系统切换' },
