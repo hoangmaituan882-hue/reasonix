@@ -34,9 +34,9 @@ export default function App() {
     <div className="flex h-screen overflow-hidden">
       {/* 全局注入 transitions.dev 过渡 CSS（27 个 t-* 类全站可用） */}
       <style dangerouslySetInnerHTML={{ __html: TRANSITION_CSS + HOVER_OVERRIDES }} />
-      {/* 左侧边栏：品牌 + 导航 + 主题方向（工作台时收窄） */}
+      {/* 左侧边栏：品牌 + 导航 + 主题方向（工作台时收窄；移动端隐藏） */}
       <aside
-        className="flex shrink-0 flex-col border-r transition-all duration-300"
+        className="hidden shrink-0 flex-col border-r transition-all duration-300 md:flex"
         style={{ width: narrow ? 52 : 208, background: 'var(--rx-sidebar)', borderColor: 'var(--rx-border-soft)' }}
       >
         {/* 品牌区（折叠时仅 R 徽标居中） */}

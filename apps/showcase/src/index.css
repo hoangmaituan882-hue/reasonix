@@ -4,6 +4,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* 扫描 packages/ui 源码（vite alias 指向仓库外，需显式 @source）*/
+@source "../../../packages/ui/src";
+
 /* ============================================================
    Reasonix design system → shadcn/tailwind mapping
    DESIGN.md (reasonix-design-kit/DESIGN.md) — graphite default
@@ -108,7 +111,7 @@
   --rx-accent: #c93918;
   --rx-accent-strong: #df471f;
   --rx-accent-soft: rgba(255, 90, 44, 0.12);
-  --rx-accent-fg: #ffffff;
+  --rx-accent-fg: #0c0d10;
   --rx-accent-text: #0c0d10;
   --rx-grad: linear-gradient(120deg, #ff5a2c, #ff8a3d);
 

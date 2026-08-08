@@ -105,7 +105,7 @@
   --rx-accent: #c93918;
   --rx-accent-strong: #df471f;
   --rx-accent-soft: color-mix(in srgb, var(--rx-accent) 16%, transparent);
-  --rx-accent-fg: #ffffff;
+  --rx-accent-fg: #0c0d10;
   --rx-accent-text: #0c0d10;
   --rx-grad: linear-gradient(120deg, #ff5a2c, #ff8a3d);
 

@@ -741,8 +741,8 @@ export default function Workbench() {
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="工具">
-            <CommandItem onSelect={() => { setCmdOpen(false); setTermOpen(o => !o) }}><Sparkles className="mr-2 h-3.5 w-3.5" /> 切换模型</CommandItem>
-            <CommandItem onSelect={() => { setCmdOpen(false); setTermOpen(o => !o) }}><Settings className="mr-2 h-3.5 w-3.5" /> 打开终端</CommandItem>
+            <CommandItem onSelect={() => { setCmdOpen(false); document.querySelector('[data-slot="composer-model"]')?.scrollIntoView({ behavior: 'smooth' }) }}><Sparkles className="mr-2 h-3.5 w-3.5" /> 切换模型</CommandItem>
+            <CommandItem onSelect={() => { setCmdOpen(false); setTermOpen(true) }}><Settings className="mr-2 h-3.5 w-3.5" /> 打开终端</CommandItem>
           </CommandGroup>
         </CommandList>
       </CommandDialog>

@@ -23,7 +23,7 @@ export function JumpSidebar({ groups, labels, activeGroup, activeTab, onNavigate
 
   return (
     <aside
-      className="flex h-full w-52 shrink-0 flex-col overflow-y-auto border-r px-2 py-3"
+      className="hidden h-full w-52 shrink-0 flex-col overflow-y-auto border-r px-2 py-3 md:flex"
       style={{ background: 'var(--rx-bg-elev)', borderColor: 'var(--rx-border-soft)' }}
       aria-label="组件跳转导航"
     >

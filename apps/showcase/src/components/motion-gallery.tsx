@@ -55,7 +55,8 @@ const MOTIONS: MotionItem[] = [
 ]
 
 function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
-  const [state, setState] = useState<'idle' | 'playing' | 'paused'>('idle')
+  const [state, setState] = useState<'idle' | 'playing' | 'paused'>('paused')
+  const [playKey, setPlayKey] = useState(0)
   const [speed, setSpeed] = useState(1)
 
   return (
@@ -64,6 +65,7 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
         {/* 舞台 */}
         <div className="relative flex h-24 items-center justify-center border-b" style={{ background: 'var(--rx-bg-soft)', borderColor: 'var(--rx-border-soft)' }}>
           <div
+            key={playKey}
             className={`flex h-12 w-32 items-center justify-center rounded-md text-xs font-semibold ${m.cls}`}
             style={{
               background: 'var(--rx-accent-soft)',
@@ -91,14 +93,14 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
           <div className="mt-2 flex items-center gap-1.5">
             <Button
               size="sm" variant="outline" className="h-6 gap-1 px-2 text-[10px]"
-              onClick={() => setState(s => s === 'playing' ? 'idle' : 'playing')}
+              onClick={() => { setPlayKey(k => k + 1); setState('playing') }}
             >
               <Play className="h-3 w-3" /> 播放
             </Button>
             <Button size="sm" variant="ghost" className="h-6 gap-1 px-2 text-[10px]" aria-label={state === 'paused' ? '恢复' : '暂停'} onClick={() => setState(s => s === 'paused' ? 'playing' : 'paused')}>
               {state === 'paused' ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
             </Button>
-            <Button size="sm" variant="ghost" className="h-6 gap-1 px-2 text-[10px]" aria-label="重置" onClick={() => setState('idle')}>
+            <Button size="sm" variant="ghost" className="h-6 gap-1 px-2 text-[10px]" aria-label="重置" onClick={() => { setPlayKey(k => k + 1); setState('paused') }}>
               <RotateCcw className="h-3 w-3" />
             </Button>
             {/* 倍速选择：shadcn Select 组件（替代原生 select） */}
