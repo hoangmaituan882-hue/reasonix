@@ -49,7 +49,7 @@ index: "src/index.ts",
   },
   format: ["esm"],
   dts: true,
-  sourcemap: true,
+  sourcemap: false,
   clean: true,
   // 处理 @/ 路径别名 → 指向 src 目录
   esbuildOptions(options) {
