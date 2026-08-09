@@ -1,0 +1,71 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="指南/快速开始" />
+
+# 快速开始
+
+`@reasonix/ui` — 38 个 shadcn 风格 React 组件，6 方向主题 × 明暗双态，动效令牌化设计系统。
+
+## 安装
+
+> ⚠️ 本包为**纯 ESM + Tailwind CSS v4 语义类**组件库：JS 产物保留 tailwind 类名，但**样式不自动生效**——宿主项目必须自己搭 Tailwind v4 编译管线。
+
+```bash
+npm install @reasonix/ui
+npm install react react-dom tailwindcss radix-ui vaul sonner cmdk \
+  react-day-picker react-resizable-panels embla-carousel-react \
+  shadcn tw-animate-css
+npm install -D @tailwindcss/vite
+```
+
+## Tailwind v4 接入（必做）
+
+**① vite.config.ts：**
+
+```ts
+import tailwindcss from '@tailwindcss/vite'
+// plugins: [react(), tailwindcss()]
+```
+
+**② 项目 CSS 入口（src/index.css）按顺序：**
+
+```css
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@reasonix/ui/styles.css";
+@source "../node_modules/@reasonix/ui/dist";  /* ★ 必配 */
+```
+
+> 不配 `@source` 组件会"裸奔"；不要重复定义 `@custom-variant dark`。
+
+## 使用组件
+
+```tsx
+import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from '@reasonix/ui'
+// 或按组件导入：import { Button } from '@reasonix/ui/components/button'
+
+export function App() {
+  return (
+    <Tabs defaultValue="a">
+      <TabsList>
+        <TabsTrigger value="a">标签 A</TabsTrigger>
+        <TabsTrigger value="b">标签 B</TabsTrigger>
+      </TabsList>
+      <TabsContent value="a">内容 A</TabsContent>
+      <TabsContent value="b">内容 B</TabsContent>
+    </Tabs>
+  )
+}
+```
+
+## 主题切换
+
+```ts
+// 6 方向：graphite / aurora / slate / carbon / nocturne / amber
+document.documentElement.setAttribute('data-direction', 'aurora')
+// 明暗：.dark class
+document.documentElement.classList.toggle('dark')
+```
+
+本页右上角 **Toolbar → 主题方向** 可实时切换全部组件 Demo 的方向；明暗通过浏览器/主题插件控制。

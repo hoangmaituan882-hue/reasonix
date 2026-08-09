@@ -11,7 +11,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "npm run build -w @reasonix/ui && npm run build -w reasonix-showcase",
+    "build": "npm run build -w @reasonix/ui && npm run build -w reasonix-showcase && npm run build -w reasonix-docs",
     "build:single": "npm run build:single -w reasonix-showcase",
     "test": "npm test -w @reasonix/ui",
     "test:coverage": "npm run test:coverage -w @reasonix/ui",
@@ -20,6 +20,9 @@
     "dev": "npm run dev -w reasonix-showcase",
     "version": "npm run version -w @reasonix/ui",
     "release": "npm run build -w @reasonix/ui && npm run release -w @reasonix/ui",
-    "pack": "npm run pack -w @reasonix/ui"
+    "pack": "npm run pack -w @reasonix/ui",
+    "docs:dev": "npm run dev -w reasonix-docs",
+    "docs:build": "npm run build -w reasonix-docs",
+    "docs:preview": "npm run preview -w reasonix-docs"
   }
 }

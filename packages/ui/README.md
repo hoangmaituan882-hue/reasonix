@@ -163,6 +163,20 @@ npm run tokens   # 或 node scripts/export-tokens.mjs
 - **Figma 用法**：Figma 插件「Tokens Studio」→ 导入 JSON → 生成 Design Tokens 同步样式变量；配合 [Figma Variables](https://help.figma.com/hc/en-us/articles/15345957129239) 可实现明暗/方向一键切换
 - **同步链路**：`styles.css` 是唯一事实源，`export-tokens.mjs` 单向导出，避免双份手写
 
+## 📚 文档站
+
+完整组件文档（38/38 可交互 Demo + API 表格 + 设计建议 + 代码示例）见仓库 `apps/docs`（Storybook）：
+
+```bash
+npm install
+npm run docs:dev      # 本地开发（http://localhost:6006）
+npm run docs:build    # 静态构建（apps/docs/storybook-static）
+```
+
+另有独立指南：
+- [迁移指南](../../docs/MIGRATION.md) — 0.1.0→0.2.0 升级要点
+- [接入指南](../../docs/INTEGRATION.md) — 外部项目接入完整步骤
+
 ## 🧑‍💻 开发
 
 ```bash

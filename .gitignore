@@ -5,6 +5,7 @@ node_modules/
 dist/
 coverage/
 *.tgz
+storybook-static/
 
 # 临时脚本
 # _gen*.py 不忽略（scripts/ 生成脚本需入库）

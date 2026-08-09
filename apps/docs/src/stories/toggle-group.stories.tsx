@@ -1,0 +1,21 @@
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { ComponentPreview } from '../../../showcase/src/components/component-preview'
+
+const meta: Meta = {
+  title: "表单/Toggle Group",
+  tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: "一组互斥或多选的可切换按钮组。\n\n## 设计使用建议\n\n一组互斥或多选的可切换按钮组。\n\n### Props\n\n<table>\n<thead><tr><th>Prop</th><th>类型</th><th>说明</th></tr></thead>\n<tbody>\n<tr><td><code>type</code></td><td><code>\"single\" | \"multiple\"</code></td><td>单选或多选</td></tr><tr><td><code>value</code></td><td><code>string | string[]</code></td><td>受控选中值</td></tr><tr><td><code>onValueChange</code></td><td><code>(value) => void</code></td><td>选中变化回调</td></tr><tr><td><code>variant</code></td><td><code>\"default\" | \"outline\"</code></td><td>视觉变体</td></tr>\n</tbody>\n</table>\n\n## 代码示例\n\n```tsx\nimport { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'\nimport { Bold, Italic } from 'lucide-react'\n\n<ToggleGroup type=\"multiple\">\n  <ToggleGroupItem value=\"bold\" aria-label=\"加粗\"><Bold /></ToggleGroupItem>\n  <ToggleGroupItem value=\"italic\" aria-label=\"斜体\"><Italic /></ToggleGroupItem>\n</ToggleGroup>\n```",
+      },
+    },
+  },
+}
+
+export default meta
+type Story = StoryObj
+
+export const Demo: Story = {
+  render: () => <ComponentPreview id="toggle-group" />,
+}
