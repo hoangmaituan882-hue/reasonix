@@ -91,6 +91,8 @@ function App() {
 | `data-open:`/`data-checked:` 变体失效 | 缺 shadcn variant | `@import "shadcn/tailwind.css"` |
 | `dark:` 变体报重复定义 | 你重复写了 `@custom-variant dark` | 删掉你自己的定义，依赖 styles.css |
 | 编译报 `@theme`/`@source` 语法错误 | Tailwind 版本不对 | 必须 Tailwind **v4**（`^4.0.0`） |
+| `Invalid hook call` / `useRef is null` | React 双实例（本地 file: 引用 / monorepo 常见） | vite 加 `resolve: { dedupe: ['react', 'react-dom', 'react/jsx-runtime'] }` |
+| `ERESOLVE`（shadcn 缺 babel peer） | shadcn 依赖 babel 工具链 | 补 `npm install -D @babel/core` |
 
 ## 🎨 主题切换
 
