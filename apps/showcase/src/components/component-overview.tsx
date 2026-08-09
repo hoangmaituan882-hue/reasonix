@@ -49,6 +49,7 @@ export function ComponentOverview() {
   const [category, setCategory] = useState<Filter>('全部')
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [codeViewId, setCodeViewId] = useState<string | null>(null)
+  const [expandedApiId, setExpandedApiId] = useState<string | null>(null)
   const timerRef = useRef<number | null>(null)
 
   useEffect(() => {
@@ -231,46 +232,62 @@ export function ComponentOverview() {
                       {copied ? '✓ 已复制' : '复制代码'}
                     </button>
 
-                    {/* API 表：组件 props（折叠） */}
+                    {/* API 表：组件 props（折叠，grid-rows 丝滑动效） */}
                     {(() => {
                       const toKebab = (n: string) => n.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
                       // 组件真名 ↔ 文件映射：Toaster 定义在 sonner.tsx
                       const alias: Record<string, string> = { toaster: 'sonner' }
                       const api = COMPONENT_API.find((a) => (alias[toKebab(a.component)] ?? toKebab(a.component)) === item.id)
                       if (!api || api.props.length === 0) return null
+                      const isOpen = expandedApiId === item.id
                       return (
-                        <details className="mt-2 group">
-                          <summary className="flex cursor-pointer items-center gap-1 text-[10px] font-semibold transition-colors hover:text-[var(--rx-accent)]" style={{ color: 'var(--rx-fg-faint)' }}>
-                            <ChevronDown className="size-3 transition-transform group-open:rotate-180" />
+                        <div className="mt-2">
+                          <button
+                            type="button"
+                            onClick={() => setExpandedApiId(isOpen ? null : item.id)}
+                            aria-expanded={isOpen}
+                            aria-controls={`api-table-${item.id}`}
+                            className="flex w-full cursor-pointer items-center gap-1 text-[10px] font-semibold transition-colors hover:text-[var(--rx-accent)]"
+                            style={{ color: 'var(--rx-fg-faint)' }}
+                          >
+                            <ChevronDown className="size-3 transition-transform duration-300" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                             API · {api.props.length} props
-                          </summary>
-                          <div className="mt-2 overflow-hidden rounded-md border" style={{ borderColor: 'var(--rx-border-soft)' }}>
-                            <table className="w-full text-left text-[10px]">
-                              <thead>
-                                <tr style={{ background: 'var(--rx-bg-soft)' }}>
-                                  <th className="px-2 py-1.5 font-semibold" style={{ color: 'var(--rx-fg-dim)' }}>Prop</th>
-                                  <th className="px-2 py-1.5 font-semibold" style={{ color: 'var(--rx-fg-dim)' }}>类型</th>
-                                  <th className="px-2 py-1.5 font-semibold" style={{ color: 'var(--rx-fg-dim)' }}>说明</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {api.props.map((p) => (
-                                  <tr key={p.name} style={{ borderTop: '1px solid var(--rx-border-soft)' }}>
-                                    <td className="px-2 py-1.5 align-top">
-                                      <code className="mono" style={{ color: 'var(--rx-accent)' }}>
-                                        {p.name}{p.optional ? '?' : ''}
-                                      </code>
-                                    </td>
-                                    <td className="px-2 py-1.5 align-top">
-                                      <code className="mono" style={{ color: 'var(--rx-fg-dim)' }}>{p.type}</code>
-                                    </td>
-                                    <td className="px-2 py-1.5 align-top" style={{ color: 'var(--rx-fg-faint)' }}>{p.desc}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                          </button>
+                          <div
+                            id={`api-table-${item.id}`}
+                            className="grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
+                            style={{ gridTemplateRows: isOpen ? '1fr' : '0fr', opacity: isOpen ? 1 : 0 }}
+                          >
+                            <div className="min-h-0 overflow-hidden">
+                              <div className="mt-2 overflow-hidden rounded-md border" style={{ borderColor: 'var(--rx-border-soft)' }}>
+                                <table className="w-full text-left text-[10px]">
+                                  <thead>
+                                    <tr style={{ background: 'var(--rx-bg-soft)' }}>
+                                      <th className="px-2 py-1.5 font-semibold" style={{ color: 'var(--rx-fg-dim)' }}>Prop</th>
+                                      <th className="px-2 py-1.5 font-semibold" style={{ color: 'var(--rx-fg-dim)' }}>类型</th>
+                                      <th className="px-2 py-1.5 font-semibold" style={{ color: 'var(--rx-fg-dim)' }}>说明</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {api.props.map((p) => (
+                                      <tr key={p.name} style={{ borderTop: '1px solid var(--rx-border-soft)' }}>
+                                        <td className="px-2 py-1.5 align-top">
+                                          <code className="mono" style={{ color: 'var(--rx-accent)' }}>
+                                            {p.name}{p.optional ? '?' : ''}
+                                          </code>
+                                        </td>
+                                        <td className="px-2 py-1.5 align-top">
+                                          <code className="mono" style={{ color: 'var(--rx-fg-dim)' }}>{p.type}</code>
+                                        </td>
+                                        <td className="px-2 py-1.5 align-top" style={{ color: 'var(--rx-fg-faint)' }}>{p.desc}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
                           </div>
-                        </details>
+                        </div>
                       )
                     })()}
                   </article>
