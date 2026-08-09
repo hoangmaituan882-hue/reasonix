@@ -83,6 +83,30 @@ function argTypesBlock(id) {
   return '\n  argTypes: {\n' + lines + '\n  },'
 }
 
+// ---- args 驱动组件：Controls 真实生效（简单组件用真实组件渲染）----
+const argsDriven = {
+  button: {
+    args: { children: '按钮', variant: 'default', size: 'default' },
+    render: `(() => { const { children, variant, size } = args; return <Button variant={variant} size={size}>{children}</Button> })()`,
+  },
+  badge: {
+    args: { children: '徽章', variant: 'default' },
+    render: `(() => { const { children, variant } = args; return <Badge variant={variant}>{children}</Badge> })()`,
+  },
+  input: {
+    args: { placeholder: '请输入内容' },
+    render: `(() => { const { placeholder, disabled } = args; return <Input placeholder={placeholder} disabled={disabled} /> })()`,
+  },
+  switch: {
+    args: { checked: true },
+    render: `(() => { const { checked, disabled } = args; return <Switch checked={checked} disabled={disabled} /> })()`,
+  },
+  checkbox: {
+    args: { checked: true },
+    render: `(() => { const { checked, disabled } = args; return <Checkbox checked={checked} disabled={disabled} /> })()`,
+  },
+}
+
 // ---- 生成每个组件的 stories（数组 join，避免反引号冲突）----
 for (const c of catalog) {
   const title = `${c.category}/${c.name}`
@@ -102,9 +126,13 @@ for (const c of catalog) {
       codeBlock,
   )
   const argTypes = argTypesBlock(c.id)
+  // args 驱动组件：import 真实组件；否则 import ComponentPreview
+  const compImport = argsDriven[c.id]
+    ? `import { ${c.name} } from '@/components/ui/${c.id}'\nimport { ComponentPreview } from '../../../showcase/src/components/component-preview'`
+    : "import { ComponentPreview } from '../../../showcase/src/components/component-preview'"
   const story = [
     "import type { Meta, StoryObj } from '@storybook/react-vite'",
-    "import { ComponentPreview } from '../../../showcase/src/components/component-preview'",
+    compImport,
     '',
     'const meta: Meta = {',
     '  title: ' + JSON.stringify(title) + ',',
@@ -121,8 +149,16 @@ for (const c of catalog) {
     'export default meta',
     'type Story = StoryObj',
     '',
+    // ---- Demo story：args 白名单组件用真实组件渲染（Controls 生效）；其余用 ComponentPreview ----
     'export const Demo: Story = {',
-    '  render: () => <ComponentPreview id=' + JSON.stringify(c.id) + ' />,',
+    ...(argsDriven[c.id]
+      ? [
+          '  args: {',
+          ...Object.entries(argsDriven[c.id].args).map(([k, v]) => `    ${k}: ${JSON.stringify(v)},`),
+          '  },',
+          `  render: (args) => { const { ${Object.keys(argsDriven[c.id].args).join(', ')} } = args; return ${argsDriven[c.id].render} },`,
+        ]
+      : [`  render: () => <ComponentPreview id=${JSON.stringify(c.id)} />,`]),
     '}',
     '',
   ].join('\n')

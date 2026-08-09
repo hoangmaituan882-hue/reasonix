@@ -38,15 +38,13 @@
 | `--sidebar-active` | `rgba(255,106,61,0.16)` | 侧栏选中态（accent 柔光） |
 | `--accent` | `#ff6a3d` | **唯一焦点色**（暖橙）。全界面只此一色做强调 |
 | `--accent-strong` | `#ff9a52` | accent 亮端（渐变终点、hover） |
-| `--accent-soft` | `rgba(255,106,61,0.16)` | accent 12–16% 柔光（选中底、focus ring） |
+| `--accent-soft` | `color-mix(in srgb, var(--accent) 16%, transparent)` | accent 柔光（选中底、focus ring，派生） |
 | `--accent-fg` | `#0c0d10` | accent 上的前景文字 |
-| `--accent-text` | `#ffffff` | accent 文本色（graphite 暗色下覆盖 accent-fg） |
 | `--grad` | `linear-gradient(120deg,#ff6a3d,#ff9a52)` | CTA 渐变（新会话、发送按钮） |
 | `--fg` | `#f1f1ef` | 主文字 |
 | `--fg-dim` | `#a7a8ad` | 次级文字 |
 | `--fg-faint` | `#6c6e74` | 弱文字（meta、时间戳、占位） |
 | `--border` | `rgba(255,255,255,0.1)` | 强描边（输入框、composer） |
-| `--border-2` | `rgba(255,255,255,0.2)` | hover 描边 |
 | `--border-soft` | `rgba(255,255,255,0.07)` | 发丝描边（卡片、分隔线） |
 | `--ok` | `#3ad17e` | 成功/在线/命中 |
 | `--warn` | `#e3a23a` | 警告 |
@@ -86,11 +84,11 @@
 | 方向 | 暗色 accent | 亮色 accent | 圆角 s/r/l | 性格 |
 |---|---|---|---|---|
 | **Graphite**（默认） | `#ff6a3d` | `#ff5a2c` | 5/8/11px | 纸张 + 发丝描边 + 暖橙 |
-| **Aurora** | `#8b7cff` | `#6d5efc` | 10/15/22px | 极光紫 × 青，大圆角 |
-| **Slate** | `#4d8df6` | `#2f6fe0` | 8/12/16px | 石板冷静蓝 |
-| **Carbon** | `#2dd4bf` | `#0d9488` | 7/10/14px | 碳暖灰 × 青绿 |
-| **Nocturne** | `#818cf8` | `#6366f1` | 11/16/22px | 夜曲靛 × 紫 |
-| **Amber** | `#d4632f` | `#dd5b28` | 5/8/11px（继承） | 琥珀，只换焦点色 |
+| **Aurora** | `#8b7cff` | `#6459b8` | 10/15/22px | 极光紫 × 青，大圆角 |
+| **Slate** | `#4d8df6` | `#3765b1` | 8/12/16px | 石板冷静蓝 |
+| **Carbon** | `#2dd4bf` | `#176e63` | 7/10/14px | 碳暖灰 × 青绿 |
+| **Nocturne** | `#818cf8` | `#5d65b3` | 11/16/22px | 夜曲靛 × 紫 |
+| **Amber** | `#d4632f` | `#994721` | 5/8/11px（继承） | 琥珀，只换焦点色 |
 
 > 规则：**圆角是主题性格的第一语言**——方向切换时 accent + 圆角一起变，明/暗只变亮度不变圆角。Amber 是"部分覆盖方向"，只换 accent、surface 继承默认。
 
@@ -177,16 +175,17 @@
 
 ### 5.0 动效 token（时长 + 缓动）
 
-**时长**（`styles.css:232-235`）：
+**时长**（`styles.css:193-197`，五档）：
 
 | Token | 值 | 用途 |
 |---|---|---|
 | `--dur-fast` | 120ms | hover、tooltip |
 | `--dur-base` | 180ms | popover、menu、小入场 |
+| `--dur-mid` | 220ms | 内容交换、按钮内容切换 |
 | `--dur-slow` | 340ms | drawer、modal、面板滑动 |
 | `--dur-slower` | 420ms | 大遮罩淡入 |
 
-**缓动**（`styles.css:236-238`）：
+**缓动**（`styles.css:197-201`）：
 
 | Token | 值 | 语义 |
 |---|---|---|
@@ -198,7 +197,7 @@
 
 **运动常量**：`--motion-pop-scale: 0.98`、`--motion-rise: 4px`。
 
-### 5.0.1 动效场景清单（33 个 @keyframes 全景）
+### 5.0.1 动效场景清单（32 个 @keyframes 全景）
 
 | 场景 | 动画 | 时长/缓动 | 关键帧 |
 |---|---|---|---|

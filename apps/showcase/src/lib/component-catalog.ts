@@ -414,7 +414,7 @@ import { Button } from '@/components/ui/button'
   },
   {
     id: 'sonner',
-    name: 'Sonner',
+    name: 'Toaster',
     category: '反馈',
     desc: '全局轻提示 Toast 通知。',
     code: `import { Toaster } from '@/components/ui/sonner'
