@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    open: { description: "受控展开状态", control: 'boolean' },
+    onOpenChange: { description: "展开状态变化回调", control: 'text' },
+    defaultOpen: { description: "初始展开", control: 'boolean' },
+    disabled: { description: "禁用", control: 'boolean' },
+  },
 }
 
 export default meta

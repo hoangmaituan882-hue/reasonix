@@ -11,6 +11,11 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    delayDuration: { description: "显示延迟 ms（默认 0）", control: 'text' },
+    open: { description: "显示状态（受控）", control: 'boolean' },
+    defaultOpen: { description: "初始显示", control: 'boolean' },
+  },
 }
 
 export default meta

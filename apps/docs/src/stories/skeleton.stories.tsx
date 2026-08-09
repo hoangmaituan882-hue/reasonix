@@ -11,6 +11,9 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    className: { description: "尺寸/形状（w-* h-* rounded-*）", control: 'text' },
+  },
 }
 
 export default meta

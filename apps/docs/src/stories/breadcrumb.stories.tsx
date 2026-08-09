@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    items: { description: "面包屑项", control: 'text' },
+    separator: { description: "分隔符", control: 'text' },
+  },
 }
 
 export default meta

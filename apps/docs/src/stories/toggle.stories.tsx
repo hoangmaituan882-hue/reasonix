@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    variant: { description: "视觉变体", control: 'select', options: ["default", "outline"] },
+    size: { description: "尺寸", control: 'select', options: ["default", "sm", "lg"] },
+    pressed: { description: "按下状态（受控）", control: 'boolean' },
+    defaultPressed: { description: "初始按下", control: 'boolean' },
+  },
 }
 
 export default meta

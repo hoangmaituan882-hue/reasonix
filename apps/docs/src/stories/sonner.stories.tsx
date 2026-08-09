@@ -11,6 +11,11 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    position: { description: "通知位置", control: 'select', options: ["top-right", "top-center", "bottom-right", "..."] },
+    theme: { description: "主题", control: 'select', options: ["light", "dark", "system"] },
+    richColors: { description: "丰富配色", control: 'boolean' },
+  },
 }
 
 export default meta

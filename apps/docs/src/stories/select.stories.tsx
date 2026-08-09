@@ -11,6 +11,13 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    value: { description: "选中值（受控）", control: 'text' },
+    defaultValue: { description: "初始选中", control: 'text' },
+    onValueChange: { description: "选中回调", control: 'text' },
+    open: { description: "展开状态（受控）", control: 'boolean' },
+    size: { description: "尺寸", control: 'select', options: ["default", "sm"] },
+  },
 }
 
 export default meta

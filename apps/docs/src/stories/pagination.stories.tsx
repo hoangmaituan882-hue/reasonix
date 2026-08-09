@@ -11,6 +11,11 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    page: { description: "当前页", control: 'text' },
+    total: { description: "总页数", control: 'text' },
+    onPageChange: { description: "翻页回调", control: 'text' },
+  },
 }
 
 export default meta

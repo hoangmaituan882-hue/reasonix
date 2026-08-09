@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    size: { description: "内边距档位", control: 'select', options: ["default", "sm"] },
+    className: { description: "追加类名", control: 'text' },
+  },
 }
 
 export default meta

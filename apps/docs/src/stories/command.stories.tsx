@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    open: { description: "命令面板开关", control: 'boolean' },
+    onOpenChange: { description: "开关回调", control: 'text' },
+    placeholder: { description: "搜索占位", control: 'text' },
+    items: { description: "命令项数据", control: 'text' },
+  },
 }
 
 export default meta

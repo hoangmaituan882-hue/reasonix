@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    value: { description: "受控选中值", control: 'text' },
+    onValueChange: { description: "选中变化回调", control: 'text' },
+    defaultValue: { description: "初始选中", control: 'text' },
+    orientation: { description: "排列方向", control: 'select', options: ["horizontal", "vertical"] },
+  },
 }
 
 export default meta

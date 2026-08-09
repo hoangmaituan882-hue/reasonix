@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    open: { description: "打开状态", control: 'boolean' },
+    onOpenChange: { description: "开关回调", control: 'text' },
+  },
 }
 
 export default meta

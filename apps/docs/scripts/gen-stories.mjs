@@ -60,6 +60,30 @@ function apiTable(id) {
   return `\n\n### Props\n\n<table>\n<thead><tr><th>Prop</th><th>类型</th><th>说明</th></tr></thead>\n<tbody>\n${rows}\n</tbody>\n</table>`
 }
 
+// ---- 从 API 推导 argTypes（Controls 面板）----
+function inferControl(type) {
+  if (type === 'boolean') return `control: 'boolean'`
+  if (type.includes('|')) {
+    const opts = type
+      .split('|')
+      .map((s) => s.trim().replace(/"/g, '').replace(/'/g, ''))
+      .filter((s) => s && s !== 'string')
+    if (opts.length >= 2 && opts.length <= 8) return `control: 'select', options: [${opts.map((o) => JSON.stringify(o)).join(', ')}]`
+  }
+  if (type === 'string') return `control: 'text'`
+  return `control: 'text'`
+}
+
+function argTypesBlock(id) {
+  const apiName = Object.keys(apiMap).find((n) => (alias[toKebab(n)] ?? toKebab(n)) === id)
+  const props = apiName ? apiMap[apiName] : []
+  if (!props.length) return ''
+  const lines = props
+    .map((p) => `    ${/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(p.name) ? p.name : JSON.stringify(p.name)}: { description: ${JSON.stringify(p.desc)}, ${inferControl(p.type)} },`)
+    .join('\n')
+  return '\n  argTypes: {\n' + lines + '\n  },'
+}
+
 // ---- 生成每个组件的 stories（数组 join，避免反引号冲突）----
 for (const c of catalog) {
   const title = `${c.category}/${c.name}`
@@ -68,6 +92,7 @@ for (const c of catalog) {
   const docDesc = JSON.stringify(
     c.desc + '\n\n## 设计使用建议\n\n' + c.desc + api + '\n\n## 代码示例\n\n' + codeBlock,
   )
+  const argTypes = argTypesBlock(c.id)
   const story = [
     "import type { Meta, StoryObj } from '@storybook/react-vite'",
     "import { ComponentPreview } from '../../../showcase/src/components/component-preview'",
@@ -81,7 +106,7 @@ for (const c of catalog) {
     '        component: ' + docDesc + ',',
     '      },',
     '    },',
-    '  },',
+    '  },' + argTypes,
     '}',
     '',
     'export default meta',

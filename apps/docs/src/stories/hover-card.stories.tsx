@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    openDelay: { description: "打开延迟 ms", control: 'text' },
+    closeDelay: { description: "关闭延迟 ms", control: 'text' },
+  },
 }
 
 export default meta

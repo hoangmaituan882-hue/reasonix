@@ -11,6 +11,14 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    value: { description: "滑块值数组（多 thumb）", control: 'text' },
+    defaultValue: { description: "初始值", control: 'text' },
+    onValueChange: { description: "值变化回调", control: 'text' },
+    min: { description: "最小值", control: 'text' },
+    max: { description: "最大值", control: 'text' },
+    step: { description: "步长", control: 'text' },
+  },
 }
 
 export default meta

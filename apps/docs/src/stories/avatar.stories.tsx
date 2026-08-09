@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    size: { description: "尺寸", control: 'select', options: ["sm", "default", "lg"] },
+    fallback: { description: "加载失败回退", control: 'text' },
+  },
 }
 
 export default meta

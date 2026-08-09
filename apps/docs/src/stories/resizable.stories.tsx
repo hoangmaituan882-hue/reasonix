@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    direction: { description: "面板排列方向", control: 'select', options: ["horizontal", "vertical"] },
+    defaultSize: { description: "面板初始百分比（Panel）", control: 'text' },
+    minSize: { description: "面板最小百分比（Panel）", control: 'text' },
+    className: { description: "追加类名", control: 'text' },
+  },
 }
 
 export default meta

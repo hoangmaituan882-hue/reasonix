@@ -11,6 +11,11 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    data: { description: "表格数据", control: 'text' },
+    columns: { description: "列定义", control: 'text' },
+    loading: { description: "加载态", control: 'boolean' },
+  },
 }
 
 export default meta

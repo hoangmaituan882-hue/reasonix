@@ -11,6 +11,13 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    variant: { description: "视觉变体", control: 'select', options: ["default", "secondary", "outline", "ghost", "destructive"] },
+    size: { description: "尺寸档位", control: 'select', options: ["default", "xs", "sm", "lg", "icon", "icon-xs", "icon-sm", "icon-lg"] },
+    asChild: { description: "作为子元素渲染（Slot）", control: 'boolean' },
+    className: { description: "追加类名（twMerge 合并）", control: 'text' },
+    children: { description: "按钮内容", control: 'text' },
+  },
 }
 
 export default meta

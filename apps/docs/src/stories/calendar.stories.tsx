@@ -11,6 +11,13 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    mode: { description: "选择模式", control: 'select', options: ["single", "multiple", "range"] },
+    selected: { description: "选中日期", control: 'select', options: ["Date", "Date[]"] },
+    onSelect: { description: "选择回调", control: 'select', options: ["(date: Date", "undefined) => void"] },
+    disabled: { description: "禁用日期", control: 'select', options: ["Matcher", "Matcher[]"] },
+    numberOfMonths: { description: "显示月数", control: 'text' },
+  },
 }
 
 export default meta

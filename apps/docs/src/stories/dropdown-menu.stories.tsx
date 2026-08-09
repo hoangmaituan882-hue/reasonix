@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    open: { description: "受控打开", control: 'boolean' },
+    onOpenChange: { description: "打开状态回调", control: 'text' },
+    modal: { description: "模态模式（点击外部不关）", control: 'boolean' },
+    dir: { description: "方向", control: 'select', options: ["ltr", "rtl"] },
+  },
 }
 
 export default meta

@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    value: { description: "进度值 0-100", control: 'text' },
+    max: { description: "最大值（默认 100）", control: 'text' },
+  },
 }
 
 export default meta

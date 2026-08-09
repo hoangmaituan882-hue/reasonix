@@ -11,6 +11,11 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    orientation: { description: "分隔线方向", control: 'select', options: ["horizontal", "vertical"] },
+    decorative: { description: "装饰性（隐藏于 a11y 树）", control: 'boolean' },
+    className: { description: "追加类名", control: 'text' },
+  },
 }
 
 export default meta

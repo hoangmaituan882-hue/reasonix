@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    type: { description: "单选或多选", control: 'select', options: ["single", "multiple"] },
+    value: { description: "受控选中值", control: 'text' },
+    onValueChange: { description: "选中变化回调", control: 'text' },
+    variant: { description: "视觉变体", control: 'select', options: ["default", "outline"] },
+  },
 }
 
 export default meta

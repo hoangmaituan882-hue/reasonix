@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    defaultValue: { description: "默认激活 tab（非受控）", control: 'text' },
+    value: { description: "激活 tab（受控）", control: 'text' },
+    onValueChange: { description: "切换回调", control: 'text' },
+    orientation: { description: "方向", control: 'select', options: ["horizontal", "vertical"] },
+  },
 }
 
 export default meta

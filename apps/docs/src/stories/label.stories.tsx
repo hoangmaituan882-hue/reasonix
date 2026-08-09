@@ -11,6 +11,11 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    htmlFor: { description: "关联控件 id", control: 'text' },
+    className: { description: "追加类名", control: 'text' },
+    children: { description: "标签文本", control: 'text' },
+  },
 }
 
 export default meta

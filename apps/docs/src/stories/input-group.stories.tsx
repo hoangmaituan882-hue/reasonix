@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    className: { description: "追加类名", control: 'text' },
+    children: { description: "输入框 + Addon/Button/Text 组合", control: 'text' },
+  },
 }
 
 export default meta

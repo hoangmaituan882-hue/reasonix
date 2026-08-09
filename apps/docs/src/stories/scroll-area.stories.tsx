@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    className: { description: "容器类名", control: 'text' },
+    viewportRef: { description: "视口引用", control: 'text' },
+  },
 }
 
 export default meta

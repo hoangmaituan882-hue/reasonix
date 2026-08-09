@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    opts: { description: "embla 轮播配置", control: 'text' },
+    setApi: { description: "获取 API 实例", control: 'text' },
+    orientation: { description: "方向", control: 'select', options: ["horizontal", "vertical"] },
+    plugins: { description: "embla 插件", control: 'text' },
+  },
 }
 
 export default meta

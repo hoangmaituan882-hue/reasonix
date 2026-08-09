@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    open: { description: "打开状态（受控）", control: 'boolean' },
+    onOpenChange: { description: "开关回调", control: 'text' },
+    direction: { description: "抽屉方向（默认 bottom）", control: 'select', options: ["bottom", "left", "right", "top"] },
+    shouldScaleBackground: { description: "背景缩放", control: 'boolean' },
+  },
 }
 
 export default meta

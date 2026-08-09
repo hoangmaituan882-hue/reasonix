@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    side: { description: "面板方向（Context 回退）", control: 'select', options: ["top", "right", "bottom", "left"] },
+    open: { description: "打开状态", control: 'boolean' },
+    onOpenChange: { description: "开关回调", control: 'text' },
+    showCloseButton: { description: "显示关闭按钮", control: 'boolean' },
+  },
 }
 
 export default meta

@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    open: { description: "打开状态（受控）", control: 'boolean' },
+    onOpenChange: { description: "开关回调", control: 'text' },
+    showCloseButton: { description: "显示关闭按钮（默认 true）", control: 'boolean' },
+    modal: { description: "模态模式（默认 true）", control: 'boolean' },
+  },
 }
 
 export default meta

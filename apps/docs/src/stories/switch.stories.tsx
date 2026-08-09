@@ -11,6 +11,12 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    checked: { description: "开合状态（受控）", control: 'boolean' },
+    onCheckedChange: { description: "切换回调", control: 'text' },
+    disabled: { description: "禁用态", control: 'boolean' },
+    size: { description: "尺寸", control: 'select', options: ["default", "sm"] },
+  },
 }
 
 export default meta

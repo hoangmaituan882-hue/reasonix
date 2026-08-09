@@ -11,6 +11,11 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    type: { description: "展开模式", control: 'select', options: ["single", "multiple"] },
+    collapsible: { description: "single 模式可折叠", control: 'boolean' },
+    defaultValue: { description: "默认展开项", control: 'text' },
+  },
 }
 
 export default meta

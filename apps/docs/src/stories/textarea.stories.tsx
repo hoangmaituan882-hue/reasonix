@@ -11,6 +11,11 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    placeholder: { description: "占位提示", control: 'text' },
+    disabled: { description: "禁用态", control: 'boolean' },
+    autoGrow: { description: "内容自动高度（field-sizing）", control: 'boolean' },
+  },
 }
 
 export default meta

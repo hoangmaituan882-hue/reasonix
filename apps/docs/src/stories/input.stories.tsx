@@ -11,6 +11,13 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    type: { description: "输入类型（text/password/file…）", control: 'text' },
+    placeholder: { description: "占位提示", control: 'text' },
+    disabled: { description: "禁用态", control: 'boolean' },
+    "aria-invalid": { description: "错误态样式", control: 'boolean' },
+    className: { description: "追加类名", control: 'text' },
+  },
 }
 
 export default meta

@@ -11,6 +11,13 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    checked: { description: "选中状态（受控）", control: 'boolean' },
+    defaultChecked: { description: "初始选中（非受控）", control: 'boolean' },
+    onCheckedChange: { description: "切换回调", control: 'text' },
+    disabled: { description: "禁用态", control: 'boolean' },
+    indeterminate: { description: "半选态", control: 'boolean' },
+  },
 }
 
 export default meta

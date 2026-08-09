@@ -11,6 +11,10 @@ const meta: Meta = {
       },
     },
   },
+  argTypes: {
+    variant: { description: "视觉变体", control: 'select', options: ["default", "secondary", "outline", "destructive", "success", "warning"] },
+    className: { description: "追加类名", control: 'text' },
+  },
 }
 
 export default meta
