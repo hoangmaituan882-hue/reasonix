@@ -585,7 +585,7 @@ function BreadcrumbPreview() {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="#"><Home className="size-3" /> 首页</BreadcrumbLink>
+          <BreadcrumbLink href="#"><Home className="size-3.5" /> 首页</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
