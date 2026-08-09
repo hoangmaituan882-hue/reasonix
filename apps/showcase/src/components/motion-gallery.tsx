@@ -63,9 +63,10 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
   const [easeOverride, setEaseOverride] = useState<string>('')
 
   const baseDur = m.dur.endsWith('ms') ? parseFloat(m.dur) : parseFloat(m.dur) * 1000
-  // 默认（durPct=100、无缓动覆盖）完全用 CSS 类原本的动画：不设内联 easing，时长也与原本一致
+  // 默认（durPct=100、speed=1、无缓动覆盖）完全用 CSS 类原本的动画：不设内联 duration/easing
   const effectiveDur = (baseDur / speed) * (durPct / 100)
   const isLoop = ['rx-pulse', 'rx-sweep', 'rx-shimmer', 'rx-breathe', 'rx-anim-spin', 'rx-anim-pulsescale'].some(c => m.cls.includes(c))
+  const isDefault = durPct === 100 && speed === 1
 
   return (
     <Card className="rx-anim-fade overflow-hidden" style={{ animationDelay: `${Math.min(idx * 30, 300)}ms`, animationFillMode: 'backwards' }}>
@@ -79,8 +80,8 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
               background: 'var(--rx-accent-soft)',
               color: 'var(--rx-accent)',
               border: '1px solid var(--rx-border)',
-              animationDuration: `${effectiveDur}ms`,
-              // 仅当用户选择缓动覆盖时才设置，否则保留 CSS 类原本的 animation-timing-function
+              // 默认不设内联 duration/easing，CSS 类全权决定（原本效果）；仅覆盖时生效
+              ...(isDefault ? {} : { animationDuration: `${effectiveDur}ms` }),
               ...(easeOverride ? { animationTimingFunction: easeOverride } : {}),
               animationIterationCount: isLoop ? 'infinite' : '1',
               animationPlayState: state === 'paused' ? 'paused' : 'running',
@@ -98,7 +99,7 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
           <div className="mt-1 text-[10px]" style={{ color: 'var(--rx-fg-faint)' }}>{m.desc}</div>
           <div className="mono mt-1.5 flex gap-2 text-[9px]" style={{ color: 'var(--rx-fg-faint)' }}>
             {/* 默认显示原本 dur/ease；有覆盖时显示实际值 */}
-            <span>{durPct === 100 ? m.dur : `${Math.round(effectiveDur)}ms`}</span><span>·</span><span>{easeOverride || m.ease}</span>
+            <span>{isDefault ? m.dur : `${Math.round(effectiveDur)}ms`}</span><span>·</span><span>{easeOverride || m.ease}</span>
           </div>
           {/* 控制 */}
           <div className="mt-2 flex items-center gap-1.5">
@@ -131,8 +132,7 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
               <input
                 type="range" min={10} max={300} value={durPct}
                 aria-label="动画时长"
-                className="h-1 flex-1 cursor-pointer appearance-none rounded-full"
-                style={{ background: 'var(--rx-accent-soft)', accentColor: 'var(--rx-accent)' }}
+                className="rx-dur-slider h-1 flex-1 cursor-pointer rounded-full"
                 onChange={(e) => setDurPct(Number(e.target.value))}
               />
             </div>
