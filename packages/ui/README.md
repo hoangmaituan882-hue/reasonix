@@ -85,6 +85,37 @@ import { Button, Dialog } from '@reasonix/ui'
 
 > v0.3.0 计划：组件级 subpath exports（`@reasonix/ui/button`），届时 CSS 也按组件拆分。
 
+## 🎨 Figma 联动（Tokens Studio）
+
+设计令牌以 Tokens Studio（DTCG）兼容 JSON 随包发布：
+
+```bash
+# 1. 安装包后直接取用
+import tokens from '@reasonix/ui/tokens.json'   // 或从 node_modules 读文件
+
+# 2. 本地重新生成（改了 styles.css 后）
+npm run tokens   # 或 node scripts/export-tokens.mjs
+```
+
+`tokens.json` 结构——`{ 方向: { light|dark: { 分类: { 令牌: {value, type} } } } }`：
+
+```json
+{
+  "graphite": {
+    "light": {
+      "color": { "accent": { "value": "#c93918", "type": "color" } },
+      "borderRadius": { "r-m": { "value": "8px", "type": "borderRadius" } },
+      "duration": { "dur-fast": { "value": "120ms", "type": "duration" } },
+      "easing": { "ease": { "value": "cubic-bezier(0.2, 0.72, 0.2, 1)", "type": "easing" } }
+    }
+  }
+}
+```
+
+- **6 方向 × 明暗**：graphite 为全量基线（36 令牌），其余方向为增量覆盖（跟随 CSS `data-direction` 语义）
+- **Figma 用法**：Figma 插件「Tokens Studio」→ 导入 JSON → 生成 Design Tokens 同步样式变量；配合 [Figma Variables](https://help.figma.com/hc/en-us/articles/15345957129239) 可实现明暗/方向一键切换
+- **同步链路**：`styles.css` 是唯一事实源，`export-tokens.mjs` 单向导出，避免双份手写
+
 ## 🧑‍💻 开发
 
 ```bash

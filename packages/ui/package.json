@@ -13,6 +13,7 @@
   "type": "module",
   "files": [
     "dist",
+    "tokens.json",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
@@ -26,6 +27,7 @@
       "import": "./dist/index.js"
     },
     "./styles.css": "./dist/index.css",
+    "./tokens.json": "./tokens.json",
     "./package.json": "./package.json",
     "./components/*": {
       "types": "./dist/components/*.d.ts",
@@ -78,7 +80,8 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "changeset publish",
-    "pack": "npm run build && npm pack"
+    "pack": "npm run build && npm pack",
+    "tokens": "node scripts/export-tokens.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.1",

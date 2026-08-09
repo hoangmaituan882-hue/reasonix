@@ -70,6 +70,6 @@
 
 ## 下一里程碑候选（v0.3.0）
 
-- 组件级 subpath exports 灰度（`@reasonix/ui/button`）
-- 动效画廊补全 27 过渡的"可交互属性控制"（playground）
-- 主题令牌导出 JSON（Tokens Studio 兼容）供 Figma 联动
+- [x] 组件级 subpath exports 灰度（`@reasonix/ui/components/button`）——已实现，pack 实测可用
+- [ ] 动效画廊补全 27 过渡的"可交互属性控制"（playground）
+- [x] 主题令牌导出 JSON（Tokens Studio 兼容）供 Figma 联动——`tokens.json` 随包发布

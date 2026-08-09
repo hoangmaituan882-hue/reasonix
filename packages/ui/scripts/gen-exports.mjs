@@ -20,6 +20,7 @@ try {
 const exportsMap = {
   ".": { types: "./dist/index.d.ts", import: "./dist/index.js" },
   "./styles.css": "./dist/index.css",
+  "./tokens.json": "./tokens.json",
   "./package.json": "./package.json",
   "./components/*": {
     types: "./dist/components/*.d.ts",
