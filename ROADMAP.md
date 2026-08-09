@@ -27,12 +27,12 @@
 ## 支柱 2 · 体验：动效设计纪律落地（P0）
 
 **检查项：**
-- [ ] 全部组件动效只用 `--rx-dur-*` 档位表 + `--rx-ease`（无硬编码时长/缓动）
+- [x] 全部组件动效只用 `--rx-dur-*` 档位表 + `--rx-ease`（无硬编码时长/缓动）
   - fast=120ms（hover/tooltip）、base=180ms、mid=220ms（内容交换）、slow=340ms（drawer/modal）、slower=420ms（backdrop）
-- [ ] 可按压元素全部有 `:active scale(0.97)` 反馈（当前 Button 缺失）
-- [ ] 弹层（popover/menu/combobox）全部 origin-aware（已就位，回归确认）
-- [ ] 无 `transition-all` 残留；无 `ease-in`；无 `scale(0)` 入场
-- [ ] `prefers-reduced-motion` 全面降级（抽查 5 个组件）
+- [x] 可按压元素全部有 `:active scale(0.97)` 反馈（Button/Tabs/Toggle；checkbox/switch/radio 小控件刻意不缩放）
+- [x] 弹层（popover/menu/combobox）全部 origin-aware（已就位，回归确认）
+- [x] 无 `transition-all` 残留；无 `ease-in`；无 `scale(0)` 入场
+- [x] `prefers-reduced-motion` 全面降级（抽查 5 个组件：button/toggle/tabs/dialog/sheet）
 
 ## 支柱 3 · 文档：每个组件可查可用（P1）
 
