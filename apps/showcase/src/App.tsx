@@ -7,10 +7,11 @@ import TransitionGallery from '@/components/transition-gallery'
 import ComponentOverview from '@/components/component-overview'
 import DesignDoc from '@/components/design-doc'
 import IntroPage from '@/components/intro-page'
+import MobilePreview from '@/components/mobile-preview'
 import { Switch } from '@/components/ui/switch'
 import { useTheme, DIRECTIONS } from '@/lib/theme'
 import { TRANSITION_CSS, HOVER_OVERRIDES } from '@/lib/transition-global'
-import { LayoutDashboard, Boxes, Clapperboard, Sparkles, Grid, ChevronsLeft, ChevronsRight, BookOpen, Home } from 'lucide-react'
+import { LayoutDashboard, Boxes, Clapperboard, Sparkles, Grid, ChevronsLeft, ChevronsRight, BookOpen, Home, Smartphone } from 'lucide-react'
 
 export default function App() {
   const [view, setView] = useState<'welcome' | 'intro' | 'workbench' | 'showcase' | 'motion' | 'overview' | 'transition' | 'design'>('welcome')
@@ -24,6 +25,7 @@ export default function App() {
     { id: 'workbench' as const, label: '工作台', icon: LayoutDashboard },
     { id: 'showcase' as const, label: '组件库', icon: Boxes },
     { id: 'overview' as const, label: '组件总览', icon: Grid },
+    { id: 'mobile' as const, label: '移动预览', icon: Smartphone },
     { id: 'transition' as const, label: '过渡画廊', icon: Sparkles },
     { id: 'motion' as const, label: '动效画廊', icon: Clapperboard },
   ]
@@ -115,6 +117,8 @@ export default function App() {
           <DesignDoc />
         ) : view === 'overview' ? (
           <ComponentOverview />
+        ) : view === 'mobile' ? (
+          <MobilePreview />
         ) : view === 'transition' ? (
           <TransitionGallery />
         ) : (
