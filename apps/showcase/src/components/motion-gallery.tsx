@@ -63,8 +63,8 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
   const [easeOverride, setEaseOverride] = useState<string>('')
 
   const baseDur = m.dur.endsWith('ms') ? parseFloat(m.dur) : parseFloat(m.dur) * 1000
+  // 默认（durPct=100、无缓动覆盖）完全用 CSS 类原本的动画：不设内联 easing，时长也与原本一致
   const effectiveDur = (baseDur / speed) * (durPct / 100)
-  const easing = easeOverride || 'var(--rx-ease)'
   const isLoop = ['rx-pulse', 'rx-sweep', 'rx-shimmer', 'rx-breathe', 'rx-anim-spin', 'rx-anim-pulsescale'].some(c => m.cls.includes(c))
 
   return (
@@ -80,7 +80,8 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
               color: 'var(--rx-accent)',
               border: '1px solid var(--rx-border)',
               animationDuration: `${effectiveDur}ms`,
-              animationTimingFunction: easing,
+              // 仅当用户选择缓动覆盖时才设置，否则保留 CSS 类原本的 animation-timing-function
+              ...(easeOverride ? { animationTimingFunction: easeOverride } : {}),
               animationIterationCount: isLoop ? 'infinite' : '1',
               animationPlayState: state === 'paused' ? 'paused' : 'running',
             }}
@@ -96,7 +97,8 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
           </div>
           <div className="mt-1 text-[10px]" style={{ color: 'var(--rx-fg-faint)' }}>{m.desc}</div>
           <div className="mono mt-1.5 flex gap-2 text-[9px]" style={{ color: 'var(--rx-fg-faint)' }}>
-            <span>{Math.round(effectiveDur)}ms</span><span>·</span><span>{easing === 'var(--rx-ease)' ? m.ease : easing}</span>
+            {/* 默认显示原本 dur/ease；有覆盖时显示实际值 */}
+            <span>{durPct === 100 ? m.dur : `${Math.round(effectiveDur)}ms`}</span><span>·</span><span>{easeOverride || m.ease}</span>
           </div>
           {/* 控制 */}
           <div className="mt-2 flex items-center gap-1.5">
