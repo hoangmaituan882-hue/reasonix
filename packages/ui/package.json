@@ -1,6 +1,6 @@
 {
   "name": "@reasonix/ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Reasonix design system component library — 38 shadcn-style components with multi-direction theming, motion tokens and a design spec.",
   "author": "Reasonix Design",
   "repository": {
