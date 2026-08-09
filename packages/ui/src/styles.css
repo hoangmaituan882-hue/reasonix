@@ -99,14 +99,12 @@
   --rx-fg-dim: #4a4d56;
   --rx-fg-faint: #6e6e75;
   --rx-border: rgba(20, 22, 28, 0.12);
-  --rx-border-2: rgba(20, 22, 28, 0.2);
   --rx-border-soft: rgba(20, 22, 28, 0.08);
 
   --rx-accent: #c93918;
   --rx-accent-strong: #df471f;
   --rx-accent-soft: color-mix(in srgb, var(--rx-accent) 16%, transparent);
   --rx-accent-fg: #0c0d10;
-  --rx-accent-text: #0c0d10;
   --rx-grad: linear-gradient(120deg, #ff5a2c, #ff8a3d);
 
   --rx-ok: #1f9d57;
@@ -170,7 +168,6 @@
   --rx-fg-dim: #a7a8ad;
   --rx-fg-faint: #7a7a80;
   --rx-border: rgba(255, 255, 255, 0.1);
-  --rx-border-2: rgba(255, 255, 255, 0.2);
   --rx-border-soft: rgba(255, 255, 255, 0.07);
 
   /* reasonix accent (graphite) */
@@ -178,7 +175,6 @@
   --rx-accent-strong: #ff9a52;
   --rx-accent-soft: color-mix(in srgb, var(--rx-accent) 16%, transparent);
   --rx-accent-fg: #0c0d10;
-  --rx-accent-text: #ffffff;
   --rx-grad: linear-gradient(120deg, #ff6a3d, #ff9a52);
 
   /* status */

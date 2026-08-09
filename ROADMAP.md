@@ -8,9 +8,9 @@
 | 维度 | 现状 |
 | --- | --- |
 | 组件 | 39 个（`packages/ui/src/components/ui/`） |
-| 测试 | 76 用例，覆盖 20/39 组件 |
-| 令牌 | 115 个 `--rx-*`，6 主题方向 × 明暗 |
-| 动效 | `--rx-dur-fast/base/mid/slow/slower` 五档 + `--rx-ease` |
+| 测试 | 123 用例，覆盖 39/39 组件（axe 11 个） |
+| 令牌 | 36 个 `--rx-*`，6 主题方向 × 明暗 |
+| 动效 | `--rx-dur-fast/base/mid/slow/slower` 五档 + `--rx-ease`（组件全令牌化） |
 | 发布 | v0.1.0，changesets + CI + release workflow 就绪 |
 
 ---
@@ -45,9 +45,11 @@
 ## 支柱 4 · 一致性：令牌与主题审计（P1）
 
 **检查项：**
-- [ ] 115 令牌审计：删除重复/未用；语义化命名复核（`--rx-bg-*`/`--rx-fg-*`/`--rx-accent-*`）
-- [ ] 6 方向 × 明暗 = 12 主题全部视觉回归（截屏对比）
-- [ ] `color-mix()` 派生令牌（如 `--rx-accent-soft`）覆盖所有手工半透明值
+- [x] 115 令牌审计：删除重复/未用；语义化命名复核（`--rx-bg-*`/`--rx-fg-*`/`--rx-accent-*`）
+  - 删除 2 个死令牌（`--rx-accent-text`/`--rx-border-2`）→ 36 个有效令牌
+  - 同值令牌均为语义不同巧合（bg=accent-fg 深色 / sidebar=elev），圆角档位跨方向值不同（保留）
+- [x] 6 方向 × 明暗 = 12 主题全部视觉回归（截屏对比）——accent/bg 全部正确渲染、无 JS 错误
+- [x] `color-mix()` 派生令牌（如 `--rx-accent-soft`）覆盖所有手工半透明值（13 处 color-mix；`--ring` 按方向跟随 accent）
 
 ## 支柱 5 · 发布：v0.2.0 交付（P1）
 
