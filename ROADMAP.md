@@ -37,10 +37,10 @@
 ## 支柱 3 · 文档：每个组件可查可用（P1）
 
 **检查项：**
-- [ ] 组件总览页（component-overview）API 表覆盖 **39/39** 组件（当前 26）
-- [ ] 每个组件有：用途说明 + 代码示例 + props 表 + 交互演示
-- [ ] `packages/ui/README.md` 补全：安装、快速开始、主题切换、按需导入
-- [ ] CHANGELOG 按 changesets 自动维护（v0.1.0 已有）
+- [x] 组件总览页（component-overview）API 表覆盖 **39/39** 组件（当前 26 → 38/38 catalog 全匹配，修复 kebab + Toaster 别名）
+- [x] 每个组件有：用途说明 + 代码示例 + props 表 + 交互演示（总览卡片已含全部）
+- [x] `packages/ui/README.md` 补全：安装、快速开始、主题切换、按需导入（tree-shaking）
+- [x] CHANGELOG 按 changesets 自动维护（v0.1.0 已有；.changeset 移至仓库根，status 链路可用）
 
 ## 支柱 4 · 一致性：令牌与主题审计（P1）
 

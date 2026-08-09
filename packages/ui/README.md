@@ -67,6 +67,24 @@ document.documentElement.classList.toggle('dark')
 | 反馈 | Alert · Dialog · Drawer · Sheet · Command · Popover · HoverCard · Tooltip · DropdownMenu |
 | 导航 | Tabs · Accordion · Collapsible · Breadcrumb · Pagination |
 
+## ⚡ 按需导入（Tree-shaking）
+
+本包为 ESM 单入口 + `sideEffects: ["**/*.css"]`。用命名导入即可让 bundler（Vite / Rollup / webpack 4+）摇掉未使用的组件：
+
+```tsx
+// ✅ 只打包用到的组件（推荐）
+import { Button, Dialog } from '@reasonix/ui'
+
+// ⚠️ 避免整包导入（破坏 tree-shaking）
+// import * as ui from '@reasonix/ui'
+```
+
+- **CSS**：`import '@reasonix/ui/styles.css'` 是必需的（令牌 + 组件样式），它很小（~22KB，含 37 令牌与 32 keyframes）。
+- **图标**：组件内部用 `lucide-react`，按需 tree-shake。
+- **按需路由懒加载**（配合 `React.lazy`）时，CSS 只需在应用根部导入一次。
+
+> v0.3.0 计划：组件级 subpath exports（`@reasonix/ui/button`），届时 CSS 也按组件拆分。
+
 ## 🧑‍💻 开发
 
 ```bash

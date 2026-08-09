@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "packages/ui/.changeset/**"
+      - ".changeset/**"
       - "packages/ui/CHANGELOG.md"
       - "packages/ui/package.json"
       - "package-lock.json"
