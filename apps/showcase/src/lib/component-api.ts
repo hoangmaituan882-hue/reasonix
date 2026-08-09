@@ -255,4 +255,90 @@ export const COMPONENT_API: ApiEntry[] = [
       { name: 'richColors', optional: true, type: 'boolean', desc: '丰富配色' },
     ],
   },
+
+  {
+    component: 'Alert',
+    props: [
+      { name: 'variant', optional: true, type: '"default" | "destructive"', desc: '视觉变体' },
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
+      { name: 'children', optional: true, type: 'React.ReactNode', desc: '内容（标题/描述/操作）' },
+    ],
+  },
+  {
+    component: 'Collapsible',
+    props: [
+      { name: 'open', optional: true, type: 'boolean', desc: '受控展开状态' },
+      { name: 'onOpenChange', optional: true, type: '(open: boolean) => void', desc: '展开状态变化回调' },
+      { name: 'defaultOpen', optional: true, type: 'boolean', desc: '初始展开' },
+      { name: 'disabled', optional: true, type: 'boolean', desc: '禁用' },
+    ],
+  },
+  {
+    component: 'DownloadButton',
+    props: [
+      { name: 'tooltip', optional: true, type: 'string', desc: 'tooltip 文本（同时作 aria-label）' },
+      { name: 'disabled', optional: true, type: 'boolean', desc: '禁用态' },
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
+      { name: 'children', optional: true, type: 'React.ReactNode', desc: '按钮内容' },
+    ],
+  },
+  {
+    component: 'DropdownMenu',
+    props: [
+      { name: 'open', optional: true, type: 'boolean', desc: '受控打开' },
+      { name: 'onOpenChange', optional: true, type: '(open: boolean) => void', desc: '打开状态回调' },
+      { name: 'modal', optional: true, type: 'boolean', desc: '模态模式（点击外部不关）' },
+      { name: 'dir', optional: true, type: '"ltr" | "rtl"', desc: '方向' },
+    ],
+  },
+  {
+    component: 'InputGroup',
+    props: [
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
+      { name: 'children', optional: true, type: 'React.ReactNode', desc: '输入框 + Addon/Button/Text 组合' },
+    ],
+  },
+  {
+    component: 'Label',
+    props: [
+      { name: 'htmlFor', optional: true, type: 'string', desc: '关联控件 id' },
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
+      { name: 'children', optional: true, type: 'React.ReactNode', desc: '标签文本' },
+    ],
+  },
+  {
+    component: 'RadioGroup',
+    props: [
+      { name: 'value', optional: true, type: 'string', desc: '受控选中值' },
+      { name: 'onValueChange', optional: true, type: '(value: string) => void', desc: '选中变化回调' },
+      { name: 'defaultValue', optional: true, type: 'string', desc: '初始选中' },
+      { name: 'orientation', optional: true, type: '"horizontal" | "vertical"', desc: '排列方向' },
+    ],
+  },
+  {
+    component: 'Resizable',
+    props: [
+      { name: 'direction', optional: true, type: '"horizontal" | "vertical"', desc: '面板排列方向' },
+      { name: 'defaultSize', optional: true, type: 'number', desc: '面板初始百分比（Panel）' },
+      { name: 'minSize', optional: true, type: 'number', desc: '面板最小百分比（Panel）' },
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
+    ],
+  },
+  {
+    component: 'Separator',
+    props: [
+      { name: 'orientation', optional: true, type: '"horizontal" | "vertical"', desc: '分隔线方向' },
+      { name: 'decorative', optional: true, type: 'boolean', desc: '装饰性（隐藏于 a11y 树）' },
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
+    ],
+  },
+  {
+    component: 'ToggleGroup',
+    props: [
+      { name: 'type', optional: true, type: '"single" | "multiple"', desc: '单选或多选' },
+      { name: 'value', optional: true, type: 'string | string[]', desc: '受控选中值' },
+      { name: 'onValueChange', optional: true, type: '(value) => void', desc: '选中变化回调' },
+      { name: 'variant', optional: true, type: '"default" | "outline"', desc: '视觉变体' },
+    ],
+  },
 ]

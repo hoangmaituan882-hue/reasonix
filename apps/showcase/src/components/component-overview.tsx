@@ -233,7 +233,10 @@ export function ComponentOverview() {
 
                     {/* API 表：组件 props（折叠） */}
                     {(() => {
-                      const api = COMPONENT_API.find((a) => a.component.toLowerCase() === item.id)
+                      const toKebab = (n: string) => n.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+                      // 组件真名 ↔ 文件映射：Toaster 定义在 sonner.tsx
+                      const alias: Record<string, string> = { toaster: 'sonner' }
+                      const api = COMPONENT_API.find((a) => (alias[toKebab(a.component)] ?? toKebab(a.component)) === item.id)
                       if (!api || api.props.length === 0) return null
                       return (
                         <details className="mt-2 group">
