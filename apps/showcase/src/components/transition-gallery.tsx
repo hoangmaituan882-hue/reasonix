@@ -232,11 +232,11 @@ function TransitionDemo({ item, autoPlay }: { item: (typeof TRANSITIONS)[number]
   }
 
   return (
-    <Card className="relative overflow-visible">
-      <CardContent className="p-0">
+    <Card className="relative flex h-full flex-col overflow-visible">
+      <CardContent className="flex flex-1 flex-col p-0">
         {/* 演示舞台：点击卡片直接播放/重置（无需点播放按钮） */}
         <div
-          className="group relative flex h-44 cursor-pointer items-center justify-center border-b transition-colors hover:border-[var(--rx-accent)]"
+          className="group relative flex h-36 shrink-0 cursor-pointer items-center justify-center border-b transition-colors hover:border-[var(--rx-accent)]"
           style={{ background: 'var(--rx-bg-soft)', borderColor: 'var(--rx-border-soft)' }}
           onClick={toggle}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle() } }}
@@ -252,13 +252,13 @@ function TransitionDemo({ item, autoPlay }: { item: (typeof TRANSITIONS)[number]
             dangerouslySetInnerHTML={demoHtml}
           />
           {/* hover 提示 */}
-          <span className="pointer-events-none absolute mt-28 rounded-full bg-black/50 px-2.5 py-0.5 text-[9px] text-white opacity-0 transition-opacity group-hover:opacity-100">
+          <span className="pointer-events-none absolute mt-20 rounded-full bg-black/50 px-2.5 py-0.5 text-[9px] text-white opacity-0 transition-opacity group-hover:opacity-100">
             {item.id === '19-card-tilt' ? '移动鼠标 · 卡片跟随倾斜' : active ? '点击重置' : '点击播放'}
           </span>
         </div>
 
         {/* 信息 */}
-        <div className="p-3">
+        <div className="flex flex-1 flex-col p-3">
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="mono h-4 px-1.5 text-[9px]">{item.num}</Badge>
             <span className="text-xs font-semibold" style={{ color: 'var(--rx-fg)' }}>{item.zh}</span>
@@ -306,7 +306,7 @@ function TransitionDemo({ item, autoPlay }: { item: (typeof TRANSITIONS)[number]
             }}
             aria-expanded={expand}
             aria-controls={`td-expand-${item.id}`}
-            className="mt-2 flex w-full cursor-pointer select-none items-center gap-1 rounded-md border px-2 py-1.5 text-[10px] font-semibold transition-colors hover:border-[var(--rx-accent)]"
+            className="mt-auto flex w-full cursor-pointer select-none items-center gap-1 rounded-md border px-2 py-1.5 text-[10px] font-semibold transition-colors hover:border-[var(--rx-accent)]"
             style={{ borderColor: expand ? 'var(--rx-accent)' : 'var(--rx-border-soft)', color: expand ? 'var(--rx-accent)' : 'var(--rx-fg-faint)', background: expand ? 'var(--rx-accent-soft)' : 'transparent' }}
           >
             <ChevronRight className={`h-3 w-3 transition-transform duration-200 ${expand ? 'rotate-90' : ''}`} />
