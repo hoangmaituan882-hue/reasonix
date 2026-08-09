@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "radix-ui"
+import { usePortalContainer } from "@/components/ui/portal-container"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -22,7 +23,8 @@ function DialogTrigger({
 function DialogPortal({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Portal>) {
-  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+  const container = usePortalContainer()
+  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} container={container ?? props.container} />
 }
 
 function DialogClose({
@@ -51,12 +53,14 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  container,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
+  container?: HTMLElement | null
 }) {
   return (
-    <DialogPortal>
+    <DialogPortal container={container}>
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"

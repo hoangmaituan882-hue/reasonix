@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { COMPONENT_CATALOG, COMPONENT_CATEGORIES, type ComponentCategory } from '@/lib/component-catalog'
 import { ComponentPreview } from '@/components/component-preview'
+import { PortalContainerProvider } from '@/components/ui/portal-container'
 import { ChevronLeft, ChevronRight, Smartphone, RotateCcw } from 'lucide-react'
 
 /**
@@ -12,6 +13,11 @@ export default function MobilePreview() {
   const [category, setCategory] = useState<ComponentCategory | '全部'>('全部')
   const [selectedId, setSelectedId] = useState('button')
   const [scale, setScale] = useState(1)
+  const screenRef = useRef<HTMLDivElement>(null)
+  const [portalEl, setPortalEl] = useState<HTMLElement | null>(null)
+  useEffect(() => {
+    setPortalEl(screenRef.current)
+  }, [])
 
   const filtered = category === '全部' ? COMPONENT_CATALOG : COMPONENT_CATALOG.filter((c) => c.category === category)
   const current = COMPONENT_CATALOG.find((c) => c.id === selectedId) ?? COMPONENT_CATALOG[0]
@@ -30,9 +36,9 @@ export default function MobilePreview() {
   }
 
   return (
-    <div className="flex h-full w-full" style={{ background: 'var(--rx-bg)' }}>
-      {/* 左侧面板：分类 + 组件列表 */}
-      <div className="flex h-full w-64 shrink-0 flex-col border-r" style={{ borderColor: 'var(--rx-border-soft)', background: 'var(--rx-bg-soft)' }}>
+    <div className="flex h-full w-full flex-col lg:flex-row" style={{ background: 'var(--rx-bg)' }}>
+      {/* 左侧面板：分类 + 组件列表（窄屏转顶部横排） */}
+      <div className="flex h-auto max-h-56 w-full shrink-0 flex-col border-b lg:h-full lg:max-h-none lg:w-64 lg:border-r lg:border-b-0" style={{ borderColor: 'var(--rx-border-soft)', background: 'var(--rx-bg-soft)' }}>
         <div className="p-3">
           <div className="flex items-center gap-2">
             <Smartphone className="size-4" style={{ color: 'var(--rx-accent)' }} />
@@ -87,7 +93,7 @@ export default function MobilePreview() {
       </div>
 
       {/* 中央：手机壳 */}
-      <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-4 p-6">
+      <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-4 p-4 lg:p-6">
         {/* 组件标题 + 描述 */}
         <div className="text-center">
           <div className="flex items-center justify-center gap-2">
@@ -129,10 +135,16 @@ export default function MobilePreview() {
         >
           {/* 灵动岛 */}
           <div className="absolute left-1/2 top-3 z-30 h-5 w-24 -translate-x-1/2 rounded-full" style={{ background: 'var(--rx-fg)' }} />
-          {/* 屏幕 */}
+          {/* 屏幕：高度在小屏收缩（保留 aspect） */}
           <div
+            ref={screenRef}
             className="relative overflow-y-auto rounded-[2rem]"
-            style={{ background: 'var(--rx-bg)', border: '1px solid var(--rx-border-soft)', height: 680 * scale }}
+            style={{
+              background: 'var(--rx-bg)',
+              border: '1px solid var(--rx-border-soft)',
+              height: Math.min(680 * scale, Math.max(320, (typeof window !== 'undefined' ? window.innerHeight - 280 : 680) * scale)),
+              transform: 'translateZ(0)',
+            }}
           >
             {/* 状态栏 */}
             <div className="sticky top-0 z-20 flex items-center justify-between px-5 pt-3 pb-1 text-[10px]" style={{ background: 'var(--rx-bg)', color: 'var(--rx-fg-dim)' }}>
@@ -143,12 +155,14 @@ export default function MobilePreview() {
                 <span>5G</span>
               </span>
             </div>
-            {/* 组件内容 */}
-            <div className="flex min-h-[calc(100%-2rem)] items-center justify-center p-4 pb-10">
-              <div className="w-full">
-                <ComponentPreview id={current.id} />
+            {/* 组件内容（弹层 Portal 挂载到此容器内，随壳定位） */}
+            <PortalContainerProvider container={portalEl}>
+              <div className="flex min-h-[calc(100%-2rem)] items-center justify-center p-4 pb-10">
+                <div className="w-full">
+                  <ComponentPreview id={current.id} />
+                </div>
               </div>
-            </div>
+            </PortalContainerProvider>
             {/* Home 指示条 */}
             <div className="sticky bottom-2 flex justify-center pb-1">
               <div className="h-1 w-24 rounded-full" style={{ background: 'var(--rx-fg-dim)' }} />

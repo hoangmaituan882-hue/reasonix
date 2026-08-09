@@ -6,6 +6,7 @@ import { Dialog as SheetPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
+import { usePortalContainer } from "@/components/ui/portal-container"
 
 /* -------------------------------------------------------------------------------------------------
  * Sheet Context
@@ -44,7 +45,8 @@ function SheetClose({
 function SheetPortal({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Portal>) {
-  return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
+  const container = usePortalContainer()
+  return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} container={container ?? props.container} />
 }
 
 function SheetOverlay({
@@ -68,16 +70,18 @@ function SheetContent({
   children,
   side: sideProp,
   showCloseButton = true,
+  container,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: SheetSide
   showCloseButton?: boolean
+  container?: HTMLElement | null
 }) {
   const ctx = React.use(SheetContext)
   // 回退：优先自身 side，其次 Context 的 side，最后 right（对齐粘贴代码 resolvedVariant 模式）
   const side = sideProp ?? ctx.side ?? "right"
   return (
-    <SheetPortal>
+    <SheetPortal container={container}>
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
