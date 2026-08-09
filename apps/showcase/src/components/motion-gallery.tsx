@@ -58,6 +58,14 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
   const [state, setState] = useState<'idle' | 'playing' | 'paused'>('paused')
   const [playKey, setPlayKey] = useState(0)
   const [speed, setSpeed] = useState(1)
+  // playground：实时覆盖默认时长/缓动
+  const [durPct, setDurPct] = useState(100)
+  const [easeOverride, setEaseOverride] = useState<string>('')
+
+  const baseDur = m.dur.endsWith('ms') ? parseFloat(m.dur) : parseFloat(m.dur) * 1000
+  const effectiveDur = (baseDur / speed) * (durPct / 100)
+  const easing = easeOverride || 'var(--rx-ease)'
+  const isLoop = ['rx-pulse', 'rx-sweep', 'rx-shimmer', 'rx-breathe', 'rx-anim-spin', 'rx-anim-pulsescale'].some(c => m.cls.includes(c))
 
   return (
     <Card className="rx-anim-fade overflow-hidden" style={{ animationDelay: `${Math.min(idx * 30, 300)}ms`, animationFillMode: 'backwards' }}>
@@ -71,8 +79,9 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
               background: 'var(--rx-accent-soft)',
               color: 'var(--rx-accent)',
               border: '1px solid var(--rx-border)',
-              animationDuration: `${((m.dur.endsWith('ms') ? parseFloat(m.dur) : parseFloat(m.dur) * 1000) / speed)}ms`,
-              animationIterationCount: ['rx-pulse', 'rx-sweep', 'rx-shimmer', 'rx-breathe', 'rx-anim-spin', 'rx-anim-pulsescale'].some(c => m.cls.includes(c)) ? 'infinite' : '1',
+              animationDuration: `${effectiveDur}ms`,
+              animationTimingFunction: easing,
+              animationIterationCount: isLoop ? 'infinite' : '1',
               animationPlayState: state === 'paused' ? 'paused' : 'running',
             }}
           >
@@ -87,7 +96,7 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
           </div>
           <div className="mt-1 text-[10px]" style={{ color: 'var(--rx-fg-faint)' }}>{m.desc}</div>
           <div className="mono mt-1.5 flex gap-2 text-[9px]" style={{ color: 'var(--rx-fg-faint)' }}>
-            <span>{m.dur}</span><span>·</span><span>{m.ease}</span>
+            <span>{Math.round(effectiveDur)}ms</span><span>·</span><span>{easing === 'var(--rx-ease)' ? m.ease : easing}</span>
           </div>
           {/* 控制 */}
           <div className="mt-2 flex items-center gap-1.5">
@@ -112,6 +121,35 @@ function MotionCard({ m, idx = 0 }: { m: MotionItem; idx?: number }) {
                 {[0.5, 1, 1.5, 2].map(s => <SelectItem key={s} value={String(s)}>{s}×</SelectItem>)}
               </SelectContent>
             </Select>
+          </div>
+          {/* playground：时长滑块 + 缓动覆盖 */}
+          <div className="mt-2 space-y-1.5 border-t pt-2" style={{ borderColor: 'var(--rx-border-soft)' }}>
+            <div className="flex items-center gap-2">
+              <span className="mono w-14 text-[9px]" style={{ color: 'var(--rx-fg-faint)' }}>时长 {durPct}%</span>
+              <input
+                type="range" min={10} max={300} value={durPct}
+                aria-label="动画时长"
+                className="h-1 flex-1 cursor-pointer appearance-none rounded-full"
+                style={{ background: 'var(--rx-accent-soft)', accentColor: 'var(--rx-accent)' }}
+                onChange={(e) => setDurPct(Number(e.target.value))}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="mono w-14 text-[9px]" style={{ color: 'var(--rx-fg-faint)' }}>缓动</span>
+              <Select value={easeOverride || '__default'} onValueChange={(v) => setEaseOverride(v === '__default' ? '' : v)}>
+                <SelectTrigger className="h-6 flex-1 gap-1 rounded-md border px-1.5 text-[10px] shadow-none focus:ring-0" style={{ borderColor: 'var(--rx-border-soft)', color: 'var(--rx-fg-dim)' }}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="min-w-[160px]">
+                  <SelectItem value="__default">默认（{m.ease}）</SelectItem>
+                  <SelectItem value="cubic-bezier(0.2, 0.72, 0.2, 1)">ease（rx 标准）</SelectItem>
+                  <SelectItem value="cubic-bezier(0.34, 1.56, 0.64, 1)">overshoot 弹跳</SelectItem>
+                  <SelectItem value="cubic-bezier(0.2, 0.7, 0.1, 1)">decelerate 减速</SelectItem>
+                  <SelectItem value="cubic-bezier(0.25, 0.1, 0.25, 1)">standard 标准</SelectItem>
+                  <SelectItem value="linear">linear 线性</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       </CardContent>
