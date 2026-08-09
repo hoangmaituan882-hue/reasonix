@@ -14,7 +14,7 @@ import { TRANSITION_CSS, HOVER_OVERRIDES } from '@/lib/transition-global'
 import { LayoutDashboard, Boxes, Clapperboard, Sparkles, Grid, ChevronsLeft, ChevronsRight, BookOpen, Home, Smartphone } from 'lucide-react'
 
 export default function App() {
-  const [view, setView] = useState<'welcome' | 'intro' | 'workbench' | 'showcase' | 'motion' | 'overview' | 'transition' | 'design'>('welcome')
+  const [view, setView] = useState<'welcome' | 'intro' | 'workbench' | 'showcase' | 'motion' | 'overview' | 'mobile' | 'transition' | 'design'>('welcome')
   const [collapsed, setCollapsed] = useState(false)
   const { dark, setDark, direction, setDirection } = useTheme()
 

@@ -96,7 +96,7 @@ reasonix-design-kit/
 |---|---|
 | [showcase/index.html](showcase/index.html) | ★ 文件结构可视化导航 |
 | [showcase/reasonix-ui-intro.html](showcase/reasonix-ui-intro.html) | 组件库介绍页 |
-| [showcase/reasonix-shadcn-design.html](showcase/reasonix-shadcn-design.html) | 8 页交互展示站（SPA） |
+| [showcase/reasonix-shadcn-design.html](showcase/reasonix-shadcn-design.html) | 8 页交互展示站（SPA，含移动预览视图） |
 | [showcase/reasonix-components-showcase.html](showcase/reasonix-components-showcase.html) | 97 组件讲解 |
 | [docs/DESIGN.md](docs/DESIGN.md) | 设计规范（9 章） |
 

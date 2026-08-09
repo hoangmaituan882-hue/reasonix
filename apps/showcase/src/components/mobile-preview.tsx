@@ -48,7 +48,12 @@ export default function MobilePreview() {
           {(['全部', ...COMPONENT_CATEGORIES] as const).map((c) => (
             <button
               key={c}
-              onClick={() => { setCategory(c); setSelectedId(c === '全部' ? COMPONENT_CATALOG[0].id : COMPONENT_CATALOG.find((x) => x.category === c)!.id) }}
+              onClick={() => {
+                const first = c === '全部' ? COMPONENT_CATALOG[0] : COMPONENT_CATALOG.find((x) => x.category === c)
+                setCategory(c)
+                if (first) setSelectedId(first.id)
+              }}
+              aria-pressed={category === c}
               className="rounded-full px-2.5 py-1 text-[11px] transition-colors"
               style={{
                 background: category === c ? 'var(--rx-accent)' : 'var(--rx-bg-elev)',
@@ -67,6 +72,7 @@ export default function MobilePreview() {
             <button
               key={c.id}
               onClick={() => select(c.id)}
+              aria-pressed={selectedId === c.id}
               className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-colors"
               style={{
                 background: selectedId === c.id ? 'var(--rx-accent-soft)' : 'transparent',
@@ -96,18 +102,20 @@ export default function MobilePreview() {
           <button
             onClick={prev}
             aria-label="上一个组件"
-            className="flex size-8 items-center justify-center rounded-full transition-colors"
+            disabled={filtered.length === 0}
+            className="flex size-8 items-center justify-center rounded-full transition-colors disabled:opacity-30"
             style={{ border: '1px solid var(--rx-border)', color: 'var(--rx-fg-dim)' }}
           >
             <ChevronLeft className="size-4" />
           </button>
           <span className="text-[11px]" style={{ color: 'var(--rx-fg-faint)' }}>
-            {currentIdx + 1} / {filtered.length}
+            {currentIdx === -1 ? '—' : `${currentIdx + 1}`} / {filtered.length}
           </span>
           <button
             onClick={next}
             aria-label="下一个组件"
-            className="flex size-8 items-center justify-center rounded-full transition-colors"
+            disabled={filtered.length === 0}
+            className="flex size-8 items-center justify-center rounded-full transition-colors disabled:opacity-30"
             style={{ border: '1px solid var(--rx-border)', color: 'var(--rx-fg-dim)' }}
           >
             <ChevronRight className="size-4" />
@@ -120,11 +128,11 @@ export default function MobilePreview() {
           style={{ borderColor: 'var(--rx-bg-elev-2)', background: 'var(--rx-bg-elev-2)', width: 390 * scale, maxWidth: '100%' }}
         >
           {/* 灵动岛 */}
-          <div className="absolute left-1/2 top-3 z-10 h-5 w-24 -translate-x-1/2 rounded-full" style={{ background: 'var(--rx-fg)' }} />
+          <div className="absolute left-1/2 top-3 z-30 h-5 w-24 -translate-x-1/2 rounded-full" style={{ background: 'var(--rx-fg)' }} />
           {/* 屏幕 */}
           <div
-            className="relative h-[680px] overflow-y-auto rounded-[2rem]"
-            style={{ background: 'var(--rx-bg)', border: '1px solid var(--rx-border-soft)' }}
+            className="relative overflow-y-auto rounded-[2rem]"
+            style={{ background: 'var(--rx-bg)', border: '1px solid var(--rx-border-soft)', height: 680 * scale }}
           >
             {/* 状态栏 */}
             <div className="sticky top-0 z-20 flex items-center justify-between px-5 pt-3 pb-1 text-[10px]" style={{ background: 'var(--rx-bg)', color: 'var(--rx-fg-dim)' }}>
@@ -152,6 +160,7 @@ export default function MobilePreview() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setScale((s) => Math.max(0.7, +(s - 0.1).toFixed(1)))}
+            aria-label="缩小"
             className="rounded-md px-2 py-1 text-[10px]"
             style={{ border: '1px solid var(--rx-border)', color: 'var(--rx-fg-dim)' }}
           >
@@ -160,13 +169,14 @@ export default function MobilePreview() {
           <span className="text-[10px]" style={{ color: 'var(--rx-fg-faint)' }}>{Math.round(scale * 100)}%</span>
           <button
             onClick={() => setScale((s) => Math.min(1.2, +(s + 0.1).toFixed(1)))}
+            aria-label="放大"
             className="rounded-md px-2 py-1 text-[10px]"
             style={{ border: '1px solid var(--rx-border)', color: 'var(--rx-fg-dim)' }}
           >
             +
           </button>
           <button
-            onClick={() => setSelectedId('button')}
+            onClick={() => { setCategory('全部'); setSelectedId('button') }}
             className="ml-2 flex items-center gap-1 rounded-md px-2 py-1 text-[10px]"
             style={{ border: '1px solid var(--rx-border)', color: 'var(--rx-fg-dim)' }}
           >
