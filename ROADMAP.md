@@ -73,3 +73,13 @@
 - [x] 组件级 subpath exports 灰度（`@reasonix/ui/components/button`）——已实现，pack 实测可用
 - [x] 动效画廊补全 27 过渡的"可交互属性控制"（playground）——33 场景每卡：倍速 + 时长滑块（10–300%）+ 缓动覆盖下拉
 - [x] 主题令牌导出 JSON（Tokens Studio 兼容）供 Figma 联动——`tokens.json` 随包发布
+
+## 文档站（apps/docs，Storybook 10）
+
+- [x] 发布级组件文档站 `apps/docs`（workspace `reasonix-docs`）——38/38 组件页
+- [x] 每组件：可交互 Demo（ComponentPreview）+ 完整 API 表格 + 设计使用建议 + 代码示例
+- [x] Controls 面板（argTypes 自动推导：select/boolean/text）
+- [x] 指南页：快速开始 / 迁移指南（MIGRATION.md）/ 更新日志（CHANGELOG）/ 设计规范（DESIGN.md）
+- [x] 主题方向切换器（6 方向 × 明暗）作用于全部 Demo
+- [x] 根脚本 docs:dev / docs:build / docs:preview；`npm run build` 统一构建
+- [x] 批量验证脚本 `verify-all.mjs`（38/38 全过）
