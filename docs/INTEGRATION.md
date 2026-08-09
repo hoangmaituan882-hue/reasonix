@@ -116,7 +116,7 @@ document.documentElement.classList.toggle('dark')
 | Button 有橙色底 | `bg-primary` = `#ff5a2c`（亮） | 缺 `@source` |
 | 打开 Dialog 有缩放/淡入 | 120–220ms 过渡 | 缺 `tw-animate-css` |
 | Dialog 打开后遮罩变体生效 | `data-open:` 样式 | 缺 `shadcn/tailwind.css` |
-| 切 `data-direction` 变紫色 | aurora accent `#6d5efc` | styles.css 未引入或方向名写错 |
+| 切 `data-direction` 变紫色 | aurora accent `#6459b8` | styles.css 未引入或方向名写错 |
 | 控制台无 peer 警告 | — | 补装缺失 peer |
 | `Invalid hook call` / `useRef is null` | React 双实例（本地 file: 引用 / monorepo 常见） | vite 加 `resolve: { dedupe: ['react', 'react-dom', 'react/jsx-runtime'] }` |
 | `ERESOLVE`（shadcn 缺 babel peer） | shadcn 依赖 babel 工具链 | 补 `npm install -D @babel/core` |

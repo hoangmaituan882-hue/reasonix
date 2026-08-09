@@ -6,9 +6,9 @@ Reasonix 设计系统组件库 —— 38 个 shadcn 风格组件，带多方向�
 
 ## ✨ 特性
 
-- **38 个组件**：基础 / 表单 / 数据展示 / 反馈 / 导航，全覆盖
+- **39 个组件**（含 DownloadButton 下载按钮）：基础 / 表单 / 数据展示 / 反馈 / 导航，全覆盖
 - **6 方向主题**：graphite / aurora / slate / carbon / nocturne / amber × 明暗双态
-- **37 个设计令牌**：`--rx-*` 色彩 / 圆角 / 动效时长 / 缓动
+- **36 个设计令牌**：`--rx-*` 色彩 / 圆角 / 动效时长 / 缓动
 - **动效体系**：32 个 keyframes + reduced-motion 降级
 - **无障碍**：对比度 WCAG AA、键盘可达、focus ring
 - **Tree-shaking**：ESM 构建，sideEffects 仅 css
@@ -108,7 +108,7 @@ document.documentElement.classList.toggle('dark')
 
 | 分类 | 组件 |
 |---|---|
-| 基础 | Button · Badge · Card · Skeleton · Separator · Label · Avatar |
+| 基础 | Button · DownloadButton · Badge · Card · Skeleton · Separator · Label · Avatar |
 | 表单 | Input · Textarea · Checkbox · RadioGroup · Switch · Select · Slider · Toggle · ToggleGroup · InputGroup · Progress |
 | 数据 | Table · Calendar · Carousel · ScrollArea · Resizable · Toaster |
 | 反馈 | Alert · Dialog · Drawer · Sheet · Command · Popover · HoverCard · Tooltip · DropdownMenu |
@@ -126,7 +126,7 @@ import { Button, Dialog } from '@reasonix/ui'
 // import * as ui from '@reasonix/ui'
 ```
 
-- **CSS**：`import '@reasonix/ui/styles.css'` 是必需的（令牌 + 组件样式），它很小（~22KB，含 37 令牌与 32 keyframes）。
+- **CSS**：`import '@reasonix/ui/styles.css'` 是必需的（令牌 + 组件样式），它很小（~22KB，含 36 令牌与 32 keyframes）。
 - **图标**：组件内部用 `lucide-react`，按需 tree-shake。
 - **按需路由懒加载**（配合 `React.lazy`）时，CSS 只需在应用根部导入一次。
 

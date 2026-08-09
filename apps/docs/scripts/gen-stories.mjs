@@ -63,14 +63,13 @@ function apiTable(id) {
 // ---- 从 API 推导 argTypes（Controls 面板）----
 function inferControl(type) {
   if (type === 'boolean') return `control: 'boolean'`
-  if (type.includes('|')) {
-    const opts = type
-      .split('|')
-      .map((s) => s.trim().replace(/"/g, '').replace(/'/g, ''))
-      .filter((s) => s && s !== 'string')
+  if (type === 'number') return `control: 'number'`
+  // 仅对纯引号字面量联合（"a" | "b" | 'c'）生成 select
+  const literalRe = /^("([^"]*)"|'([^']*)')(\s*\|\s*("([^"]*)"|'([^']*)'))*$/
+  if (type.includes('|') && literalRe.test(type)) {
+    const opts = [...type.matchAll(/"([^"]*)"|'([^']*)'/g)].map((m) => m[1] ?? m[2])
     if (opts.length >= 2 && opts.length <= 8) return `control: 'select', options: [${opts.map((o) => JSON.stringify(o)).join(', ')}]`
   }
-  if (type === 'string') return `control: 'text'`
   return `control: 'text'`
 }
 
@@ -90,7 +89,17 @@ for (const c of catalog) {
   const api = apiTable(c.id)
   const codeBlock = '```tsx\n' + c.code + '\n```'
   const docDesc = JSON.stringify(
-    c.desc + '\n\n## 设计使用建议\n\n' + c.desc + api + '\n\n## 代码示例\n\n' + codeBlock,
+    c.desc +
+      '\n\n## 设计使用建议\n\n' +
+      '### 何时使用\n' +
+      c.desc +
+      '\n\n### 设计要点\n' +
+      '- 所有颜色/圆角/动效均使用设计令牌（`--rx-*`），方向主题（6 方向 × 明暗）自动跟随\n' +
+      '- 交互动效只动 transform/opacity，使用 `--rx-dur-*` 时长档位（fast 120ms / base 180ms / mid 220ms / slow 340ms / slower 420ms）\n' +
+      '- 支持 `prefers-reduced-motion` 自动降级；键盘可达 + focus ring\n' +
+      api +
+      '\n\n## 代码示例\n\n' +
+      codeBlock,
   )
   const argTypes = argTypesBlock(c.id)
   const story = [

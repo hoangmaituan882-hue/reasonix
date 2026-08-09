@@ -12,10 +12,10 @@ export interface ApiEntry {
 }
 
 export const COMPONENT_API: ApiEntry[] = [
-  {
+    {
     component: 'Button',
     props: [
-      { name: 'variant', optional: true, type: '"default" | "secondary" | "outline" | "ghost" | "destructive"', desc: '视觉变体' },
+      { name: 'variant', optional: true, type: '"default" | "secondary" | "outline" | "ghost" | "destructive" | "link"', desc: '视觉变体' },
       { name: 'size', optional: true, type: '"default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg"', desc: '尺寸档位' },
       { name: 'asChild', optional: true, type: 'boolean', desc: '作为子元素渲染（Slot）' },
       { name: 'className', optional: true, type: 'string', desc: '追加类名（twMerge 合并）' },
@@ -32,14 +32,13 @@ export const COMPONENT_API: ApiEntry[] = [
       { name: 'className', optional: true, type: 'string', desc: '追加类名' },
     ],
   },
-  {
+    {
     component: 'Checkbox',
     props: [
-      { name: 'checked', optional: true, type: 'boolean', desc: '选中状态（受控）' },
+      { name: 'checked', optional: true, type: 'boolean | "indeterminate"', desc: '选中状态（受控，半选用 "indeterminate"）' },
       { name: 'defaultChecked', optional: true, type: 'boolean', desc: '初始选中（非受控）' },
-      { name: 'onCheckedChange', optional: true, type: '(checked: boolean) => void', desc: '切换回调' },
+      { name: 'onCheckedChange', optional: true, type: '(checked: boolean | "indeterminate") => void', desc: '切换回调' },
       { name: 'disabled', optional: true, type: 'boolean', desc: '禁用态' },
-      { name: 'indeterminate', optional: true, type: 'boolean', desc: '半选态' },
     ],
   },
   {
@@ -105,10 +104,10 @@ export const COMPONENT_API: ApiEntry[] = [
       { name: 'defaultOpen', optional: true, type: 'boolean', desc: '初始显示' },
     ],
   },
-  {
+    {
     component: 'Badge',
     props: [
-      { name: 'variant', optional: true, type: '"default" | "secondary" | "outline" | "destructive" | "success" | "warning"', desc: '视觉变体' },
+      { name: 'variant', optional: true, type: '"default" | "secondary" | "destructive" | "outline" | "ghost" | "link"', desc: '视觉变体' },
       { name: 'className', optional: true, type: 'string', desc: '追加类名' },
     ],
   },
@@ -137,19 +136,19 @@ export const COMPONENT_API: ApiEntry[] = [
       { name: 'max', optional: true, type: 'number', desc: '最大值（默认 100）' },
     ],
   },
-  {
+    {
     component: 'Avatar',
     props: [
       { name: 'size', optional: true, type: '"sm" | "default" | "lg"', desc: '尺寸' },
-      { name: 'fallback', optional: true, type: 'React.ReactNode', desc: '加载失败回退' },
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
     ],
   },
-  {
+    {
     component: 'Textarea',
     props: [
       { name: 'placeholder', optional: true, type: 'string', desc: '占位提示' },
       { name: 'disabled', optional: true, type: 'boolean', desc: '禁用态' },
-      { name: 'autoGrow', optional: true, type: 'boolean', desc: '内容自动高度（field-sizing）' },
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
     ],
   },
   {
@@ -180,13 +179,13 @@ export const COMPONENT_API: ApiEntry[] = [
       { name: 'plugins', optional: true, type: 'EmblaPluginType[]', desc: 'embla 插件' },
     ],
   },
-  {
+    {
     component: 'Command',
     props: [
-      { name: 'open', optional: true, type: 'boolean', desc: '命令面板开关' },
-      { name: 'onOpenChange', optional: true, type: '(open: boolean) => void', desc: '开关回调' },
-      { name: 'placeholder', optional: true, type: 'string', desc: '搜索占位' },
-      { name: 'items', optional: true, type: 'CommandItem[]', desc: '命令项数据' },
+      { name: 'shouldFilter', optional: true, type: 'boolean', desc: '是否启用内置过滤（cmdk）' },
+      { name: 'filter', optional: true, type: '(value, search) => number', desc: '自定义过滤函数（cmdk）' },
+      { name: 'loop', optional: true, type: 'boolean', desc: '键盘循环导航（cmdk）' },
+      { name: 'className', optional: true, type: 'string', desc: '追加类名' },
     ],
   },
   {
@@ -203,12 +202,11 @@ export const COMPONENT_API: ApiEntry[] = [
       { name: 'closeDelay', optional: true, type: 'number', desc: '关闭延迟 ms' },
     ],
   },
-  {
+    {
     component: 'Table',
     props: [
-      { name: 'data', optional: true, type: 'T[]', desc: '表格数据' },
-      { name: 'columns', optional: true, type: 'Column<T>[]', desc: '列定义' },
-      { name: 'loading', optional: true, type: 'boolean', desc: '加载态' },
+      { name: 'className', optional: true, type: 'string', desc: '容器类名' },
+      { name: 'children', optional: true, type: 'React.ReactNode', desc: '子组件组合（TableHeader/TableBody/TableRow/TableHead/TableCell）' },
     ],
   },
   {
@@ -219,19 +217,18 @@ export const COMPONENT_API: ApiEntry[] = [
       { name: 'defaultValue', optional: true, type: 'string | string[]', desc: '默认展开项' },
     ],
   },
-  {
+    {
     component: 'Breadcrumb',
     props: [
-      { name: 'items', optional: true, type: 'BreadcrumbItem[]', desc: '面包屑项' },
-      { name: 'separator', optional: true, type: 'React.ReactNode', desc: '分隔符' },
+      { name: 'className', optional: true, type: 'string', desc: '容器类名' },
+      { name: 'children', optional: true, type: 'React.ReactNode', desc: '子组件组合（List/Item/Link/Page/Separator）' },
     ],
   },
-  {
+    {
     component: 'Pagination',
     props: [
-      { name: 'page', optional: true, type: 'number', desc: '当前页' },
-      { name: 'total', optional: true, type: 'number', desc: '总页数' },
-      { name: 'onPageChange', optional: true, type: '(page: number) => void', desc: '翻页回调' },
+      { name: 'className', optional: true, type: 'string', desc: '容器类名' },
+      { name: 'children', optional: true, type: 'React.ReactNode', desc: '子组件组合（Content/Item/Link/Previous/Next/Ellipsis）' },
     ],
   },
   {
@@ -240,11 +237,12 @@ export const COMPONENT_API: ApiEntry[] = [
       { name: 'className', optional: true, type: 'string', desc: '尺寸/形状（w-* h-* rounded-*）' },
     ],
   },
-  {
+    {
     component: 'ScrollArea',
     props: [
+      { name: 'type', optional: true, type: '"auto" | "always" | "scroll" | "hover"', desc: '滚动条显示模式（radix）' },
+      { name: 'scrollHideDelay', optional: true, type: 'number', desc: '滚动条隐藏延迟 ms（radix）' },
       { name: 'className', optional: true, type: 'string', desc: '容器类名' },
-      { name: 'viewportRef', optional: true, type: 'React.Ref<HTMLDivElement>', desc: '视口引用' },
     ],
   },
   {

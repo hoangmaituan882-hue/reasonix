@@ -7,14 +7,13 @@ const meta: Meta = {
   parameters: {
     docs: {
       description: {
-        component: "结构化数据表格。\n\n## 设计使用建议\n\n结构化数据表格。\n\n### Props\n\n<table>\n<thead><tr><th>Prop</th><th>类型</th><th>说明</th></tr></thead>\n<tbody>\n<tr><td><code>data</code></td><td><code>T[]</code></td><td>表格数据</td></tr><tr><td><code>columns</code></td><td><code>Column<T>[]</code></td><td>列定义</td></tr><tr><td><code>loading</code></td><td><code>boolean</code></td><td>加载态</td></tr>\n</tbody>\n</table>\n\n## 代码示例\n\n```tsx\nimport { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'\n\n<Table>\n  <TableHeader>\n    <TableRow>\n      <TableHead>姓名</TableHead>\n      <TableHead>角色</TableHead>\n    </TableRow>\n  </TableHeader>\n  <TableBody>\n    <TableRow>\n      <TableCell>张三</TableCell>\n      <TableCell>管理员</TableCell>\n    </TableRow>\n  </TableBody>\n</Table>\n```",
+        component: "结构化数据表格。\n\n## 设计使用建议\n\n### 何时使用\n结构化数据表格。\n\n### 设计要点\n- 所有颜色/圆角/动效均使用设计令牌（`--rx-*`），方向主题（6 方向 × 明暗）自动跟随\n- 交互动效只动 transform/opacity，使用 `--rx-dur-*` 时长档位（fast 120ms / base 180ms / mid 220ms / slow 340ms / slower 420ms）\n- 支持 `prefers-reduced-motion` 自动降级；键盘可达 + focus ring\n\n\n### Props\n\n<table>\n<thead><tr><th>Prop</th><th>类型</th><th>说明</th></tr></thead>\n<tbody>\n<tr><td><code>className</code></td><td><code>string</code></td><td>容器类名</td></tr><tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>子组件组合（TableHeader/TableBody/TableRow/TableHead/TableCell）</td></tr>\n</tbody>\n</table>\n\n## 代码示例\n\n```tsx\nimport { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'\n\n<Table>\n  <TableHeader>\n    <TableRow>\n      <TableHead>姓名</TableHead>\n      <TableHead>角色</TableHead>\n    </TableRow>\n  </TableHeader>\n  <TableBody>\n    <TableRow>\n      <TableCell>张三</TableCell>\n      <TableCell>管理员</TableCell>\n    </TableRow>\n  </TableBody>\n</Table>\n```",
       },
     },
   },
   argTypes: {
-    data: { description: "表格数据", control: 'text' },
-    columns: { description: "列定义", control: 'text' },
-    loading: { description: "加载态", control: 'boolean' },
+    className: { description: "容器类名", control: 'text' },
+    children: { description: "子组件组合（TableHeader/TableBody/TableRow/TableHead/TableCell）", control: 'text' },
   },
 }
 

@@ -40,6 +40,8 @@ import { Button } from '@reasonix/ui/components/button'
 
 ### 3. 死令牌清理
 
+> ⚠️ 代码已合入，**随 0.3.0 发布**（对应 `.changeset/integration-fixes.md`）。
+
 - `--rx-accent-text`、`--rx-border-2` 已删除（无组件引用）。若你的项目引用了它们，请改用 `--rx-accent-fg` / `--rx-border`。
 
 ### 4. 动效时长令牌化
@@ -56,6 +58,8 @@ import { Button } from '@reasonix/ui/components/button'
 若你自定义了这些组件的过渡时长，改为覆盖对应令牌即可。
 
 ### 5. 依赖变化（peerDependencies）
+
+> ⚠️ 代码已合入，**随 0.3.0 发布**（对应 `.changeset/integration-fixes.md`）。
 
 | 变化 | 说明 |
 |---|---|

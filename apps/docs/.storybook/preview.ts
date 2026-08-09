@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react-vite'
 import React from 'react'
+import { withThemeByClassName } from '@storybook/addon-themes'
 import '../src/index.css'
 
 // 主题方向：graphite / aurora / slate / carbon / nocturne / amber
@@ -11,15 +12,9 @@ function applyDirection(dir: Direction) {
   document.documentElement.setAttribute('data-direction', dir)
 }
 
-/** 明暗切换（withThemeByClassName 兼容） */
-function applyDark(dark: boolean) {
-  document.documentElement.classList.toggle('dark', dark)
-}
-
 // 默认：graphite 浅色
 if (typeof document !== 'undefined') {
   applyDirection('graphite')
-  applyDark(false)
 }
 
 const preview: Preview = {
@@ -44,6 +39,14 @@ const preview: Preview = {
     },
   },
   decorators: [
+    // 明暗切换：addon-themes 的 class 装饰器（.dark class 切换）
+    withThemeByClassName({
+      themes: {
+        light: '',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+    }),
     // 方向切换：toolbar → 应用到 html
     (Story, context) => {
       const direction = context.globals.direction as Direction | undefined
@@ -53,7 +56,6 @@ const preview: Preview = {
   ],
   initialGlobals: {
     direction: 'graphite',
-    backgrounds: { value: 'light' },
   },
 }
 
