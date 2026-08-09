@@ -11,7 +11,7 @@
 | 测试 | 123 用例，覆盖 39/39 组件（axe 11 个） |
 | 令牌 | 36 个 `--rx-*`，6 主题方向 × 明暗 |
 | 动效 | `--rx-dur-fast/base/mid/slow/slower` 五档 + `--rx-ease`（组件全令牌化） |
-| 发布 | v0.1.0，changesets + CI + release workflow 就绪 |
+| 发布 | v0.2.0（tag 已建，npm publish 待执行） |
 
 ---
 
@@ -54,9 +54,10 @@
 ## 支柱 5 · 发布：v0.2.0 交付（P1）
 
 **检查项：**
-- [ ] changesets 规范：每个 PR 一个 changeset（minor/patch），CI 强制检查（已配 status）
-- [ ] `npm pack` 内容白名单复核（dist + README + LICENSE + CHANGELOG）
-- [ ] v0.2.0 发布 + GitHub Releases + 双格式产物验证（ESM + d.ts）
+- [x] changesets 规范：每个 PR 一个 changeset（minor/patch），CI 强制检查（`status --since origin/main` 已跑通）
+- [x] `npm pack` 内容白名单复核（dist + README + LICENSE + CHANGELOG，123 文件 38.8kB）
+- [x] v0.2.0 发布准备完成：changesets version → 0.2.0、双格式产物验证（ESM 168 导出 + d.ts）、tag v0.2.0
+  - 实际 npm publish + GitHub Releases 由用户手动执行（需 npm token）
 
 ---
 
