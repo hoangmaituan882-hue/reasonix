@@ -1,3 +1,5 @@
+import "vitest-axe/extend-expect"
+import { axe } from "vitest-axe"
 import { describe, it, expect } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -36,5 +38,15 @@ describe("Accordion", () => {
     await waitFor(() => {
       expect(screen.queryByText("内容A")).not.toBeInTheDocument()
     })
+  })
+
+  it("渲染无 a11y 违规", async () => {
+    const { container } = render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a"><AccordionTrigger>标题A</AccordionTrigger><AccordionContent>内容A</AccordionContent></AccordionItem>
+      </Accordion>,
+    )
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
   })
 })

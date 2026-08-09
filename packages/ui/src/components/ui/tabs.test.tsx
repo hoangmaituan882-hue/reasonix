@@ -1,3 +1,5 @@
+import "vitest-axe/extend-expect"
+import { axe } from "vitest-axe"
 import { describe, it, expect, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -52,5 +54,16 @@ describe("Tabs", () => {
     tab1.focus()
     await userEvent.keyboard("{ArrowRight}")
     expect(screen.getByRole("tab", { name: "标签二" })).toHaveFocus()
+  })
+
+  it("渲染无 a11y 违规", async () => {
+    const { container } = render(
+      <Tabs defaultValue="a">
+        <TabsList><TabsTrigger value="a">标签A</TabsTrigger><TabsTrigger value="b">标签B</TabsTrigger></TabsList>
+        <TabsContent value="a">内容A</TabsContent>
+      </Tabs>,
+    )
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
   })
 })

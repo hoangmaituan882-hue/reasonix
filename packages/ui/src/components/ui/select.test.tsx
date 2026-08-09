@@ -1,3 +1,5 @@
+import "vitest-axe/extend-expect"
+import { axe } from "vitest-axe"
 import { describe, it, expect, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -54,5 +56,17 @@ describe("Select", () => {
     )
     await userEvent.click(screen.getByRole("option", { name: "模型B" }))
     expect(onValueChange).toHaveBeenCalledWith("b")
+  })
+
+  it("打开后无 a11y 违规", async () => {
+    const { container } = render(
+      <Select open value="a">
+        <SelectTrigger aria-label="选择模型"><SelectValue /></SelectTrigger>
+        <SelectContent><SelectItem value="a">模型A</SelectItem></SelectContent>
+      </Select>,
+    )
+    await screen.findAllByText("模型A")
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
   })
 })

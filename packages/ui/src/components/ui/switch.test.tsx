@@ -1,3 +1,5 @@
+import "vitest-axe/extend-expect"
+import { axe } from "vitest-axe"
 import { describe, it, expect, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -33,5 +35,11 @@ describe("Switch", () => {
     expect(sw).toBeDisabled()
     await userEvent.click(sw).catch(() => {})
     expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it("渲染无 a11y 违规", async () => {
+    const { container } = render(<Switch aria-label="开关" />)
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
   })
 })

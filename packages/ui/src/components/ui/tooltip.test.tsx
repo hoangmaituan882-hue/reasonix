@@ -1,5 +1,8 @@
+import "vitest-axe/extend-expect"
+import { axe } from "vitest-axe"
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip"
 
 describe("Tooltip", () => {
@@ -26,5 +29,20 @@ describe("Tooltip", () => {
       </TooltipProvider>,
     )
     expect(screen.getByText("提示信息")).toBeInTheDocument()
+  })
+
+  it("展开后无 a11y 违规", async () => {
+    render(
+      <TooltipProvider delayDuration={0}>
+        <Tooltip>
+          <TooltipTrigger asChild><button>悬停</button></TooltipTrigger>
+          <TooltipContent>提示内容</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    )
+    await userEvent.hover(screen.getByRole("button", { name: "悬停" }))
+    const tip = await screen.findByText("提示内容")
+    const results = await axe(tip.parentElement as HTMLElement)
+    expect(results).toHaveNoViolations()
   })
 })

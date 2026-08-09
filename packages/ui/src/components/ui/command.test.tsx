@@ -1,3 +1,5 @@
+import "vitest-axe/extend-expect"
+import { axe } from "vitest-axe"
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -33,5 +35,18 @@ describe("Command", () => {
     )
     await userEvent.type(screen.getByPlaceholderText("搜索"), "zzz")
     expect(screen.getByText("无结果")).toBeInTheDocument()
+  })
+
+  it("渲染无 a11y 违规", async () => {
+    const { container } = render(
+      <Command>
+        <CommandInput placeholder="搜索" />
+        <CommandList>
+          <CommandGroup><CommandItem>新建</CommandItem></CommandGroup>
+        </CommandList>
+      </Command>,
+    )
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
   })
 })

@@ -18,11 +18,11 @@
 ## 支柱 1 · 质量：测试全覆盖 + 可访问性（P0）
 
 **检查项：**
-- [ ] 39/39 组件有测试文件（当前 20/39）
-- [ ] 覆盖率门槛提到 **60%**（当前 ~57%）
-- [ ] vitest-axe 断言扩展到 **10+** 关键交互组件（dialog/drawer/tooltip/select/combobox/tabs…）
-- [ ] 测试文件纳入 `tsconfig.test.json` 类型检查（已启用，保持绿）
-- [ ] `console.error` 即失败（mock 内已配，确认每个测试文件生效）
+- [x] 39/39 组件有测试文件（当前 20/39 → 39/39）
+- [x] 覆盖率门槛提到 **60%**（当前 ~57% → 84%）
+- [x] vitest-axe 断言扩展到 **10+** 关键交互组件（11 个：dialog/drawer/tooltip/select/command/tabs/switch/checkbox/radio-group/accordion/popover）
+- [x] 测试文件纳入 `tsconfig.test.json` 类型检查（已启用，保持绿）
+- [x] `console.error` 即失败（mock 内已配，确认每个测试文件生效）
 
 ## 支柱 2 · 体验：动效设计纪律落地（P0）
 

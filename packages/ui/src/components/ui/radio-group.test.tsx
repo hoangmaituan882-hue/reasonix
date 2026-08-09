@@ -1,3 +1,5 @@
+import "vitest-axe/extend-expect"
+import { axe } from "vitest-axe"
 import { describe, it, expect, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -34,5 +36,16 @@ describe("RadioGroup", () => {
     )
     await userEvent.click(screen.getByRole("radio", { name: "浅色" }))
     expect(onValueChange).toHaveBeenCalledWith("light")
+  })
+
+  it("渲染无 a11y 违规", async () => {
+    const { container } = render(
+      <RadioGroup aria-label="单选">
+        <RadioGroupItem value="a" id="r1" /><label htmlFor="r1">A</label>
+        <RadioGroupItem value="b" id="r2" /><label htmlFor="r2">B</label>
+      </RadioGroup>,
+    )
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
   })
 })
