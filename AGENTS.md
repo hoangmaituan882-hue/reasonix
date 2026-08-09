@@ -10,9 +10,9 @@
 ```
 reasonix-design-kit/
 ├── packages/ui/            → @reasonix/ui 组件库（唯一组件来源，可发布）
-│   ├── src/components/ui/      38 个组件 + 19 个测试文件（colocate）
+│   ├── src/components/ui/      39 个组件 + 39 个测试文件（colocate）
 │   ├── src/lib/utils.ts        cn() 工具
-│   ├── src/styles.css          37 个 --rx-* 令牌 + 6 方向主题 + 32 keyframes
+│   ├── src/styles.css          36 个 --rx-* 令牌 + 6 方向主题 + 32 keyframes
 │   ├── src/index.ts            统一导出入口
 │   ├── .changeset/             changesets 版本变更集
 │   └── scripts/                copy-css / gen-exports / sim-version
@@ -29,18 +29,18 @@ reasonix-design-kit/
 
 ## 1. 设计令牌体系（styles.css）
 
-### 令牌分类（37 个唯一 `--rx-*`）
+### 令牌分类（36 个唯一 `--rx-*`）
 
 | 分类 | 令牌 | 说明 |
 |---|---|---|
 | 背景 | `--rx-bg` / `--rx-bg-soft` / `--rx-bg-elev` / `--rx-bg-elev-2` | 层级递进 |
 | 侧栏 | `--rx-sidebar` / `--rx-sidebar-hover` | |
 | 前景 | `--rx-fg` / `--rx-fg-dim` / `--rx-fg-faint` | 层级递进 |
-| 边框 | `--rx-border` / `--rx-border-2` / `--rx-border-soft` | |
-| 强调 | `--rx-accent` / `--rx-accent-strong` / `--rx-accent-soft` / `--rx-accent-fg` / `--rx-accent-text` | 软色用 `color-mix` 派生 |
+| 边框 | `--rx-border` / `--rx-border-soft` | |
+| 强调 | `--rx-accent` / `--rx-accent-strong` / `--rx-accent-soft` / `--rx-accent-fg` | 软色用 `color-mix` 派生 |
 | 语义 | `--rx-ok` / `--rx-warn` / `--rx-err` / `--rx-danger` | |
 | 圆角 | `--rx-r-s(5)` / `--rx-r-m(8)` / `--rx-r-l(11)` / `--rx-r-pill(999)` | 方向块可覆盖 |
-| 时长 | `--rx-dur-fast(120)` / `base(180)` / `slow(340)` / `slower(420)` | ms |
+| 时长 | `--rx-dur-fast(120)` / `base(180)` / `mid(220)` / `slow(340)` / `slower(420)` | ms |
 | 缓动 | `--rx-ease` / `-decelerate` / `-standard` / `-overshoot` / `-palette` | |
 
 ### 6 主题方向
