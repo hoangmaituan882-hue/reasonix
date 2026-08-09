@@ -64,7 +64,7 @@ export const COMPONENT_GUIDANCE: Record<string, Guidance> = {
     whenUse: '内容加载中的占位骨架，减少布局跳动（CLS）。',
     points: [
       '形状尽量贴近真实内容（文字条/图片块），宽度用百分比模拟',
-      'shimmer 流光 5s 循环（`--rx-shimmer`），reduced-motion 下自动静止',
+      'shimmer 流光 5s 循环（`rx-shimmer` 类），reduced-motion 下自动静止',
       '加载完成后移除，不要与真实内容同时渲染',
     ],
   },
@@ -187,7 +187,7 @@ export const COMPONENT_GUIDANCE: Record<string, Guidance> = {
     points: [
       'Previous/Next 用 static 定位避免溢出；可加 dots 指示当前项',
       '自动播放慎重：用户悬停/聚焦时暂停，reduced-motion 下不播',
-      '首尾循环需明确语义（loop），否则用边界禁用',
+      '首尾循环需明确语义（`opts.loop: true`），否则用边界禁用',
     ],
   },
   tabs: {
