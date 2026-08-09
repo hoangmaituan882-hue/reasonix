@@ -16,22 +16,57 @@ Reasonix 设计系统组件库 —— 38 个 shadcn 风格组件，带多方向�
 
 ## 📦 安装
 
+> ⚠️ 本包为**纯 ESM + Tailwind CSS v4 语义类**组件库：JS 产物保留 tailwind 类名（`bg-primary`、`dark:bg-input/30`），但**样式不自动生效**——宿主项目必须自己搭 Tailwind v4 编译管线（见下）。
+
 ```bash
+# 1. 组件库本体
 npm install @reasonix/ui
-# peerDependencies（需自行安装）
-npm install react react-dom tailwindcss radix-ui vaul sonner cmdk react-day-picker react-resizable-panels embla-carousel-react next-themes
+
+# 2. peerDependencies（12 个，dist 运行时引用，缺一即崩）
+npm install react react-dom tailwindcss radix-ui vaul sonner cmdk \
+  react-day-picker react-resizable-panels embla-carousel-react \
+  shadcn tw-animate-css
+
+# 3. Tailwind v4 的构建插件（Vite 场景）
+npm install -D @tailwindcss/vite
 ```
 
 > 注意：本包为纯 ESM。CJS 消费方需使用动态 `import()` 或配置 bundler 的 ESM 支持。
 
+## 🛠 Tailwind v4 接入（必做，跳过则组件裸奔）
+
+组件类（`bg-primary` / `h-8` / `animate-in` / `data-open:*`…）由**你的 Tailwind 引擎**生成，本包不预编译。
+
+**① vite.config.ts 加插件：**
+
+```ts
+import tailwindcss from '@tailwindcss/vite'
+// plugins: [react(), tailwindcss()]
+```
+
+**② 项目 CSS 入口（如 `src/index.css`）顶部按顺序：**
+
+```css
+@import "tailwindcss";
+@import "tw-animate-css";           /* 弹层进出场动画类（animate-in/fade-in/zoom-in…） */
+@import "shadcn/tailwind.css";      /* data-open/data-closed/data-checked 等自定义 variant */
+@import "@reasonix/ui/styles.css";  /* 令牌 + 6 方向主题 + rx-* 规则 + keyframes */
+@source "../node_modules/@reasonix/ui/dist";  /* 必配！Tailwind 4 默认不扫 node_modules */
+```
+
+> **为什么必须 `@source`**：Tailwind v4 自动扫描会忽略 `node_modules` 与 `.gitignore` 文件。不指向包产物，组件里的类一个都不会生成。
+> **不要重复定义** `@custom-variant dark`（styles.css 已含）；若你的项目模板自带，删掉再引 styles.css。
+
 ## 🚀 快速开始
 
 ```tsx
-// 1. 引入组件
-import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from '@reasonix/ui'
-
-// 2. 引入主题（37 令牌 + 6 方向 + 动效）
+// 1. 入口引入主题（根部一次；已通过 @import 引入则无需再 import）
 import '@reasonix/ui/styles.css'
+
+// 2. 引入组件
+import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from '@reasonix/ui'
+// 或按组件 subpath 导入（更细粒度 tree-shaking）：
+// import { Button } from '@reasonix/ui/components/button'
 
 function App() {
   return (
@@ -46,6 +81,16 @@ function App() {
   )
 }
 ```
+
+### 排错速查
+
+| 症状 | 原因 | 解决 |
+|---|---|---|
+| 组件无样式（布局/颜色裸奔） | 缺 `@source` | 在 CSS 加 `@source "../node_modules/@reasonix/ui/dist"` |
+| 弹层无进出场动画 | 缺 `tw-animate-css` | `@import "tw-animate-css"` |
+| `data-open:`/`data-checked:` 变体失效 | 缺 shadcn variant | `@import "shadcn/tailwind.css"` |
+| `dark:` 变体报重复定义 | 你重复写了 `@custom-variant dark` | 删掉你自己的定义，依赖 styles.css |
+| 编译报 `@theme`/`@source` 语法错误 | Tailwind 版本不对 | 必须 Tailwind **v4**（`^4.0.0`） |
 
 ## 🎨 主题切换
 
