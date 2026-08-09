@@ -46,6 +46,19 @@ const alias = { toaster: 'sonner' }
 
 console.log('catalog:', catalog.length, '| api:', Object.keys(apiMap).length)
 
+// ---- 读设计建议（component-guidance.ts，解析源码）----
+const guidanceSrc = readFileSync(path.join(docs, 'src/lib/component-guidance.ts'), 'utf-8')
+const guidanceMap = {}
+// 匹配 'key': { whenUse: '...', points: [...], avoid: [...] }（key 可带引号，连字符 key 必须带）
+const gBlockRe = /(['"]?)([a-z-]+)\1:\s*\{\s*whenUse:\s*'([^']*)',\s*points:\s*\[([\s\S]*?)\],\s*(?:avoid:\s*\[([\s\S]*?)\],\s*)?\}/g
+let g
+while ((g = gBlockRe.exec(guidanceSrc))) {
+  const points = [...g[4].matchAll(/'([^']*)'/g)].map((m) => m[1])
+  const avoid = g[5] ? [...g[5].matchAll(/'([^']*)'/g)].map((m) => m[1]) : undefined
+  guidanceMap[g[2]] = { whenUse: g[3], points, avoid }
+}
+console.log('guidance:', Object.keys(guidanceMap).length)
+
 const storyDir = path.join(docs, 'src/stories')
 mkdirSync(storyDir, { recursive: true })
 
@@ -112,19 +125,30 @@ for (const c of catalog) {
   const title = `${c.category}/${c.name}`
   const api = apiTable(c.id)
   const codeBlock = '```tsx\n' + c.code + '\n```'
-  const docDesc = JSON.stringify(
-    c.desc +
+  // 设计使用建议：优先用手写的 COMPONENT_GUIDANCE，缺失时回退通用模板
+  const guidance = guidanceMap[c.id]
+  let designBlock
+  if (guidance) {
+    const points = guidance.points.map((p) => `- ${p}`).join('\n')
+    const avoid = guidance.avoid?.length ? '\n\n### 避免误用\n' + guidance.avoid.map((a) => `- ${a}`).join('\n') : ''
+    designBlock =
+      '\n\n## 设计使用建议\n\n' +
+      '### 何时使用\n' +
+      guidance.whenUse +
+      '\n\n### 设计要点\n' +
+      points +
+      avoid
+  } else {
+    designBlock =
       '\n\n## 设计使用建议\n\n' +
       '### 何时使用\n' +
       c.desc +
       '\n\n### 设计要点\n' +
       '- 所有颜色/圆角/动效均使用设计令牌（`--rx-*`），方向主题（6 方向 × 明暗）自动跟随\n' +
       '- 交互动效只动 transform/opacity，使用 `--rx-dur-*` 时长档位（fast 120ms / base 180ms / mid 220ms / slow 340ms / slower 420ms）\n' +
-      '- 支持 `prefers-reduced-motion` 自动降级；键盘可达 + focus ring\n' +
-      api +
-      '\n\n## 代码示例\n\n' +
-      codeBlock,
-  )
+      '- 支持 `prefers-reduced-motion` 自动降级；键盘可达 + focus ring'
+  }
+  const docDesc = JSON.stringify(c.desc + designBlock + api + '\n\n## 代码示例\n\n' + codeBlock)
   const argTypes = argTypesBlock(c.id)
   // args 驱动组件：import 真实组件；否则 import ComponentPreview
   const compImport = argsDriven[c.id]

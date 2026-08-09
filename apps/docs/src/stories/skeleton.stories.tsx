@@ -7,7 +7,7 @@ const meta: Meta = {
   parameters: {
     docs: {
       description: {
-        component: "内容加载时的占位骨架屏。\n\n## 设计使用建议\n\n### 何时使用\n内容加载时的占位骨架屏。\n\n### 设计要点\n- 所有颜色/圆角/动效均使用设计令牌（`--rx-*`），方向主题（6 方向 × 明暗）自动跟随\n- 交互动效只动 transform/opacity，使用 `--rx-dur-*` 时长档位（fast 120ms / base 180ms / mid 220ms / slow 340ms / slower 420ms）\n- 支持 `prefers-reduced-motion` 自动降级；键盘可达 + focus ring\n\n\n### Props\n\n<table>\n<thead><tr><th>Prop</th><th>类型</th><th>说明</th></tr></thead>\n<tbody>\n<tr><td><code>className</code></td><td><code>string</code></td><td>尺寸/形状（w-* h-* rounded-*）</td></tr>\n</tbody>\n</table>\n\n## 代码示例\n\n```tsx\nimport { Skeleton } from '@/components/ui/skeleton'\r\n\r\n<Skeleton className=\"h-4 w-32\" />\r\n<Skeleton className=\"mt-2 h-8 w-full\" />\n```",
+        component: "内容加载时的占位骨架屏。\n\n## 设计使用建议\n\n### 何时使用\n内容加载中的占位骨架，减少布局跳动（CLS）。\n\n### 设计要点\n- 形状尽量贴近真实内容（文字条/图片块），宽度用百分比模拟\n- shimmer 流光 5s 循环（`--rx-shimmer`），reduced-motion 下自动静止\n- 加载完成后移除，不要与真实内容同时渲染\n\n### Props\n\n<table>\n<thead><tr><th>Prop</th><th>类型</th><th>说明</th></tr></thead>\n<tbody>\n<tr><td><code>className</code></td><td><code>string</code></td><td>尺寸/形状（w-* h-* rounded-*）</td></tr>\n</tbody>\n</table>\n\n## 代码示例\n\n```tsx\nimport { Skeleton } from '@/components/ui/skeleton'\r\n\r\n<Skeleton className=\"h-4 w-32\" />\r\n<Skeleton className=\"mt-2 h-8 w-full\" />\n```",
       },
     },
   },
